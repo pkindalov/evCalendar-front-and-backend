@@ -1,0 +1,451 @@
+@import url('https://fonts.googleapis.com/css?family=Concert+One&display=swap');
+
+*{
+    box-sizing: border-box;
+}
+
+body{
+    font-family: 'Concert One', cursive;
+}
+
+ tr, td{
+    border: none;
+}
+
+table{
+    border-spacing: 0;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+
+.container{
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    border:  5px solid #1e88e5;
+    /* background: url('../images/blueFractal1.png') rgba(255,255,255,0.3); */
+   
+}
+
+.darkTheme1, .darkTheme2, .darkTheme3, .darkTheme4, .darkTheme5, .darkTheme6,
+.colorfulTheme1, .colorfulTheme2, .colorfulTheme3, .colorfulTheme4, 
+.colorfulTheme5, .colorfulTheme6{
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.darkTheme1{
+    background-image: linear-gradient(rgba(255,255,255,0.3), rgba(255,255,255,0.2)), url("../images/blueFractal1.png");
+}
+
+.darkTheme2{
+    background-image: linear-gradient(rgba(255,255,255,0.3), rgba(255,255,255,0.2)), url("../images/winterBackground2.png");
+}
+
+.darkTheme3{
+    background-image: linear-gradient(rgba(255,255,255,0.3), rgba(255,255,255,0.2)), url("../images/winterBackground3.png");
+}
+
+.darkTheme4{
+    background-image: linear-gradient(rgba(255,255,255,0.3), rgba(255,255,255,0.2)), url("../images/winterBackground4.png");
+}
+
+
+.darkTheme5{
+    background-image: linear-gradient(rgba(255,255,255,0.3), rgba(255,255,255,0.2)), url("../images/darkTheme5.png");
+}
+
+.darkTheme6{
+    background-image: linear-gradient(rgba(255,255,255,0.3), rgba(255,255,255,0.2)), url("../images/darkTheme6.png");
+}
+
+.colorfulTheme1{
+    background-image: linear-gradient(rgba(255,255,255,0.3), rgba(255,255,255,0.2)), url("../images/colorfulTheme1.png");
+}
+
+.colorfulTheme2{
+    background-image: linear-gradient(rgba(255,255,255,0.3), rgba(255,255,255,0.2)), url("../images/colorfulTheme2.png");
+}
+
+.colorfulTheme3{
+    background-image: linear-gradient(rgba(255,255,255,0.3), rgba(255,255,255,0.2)), url("../images/colorfulTheme3.png");
+}
+
+.colorfulTheme4{
+    background-image: linear-gradient(rgba(255,255,255,0.3), rgba(255,255,255,0.2)), url("../images/colorfulTheme4.png");
+}
+
+.colorfulTheme5{
+    background-image: linear-gradient(rgba(255,255,255,0.3), rgba(255,255,255,0.2)), url("../images/colorfulTheme5.png");
+}
+
+.colorfulTheme6{
+    background-image: linear-gradient(rgba(255,255,255,0.3), rgba(255,255,255,0.2)), url("../images/colorfulTheme6.png");
+}
+
+#dayName{
+    /* border: 1px solid red;
+    background-color: red; */
+    height: 80px;
+    text-align: center;
+    font-size: xx-large;
+}
+
+#eventsContainer{
+    background-color: #1e88e5;
+    position: absolute;
+    height: 93%;
+    width: 40%;
+    margin-left: 29.5%;
+    /* visibility: hidden; */
+}
+
+#eventsList{
+    overflow: scroll;
+    height: 300px;
+    font-size: 15px;
+}
+
+
+/* @media(min-width: 1100px){
+    #eventsContainer{
+        background-color: #1e88e5;
+        position: fixed;
+        height: 82%;
+        width: 69.7%;
+        margin-left: -35.8%;
+        visibility: hidden;
+    } 
+} */
+
+
+
+#simpleCalendarContainer{
+    height: 600px;
+}
+
+
+
+.dateLabel, .monthLabel, .yearLabel{
+    /* border: 1px solid red;
+    background-color: red; */
+    height: 30px;
+    text-align: center;
+    font-size: xxx-large;
+}
+
+.monthLabel, .yearLabel{
+    height: 60px;
+}
+
+.eventDot{
+    background-color: black;
+    display: block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin: 0 auto;
+}
+
+.eventBtns, .editDelBtns{
+    margin-left: 10px;
+}
+
+#eventsList{
+    overflow: auto;
+}
+
+
+@media(min-width: 300px) and (max-width: 374px){
+    #eventsSection{
+        width: 100%;
+        margin-top: -40%;
+    }
+
+    #eventsDashboard{
+        height: 390px;
+    }
+
+
+    #eventsContainer{
+        background-color: #1e88e5;
+        position: absolute;
+        height: 97%;
+        width: 50.3%;
+        margin-left: 47%;
+        /* visibility: hidden; */
+    }
+
+    #mainDateLabel, #nameOfMonth, #yearField, #dayName, .monthLabel, .yearLabel{
+        font-size: 15px;
+        height: 20%;
+    }
+
+    #eventsList{
+        overflow: auto;
+        height: 240px;
+        font-size: 15px;
+    }
+
+    #mainDateLabel.dateLabel{
+        font-size: 30px;
+        height: 15px;
+    }
+
+    .container{
+        /* height: 750px; */
+        width: 100%;
+    }
+}
+
+
+@media(min-width: 375px) and (max-width: 500px){
+    #eventsSection{
+        width: 100%;
+        margin-top: -40%;
+    }
+
+    #eventsDashboard{
+        height: 390px;
+    }
+
+    #eventsContainer{
+        background-color: #1e88e5;
+        position: fixed;
+        height: 92.4%;
+        width: 50%;
+        margin-left: 38%;
+        /* visibility: hidden; */
+    }
+
+    #mainDateLabel, #nameOfMonth, #yearField, #dayName,
+    .dateLabel, .monthLabel, .yearLabel{
+        font-size: 25px;
+        height: 20%;
+    }
+
+    #eventsList{
+        overflow: auto;
+        height: 240px;
+        font-size: 15px;
+    }
+
+    .container{
+        height: auto;
+    }
+}
+
+@media(min-width: 501px) and (max-width: 600px){
+    #eventsSection{
+        width: 100%;
+        margin-top: -20%;
+    }
+
+    #eventsDashboard{
+        height: 390px;
+    }
+
+    #eventsContainer{
+        background-color: #1e88e5;
+        position: fixed;
+        height: 92.4%;
+        width: 51%;
+        margin-left: 38%;
+        /* visibility: hidden; */
+    }
+
+    #mainDateLabel, #nameOfMonth, #yearField, #dayName,
+    .dateLabel, .monthLabel, .yearLabel{
+        font-size: 25px;
+        height: 20%;
+    }
+
+    #eventsList{
+        overflow: auto;
+        height: 240px;
+        font-size: 15px;
+    }
+
+    .container{
+        height: auto;
+    }
+}
+
+@media(min-width: 601px) and (max-width: 992px){
+    #eventsSection{
+        width: 100%;
+        margin-top: -20%;
+    }
+
+    #eventsDashboard{
+        height: 390px;
+    }
+
+    #eventsContainer{
+        background-color: #1e88e5;
+        position: fixed;
+        height: 92.4%;
+        width: 50%;
+        margin-left: 33.5%;
+        /* visibility: hidden; */
+    }
+
+    #mainDateLabel, #nameOfMonth, #yearField, #dayName,
+    .dateLabel, .monthLabel, .yearLabel{
+        font-size: 25px;
+        height: 20%;
+    }
+
+    #eventsList{
+        overflow: auto;
+        height: 310px;
+        font-size: 15px;
+    }
+
+    .container{
+        height: auto;
+    }
+}
+
+@media(min-width: 993px) and (max-width: 1200px){
+    #eventsSection{
+        width: 100%;
+        margin-top: -20%;
+    }
+    #eventsContainer{
+        background-color: #1e88e5;
+        position: fixed;
+        height: 77%;
+        width: 31.5%;
+        margin-left: 38%;
+        /* visibility: hidden; */
+    }
+
+    #mainDateLabel, #nameOfMonth, #yearField, #dayName,
+    .dateLabel, .monthLabel, .yearLabel{
+        font-size: 25px;
+        height: 20%;
+    }
+
+    #eventsList{
+        overflow: scroll;
+        height: 350px;
+        font-size: 15px;
+    }
+}
+
+@media(min-width: 1200px){
+    #eventsSection{
+        width: 100%;
+        margin-top: -10%;
+    }
+
+    #eventsDashboard{
+        height: 391px;
+    }
+    #eventsContainer{
+        background-color: #1e88e5;
+        position: fixed;
+        height: auto;
+        width: 31.5%;
+        margin-left: 38%;
+        /* visibility: hidden; */
+    }
+
+    #mainDateLabel, #nameOfMonth, #yearField, #dayName,
+    .dateLabel, .monthLabel, .yearLabel{
+        font-size: 25px;
+        height: 20%;
+    }
+
+    #eventsList{
+        overflow: auto;
+        height: 350px;
+        font-size: 15px;
+    }
+
+    .container{
+        height: auto;
+    }
+}
+
+/* @media(min-width: 1838px) and (max-width: 1845px){
+    #eventsSection{
+        width: 100%;
+    }
+    #eventsContainer{
+        background-color: #1e88e5;
+        position: fixed;
+        height: 77%;
+        width: 31.2%;
+        margin-left: 38%;
+    }
+
+    #mainDateLabel, #nameOfMonth, #yearField, #dayName,
+    .dateLabel, .monthLabel, .yearLabel{
+        font-size: 25px;
+        height: 20%;
+    }
+
+    #eventsList{
+        overflow: scroll;
+        height: 350px;
+        font-size: 15px;
+    }
+} */
+
+
+
+/* @media(min-width: 1846px){
+    #eventsSection{
+        width: 100%;
+    }
+    #eventsContainer{
+        background-color: #1e88e5;
+        position: fixed;
+        height: 77%;
+        width: 31%;
+        margin-left: 38%;
+    }
+
+    #mainDateLabel, #nameOfMonth, #yearField, #dayName,
+    .dateLabel, .monthLabel, .yearLabel{
+        font-size: 25px;
+        height: 20%;
+    }
+
+    #eventsList{
+        overflow: scroll;
+        height: 350px;
+        font-size: 15px;
+    }
+} */
+
+.itemChecked{
+    text-decoration: line-through;
+}
+
+.visible{
+    visibility: visible;
+}
+
+.nonVisible{
+    visibility: hidden;
+}
+
+td:hover{
+    cursor: pointer;
+}
+
+.btn{
+    font-size: 10px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+#eventsCont{
+    height: auto;
+    overflow: auto;
+}
