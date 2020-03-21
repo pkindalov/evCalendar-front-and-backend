@@ -52,5 +52,13 @@ class Events extends Controller
         }
     }
 
-    
+    public function getUserEventsCurrYear(){
+        if(isset($_SESSION['user_id'])){
+            $currYearUserEvents = $this->eventsModel->getCurrYearUserEvents();
+            header('Content-Type: application/json');
+            echo json_encode($currYearUserEvents);
+            // return ['success' => true, 'data' => json_encode($currYearUserEvents)];
+        }
+    }
+
 }
