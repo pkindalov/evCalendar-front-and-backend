@@ -52,113 +52,41 @@
         //         text: 'Father\'s birthday',
         //         checked: false
         //     },
-        //     {
-        //         id: 3,
-        //         date: '2020-02-16',
-        //         from: '00:00:00',
-        //         to: '18:00:00',
-        //         text: 'My brother wife\'s birthday',
-        //         checked: false
-        //     },
-        //     {
-        //         id: 4,
-        //         date: '2020-02-16',
-        //         from: '00:00:00',
-        //         to: '18:00:00',
-        //         text: 'My brother  birthday',
-        //         checked: false
-        //     },
-        //     {
-        //         id: 5,
-        //         date: '2020-02-16',
-        //         from: '00:00:00',
-        //         to: '18:00:00',
-        //         text: 'Work meeting',
-        //         checked: true
-        //     },
-        //     {
-        //         id: 6,
-        //         date: '2020-02-16',
-        //         from: '00:00:00',
-        //         to: '18:00:00',
-        //         text: 'Work meeting',
-        //         checked: false
-        //     },
-        //     {
-        //         id: 7,
-        //         date: '2020-02-16',
-        //         from: '00:00:00',
-        //         to: '18:00:00',
-        //         text: 'Work meeting',
-        //         checked: false
-        //     },
-        //     {
-        //         id: 8,
-        //         date: '2020-02-16',
-        //         from: '00:00:00',
-        //         to: '18:00:00',
-        //         text: 'Work meeting',
-        //         checked: true
-        //     },
-        //     {
-        //         id: 9,
-        //         date: '2020-02-16',
-        //         from: '00:00:00',
-        //         to: '18:00:00',
-        //         text: 'Work meeting',
-        //         checked: true
-        //     },
-        //     {
-        //         id: 10,
-        //         date: '2020-02-16',
-        //         from: '00:00:00',
-        //         to: '18:00:00',
-        //         text: 'Work meeting',
-        //         checked: true
-        //     },
-        //     {
-        //         id: 11,
-        //         date: '2020-02-16',
-        //         from: '00:00:00',
-        //         to: '18:00:00',
-        //         text: 'Work meeting',
-        //         checked: false
-        //     },
-        //     {
-        //         id: 12,
-        //         date: '2020-01-15',
-        //         from: '00:00:00',
-        //         to: '18:00:00',
-        //         text: 'Имам рожден ден :) ',
-        //         checked: false
-        //     },
-        //     {
-        //         id: 13,
-        //         date: '2020-03-03',
-        //         from: '00:00:00',
-        //         to: '18:00:00',
-        //         text: 'Национален празник по случай освобождението на България',
-        //         checked: false
-        //     },
-        //     {
-        //         id: 14,
-        //         date: '2020-03-11',
-        //         from: '00:00:00',
-        //         to: '18:00:00',
-        //         text: 'next week test',
-        //         checked: true
-        //     },
         // ];
-        let evCalendar = new eventCalendar({
-            calendarContainer: 'simpleCalendarContainer',
-            usingThemes: true,
-            language: 'bg',
-            // calendarEventsData: dataEvents
-        });
-        // evCalendar.setContainer('simpleCalendarContainer');
-        // evCalendar.setUseOfThemes(false);
-        // evCalendar.setData(dataEvents);
-        evCalendar.createCalendar();
+
+        (async function() {
+            let url = '/evCalendar/events/getUserEventsCurrYear';
+            let response = await fetch(url);
+            let data = await response.json(); // read response body and parse as JSON
+            let evCalendar = new eventCalendar({
+                calendarContainer: 'simpleCalendarContainer',
+                usingThemes: true,
+                language: 'bg',
+                calendarEventsData: data
+                // calendarEventsData: dataEvents
+            });
+            // evCalendar.setContainer('simpleCalendarContainer');
+            // evCalendar.setUseOfThemes(false);
+            // evCalendar.setData(dataEvents);
+            evCalendar.createCalendar();
+        })();
+
+
+
+
+        // let data = '<?php //echo $data['events'] ?>';
+        // console.log( JSON.parse(data));
+        // let evCalendar = new eventCalendar({
+        //     calendarContainer: 'simpleCalendarContainer',
+        //     usingThemes: true,
+        //     language: 'bg',
+        //     calendarEventsData: JSON.parse(data)
+        //     // calendarEventsData: dataEvents
+        // });
+        // // evCalendar.setContainer('simpleCalendarContainer');
+        // // evCalendar.setUseOfThemes(false);
+        // // evCalendar.setData(dataEvents);
+        // evCalendar.createCalendar();
 
 
         // let todayNum = evCalendar.getTodayNum();

@@ -24,4 +24,23 @@ class Event
 
         return false;
     }
+
+    public function getCurrYearUserEvents(){
+        $currentYear = date('Y');
+        $user = $_SESSION['user_id'];
+        $searched = '%' . $currentYear . '%';
+
+        $this->db->query("SELECT id, date, begin AS `from`, finish AS `to`, text, checkedEvents AS `checked` FROM events WHERE events.user_id = :userId AND events.date LIKE :search");
+        $this->db->bind(":userId", $user, null);
+        $this->db->bind(":search", $searched, null);
+
+        $results = $this->db->execute();
+        if ($this->db->rowCount($results) == 0) {
+            return [];
+        } else {
+            $results = $this->db->resultSet();
+            return $results;
+        }
+        
+    }
 }
