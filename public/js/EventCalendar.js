@@ -634,23 +634,26 @@ let eventCalendar = (function(calendarContainerId) {
 		let eventsDashboard = document.getElementById('eventsDashboard');
 		eventsDashboard.innerHTML = '<div id="addEventCont"></div>';
 		let form = `
-			<form id="createEventForm" action="#" method="post">
+			<form id="createEventForm" action="/evCalendar/events/addDate/${that.currentlySelectedDay}" method="post">
 				<label for="eventText">${textLabelTx}</label>
-				<textarea id="eventText" name="eventTextName" class="materialize-textarea"></textarea>
+				<textarea id="eventText" name="eventText" class="materialize-textarea"></textarea>
 				<label for="hoursBegin">${beginLabelTx}</label>
 				  <input type="text" name="hoursBegin" class="timepicker" />
 				  <label for="hoursFinish">${finishLabelTx}</label>
 				  <input type="text" name="hoursFinish" class="timepicker" />  
-				  <a id="createLocalEvent" href="#" class="waves-effect waves-light btn">${createEvenBtnTxt}</a>
+				  <input type="hidden" name="selectedMonth" value="${++that.currentMonthNum}" />
+				  <input type="hidden" name="selectedYear" value="${that.currentYear}" />
+				  <input type="submit" class="waves-effect waves-light btn" value="Create Event" />
 				  <input type="reset" class="waves-effect waves-light btn" value="${clearBtnTx}" />
 				  </form>
 				  `;
+		// <a id="createLocalEvent" href="#" class="waves-effect waves-light btn">${createEvenBtnTxt}</a>
 		//   <input type="submit" class="waves-effect waves-light btn" value="Create Event" />
 
 		eventsDashboard.innerHTML += form;
 
-		let createLocalEventBtn = document.getElementById('createLocalEvent');
-		createLocalEventBtn.addEventListener('click', () => this.createLocalEvent());
+		// let createLocalEventBtn = document.getElementById('createLocalEvent');
+		// createLocalEventBtn.addEventListener('click', () => this.createLocalEvent());
 
 		let elems = document.querySelectorAll('.timepicker');
 		let instances = M.Timepicker.init(elems, { twelveHour: false, showClearBtn: true });
