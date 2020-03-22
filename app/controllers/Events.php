@@ -68,4 +68,23 @@ class Events extends Controller
         }
     }
 
+    public function editEvent($eventId){
+
+        if(!isset($_SESSION['user_id']) || !isset($_POST) || !isset($_POST['eventAuthor'])){
+            redirect('/');
+        }
+
+        if($_SESSION['user_id'] !== $_POST['eventAuthor']){
+            redirect('/');
+        }
+
+        $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+
+        if($this->eventsModel->updateEvent($eventId, $_POST)){
+            redirect('/');
+        }
+      
+        
+    }
+
 }

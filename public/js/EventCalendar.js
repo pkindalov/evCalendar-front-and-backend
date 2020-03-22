@@ -70,7 +70,8 @@ let eventCalendar = (function(calendarContainerId) {
 		'Text',
 		'Date',
 		'Events on this day',
-		'Events this month'
+		'Events this month',
+		'Checked event'
 	];
 	that.eventsLabelsBg = [
 		'Събития миналата седмица',
@@ -81,7 +82,8 @@ let eventCalendar = (function(calendarContainerId) {
 		'Текст',
 		'Дата',
 		'Събития на този ден',
-		'Събития този месец'
+		'Събития този месец',
+		'Отметнато събитие'
 	];
 	that.buttonLabelsEn = [
 		'Add event',
@@ -666,12 +668,14 @@ let eventCalendar = (function(calendarContainerId) {
 	eventCalendar.prototype.editLocalEvent = function(event) {
 		let eventsDashboard = document.getElementById('eventsDashboard');
 		eventsDashboard.innerHTML = '<div id="addEventCont"></div>';
+		console.log(event);
 		let editStaticEvenBtnTx = '';
 		let clearBtnTx = '';
 		let dateLabelTx = '';
 		let beginLabelTx = '';
 		let finishLabelTx = '';
 		let textLabelTx = '';
+		let checkedEventLbl = '';
 
 		switch (that.language) {
 			case 'en':
@@ -681,27 +685,30 @@ let eventCalendar = (function(calendarContainerId) {
 				beginLabelTx = that.eventsLabelsEn[3];
 				finishLabelTx = that.eventsLabelsEn[4];
 				textLabelTx = that.eventsLabelsEn[5];
+				checkedEventLbl = that.eventsLabelsEn[9];
 				break;
-			case 'bg':
-				editStaticEvenBtnTx = this.getTranslatedWord(that.buttonLabelsEn[1], 'en', 'bg');
-				clearBtnTx = this.getTranslatedWord(that.buttonLabelsEn[8], 'en', 'bg');
-				dateLabelTx = this.getTranslatedWord(that.eventsLabelsEn[6], 'en', 'bg');
-				beginLabelTx = this.getTranslatedWord(that.eventsLabelsEn[3], 'en', 'bg');
-				finishLabelTx = this.getTranslatedWord(that.eventsLabelsEn[4], 'en', 'bg');
-				textLabelTx = this.getTranslatedWord(that.eventsLabelsEn[5], 'en', 'bg');
-				break;
-			default:
-				editStaticEvenBtnTx = that.buttonLabelsEn[1];
-				clearBtnTx = that.buttonLabelsEn[8];
-				dateLabelTx = that.eventsLabelsEn[6];
-				beginLabelTx = that.eventsLabelsEn[3];
-				finishLabelTx = that.eventsLabelsEn[4];
-				textLabelTx = that.eventsLabelsEn[5];
+				case 'bg':
+					editStaticEvenBtnTx = this.getTranslatedWord(that.buttonLabelsEn[1], 'en', 'bg');
+					clearBtnTx = this.getTranslatedWord(that.buttonLabelsEn[8], 'en', 'bg');
+					dateLabelTx = this.getTranslatedWord(that.eventsLabelsEn[6], 'en', 'bg');
+					beginLabelTx = this.getTranslatedWord(that.eventsLabelsEn[3], 'en', 'bg');
+					finishLabelTx = this.getTranslatedWord(that.eventsLabelsEn[4], 'en', 'bg');
+					textLabelTx = this.getTranslatedWord(that.eventsLabelsEn[5], 'en', 'bg');
+					checkedEventLbl = this.getTranslatedWord(that.eventsLabelsEn[9], 'en', 'bg');
+					break;
+					default:
+						editStaticEvenBtnTx = that.buttonLabelsEn[1];
+						clearBtnTx = that.buttonLabelsEn[8];
+						dateLabelTx = that.eventsLabelsEn[6];
+						beginLabelTx = that.eventsLabelsEn[3];
+						finishLabelTx = that.eventsLabelsEn[4];
+						textLabelTx = that.eventsLabelsEn[5];
+						checkedEventLbl = that.eventsLabelsEn[9];
 				break;
 		}
 
 		let form = `
-			<form id="editEventForm" action="#" method="post">
+			<form id="editEventForm" action="/evCalendar/events/editEvent/${event.id}" method="post">
 			<label for="eventText">${textLabelTx}</label>
 			<textarea id="eventText" name="eventTextName" class="materialize-textarea">${event.text}</textarea>
 			<label for="editDate">${dateLabelTx}</label>
@@ -709,17 +716,24 @@ let eventCalendar = (function(calendarContainerId) {
 				<label for="hoursBegin">${beginLabelTx}</label>
 				  <input type="text" name="hoursBegin" value="${event.from}" class="timepicker" />
 				  <label for="hoursFinish">${finishLabelTx}</label>
-				  <input type="text" name="hoursFinish" value="${event.to}" class="timepicker" />  
-				  <a id="editLocalEvent" href="#" class="waves-effect waves-light btn">${editStaticEvenBtnTx}</a>
+				  <input type="text" name="hoursFinish" value="${event.to}" class="timepicker" />
+
+				  <label>
+					  <input type="checkbox" name="checkedEvent" value="Checked" ${!event.checked ? '' : 'checked'} />
+					  <span>${checkedEventLbl}</span>
+				  </label>
+				 
+				  <input type="hidden" name="eventAuthor" value="${event.user_id}" />
+				  <input type="submit" class="waves-effect waves-light btn" value="Edit Event" />
 				  <input type="reset" class="waves-effect waves-light btn" value="${clearBtnTx}" />
 				  </form>
 				  `;
-		//   <input type="submit" class="waves-effect waves-light btn" value="Edit Event" />
+				//   <a id="editLocalEvent" href="#" class="waves-effect waves-light btn">${editStaticEvenBtnTx}</a>
 
 		eventsDashboard.innerHTML += form;
 
-		let editLocalEventBtn = document.getElementById('editLocalEvent');
-		editLocalEventBtn.addEventListener('click', () => this.editingLocalEvent());
+		// let editLocalEventBtn = document.getElementById('editLocalEvent');
+		// editLocalEventBtn.addEventListener('click', () => this.editingLocalEvent());
 
 		let elems = document.querySelectorAll('.timepicker');
 		let datePickElems = document.querySelectorAll('.datepicker');
