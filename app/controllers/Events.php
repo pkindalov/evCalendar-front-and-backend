@@ -57,6 +57,7 @@ class Events extends Controller
         if($this->eventsModel->addEvent($data)){
             redirect('/');
         }
+        return;
     }
 
     public function getUserEventsCurrYear(){
@@ -70,7 +71,7 @@ class Events extends Controller
 
     public function editEvent($eventId){
 
-        if(!isset($_SESSION['user_id']) || !isset($_POST) || !isset($_POST['eventAuthor'])){
+        if(!isset($_SESSION['user_id']) || !isset($_POST) || !isset($_POST['eventAuthor']) || !isset($eventId)){
             redirect('/');
         }
 
@@ -80,11 +81,18 @@ class Events extends Controller
 
         $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
 
-        if($this->eventsModel->updateEvent($eventId, $_POST)){
+        if($this->eventsModel->updateEvent(htmlspecialchars($eventId), $_POST)){
             redirect('/');
-        }
-      
-        
+        }    
+        return;
+    }
+
+    public function deleteEvent($query){
+       $queryData = getQueryData($query);
+       if($this->eventsModel->removeEventById($queryData)){
+           redirect('/');
+       }
+       return;
     }
 
 }

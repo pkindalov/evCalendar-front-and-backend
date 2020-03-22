@@ -752,6 +752,7 @@ let eventCalendar = (function(calendarContainerId) {
 		let confirmDelete = confirm(`Are you sure to delete event from ${event.date} and text ${event.text}?`);
 		if (confirmDelete) {
 			that.eventsData.splice(eventIndex, 1);
+			window.location = `/evCalendar/events/deleteEvent/?eventId=${event.id}&author=${event.user_id}`;
 		}
 
 		this.closeEventWindow();

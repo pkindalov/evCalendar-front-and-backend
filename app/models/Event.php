@@ -71,8 +71,24 @@ class Event
         if($this->db->execute()){
             return true;
         }
-
         return false;
+    }
 
+    public function removeEventById($queryData){
+       
+        $eventId = htmlspecialchars($queryData['eventId']);
+        $author = htmlspecialchars($queryData['author']);
+   
+        if(!$_SESSION['user_id'] || $_SESSION['user_id'] !== $queryData['author']){
+           redirect('/');
+        } 
+
+        $this->db->query('DELETE FROM events WHERE `id` = :eventId AND user_id = :userId');
+        $this->db->bind(":eventId", $eventId, null);
+        $this->db->bind(":userId", $author, null);
+        if($this->db->execute()){
+            return true;
+        }
+        return false;
     }
 }
