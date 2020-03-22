@@ -13,26 +13,33 @@ class Events extends Controller
         $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
 
         if(!isset($_SESSION['user_id'])){
-            return json_encode(['success' => false, 'reason' => 'you must be logged to created events']);
+            echo json_encode(['success' => false, 'reason' => 'you must be logged to created events']);
+            return;
         }
         
         if(!isset($_POST['eventText']) || strlen($_POST['eventText']) < 5 ){
-            return json_encode(['success' => false, 'reason' => 'eventText variable do not exist or it is too short.']);
+            echo json_encode(['success' => false, 'reason' => 'text of event do not exist or it is too short.']);
+            return;
         }
         if(!isset($_POST['hoursBegin']) || empty($_POST['hoursBegin'])){
-            return json_encode(['success' => false, 'reason' => 'hoursBegin variable do not exist or it is empty']);
+            echo json_encode(['success' => false, 'reason' => 'hoursBegin variable do not exist or it is empty']);
+            return;
         }
         if(!isset($_POST['hoursFinish']) || empty($_POST['hoursFinish'])){
-            return json_encode(['success' => false, 'reason' => 'hoursFinish variable do not exist or it is empty']);
+            echo json_encode(['success' => false, 'reason' => 'hoursFinish variable do not exist or it is empty']);
+            return;
         }
         if(!isset($_POST['selectedYear']) || empty($_POST['selectedYear'])){
-            return json_encode(['success' => false, 'reason' => 'selectedYear variable do not exist or it is empty']);
+            echo json_encode(['success' => false, 'reason' => 'selectedYear variable do not exist or it is empty']);
+            return;
         }
         if(!isset($_POST['selectedMonth']) || empty($_POST['selectedMonth'])){
-            return json_encode(['success' => false, 'reason' => 'selectedMonth variable do not exist or it is empty']);
+            echo json_encode(['success' => false, 'reason' => 'selectedMonth variable do not exist or it is empty']);
+            return;
         }
         if(!isset($date) || empty($date)){
-            return json_encode(['success' => false, 'reason' => 'date variable do not exist or it is empty']);
+            echo json_encode(['success' => false, 'reason' => 'date variable do not exist or it is empty']);
+            return;
         }
 
 
