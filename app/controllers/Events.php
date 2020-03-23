@@ -95,4 +95,12 @@ class Events extends Controller
        return;
     }
 
+    public function checkUncheckEvent($query){
+        $queryData = getQueryData($query);
+        if($this->eventsModel->checkUncheckEventById($queryData)){
+            redirect('/');
+        }
+        return;
+    }
+
 }

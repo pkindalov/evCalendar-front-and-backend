@@ -1,5 +1,7 @@
 <?php
 
+use function PHPSTORM_META\type;
+
 class Event
 {
     private $db;
@@ -9,23 +11,25 @@ class Event
         $this->db = new Database();
     }
 
-    public function addEvent($data){
+    public function addEvent($data)
+    {
         // print_r($data);
         $this->db->query("INSERT INTO events (text, begin, finish, date, user_id) 
                           VALUES(:text, :begin, :finish, :date, :user_id)");
-        $this->db->bind(":text", $data['eventText'], null);                  
-        $this->db->bind(":begin", $data['hoursBegin'], null);                  
-        $this->db->bind(":finish", $data['hoursFinish'], null);                  
-        $this->db->bind(":date", $data['date'], null);                  
-        $this->db->bind(":user_id", $_SESSION['user_id'], null); 
-        if($this->db->execute()){
+        $this->db->bind(":text", $data['eventText'], null);
+        $this->db->bind(":begin", $data['hoursBegin'], null);
+        $this->db->bind(":finish", $data['hoursFinish'], null);
+        $this->db->bind(":date", $data['date'], null);
+        $this->db->bind(":user_id", $_SESSION['user_id'], null);
+        if ($this->db->execute()) {
             return true;
         }
 
         return false;
     }
 
-    public function getCurrYearUserEvents(){
+    public function getCurrYearUserEvents()
+    {
         $currentYear = date('Y');
         $user = $_SESSION['user_id'];
         $searched = '%' . $currentYear . '%';
@@ -41,11 +45,11 @@ class Event
             $results = $this->db->resultSet();
             return $results;
         }
-        
     }
 
-    public function updateEvent($eventId, $data){
-       
+    public function updateEvent($eventId, $data)
+    {
+
         $text = $data['eventTextName'];
         $date = $data['editedDate'];
         $begin = $data['hoursBegin'];
@@ -60,33 +64,71 @@ class Event
                              `checkedEvent` = :checked
                           WHERE events.id = :eventId AND events.user_id = :currentUser
                         ');
-        $this->db->bind(":eventText", $text, null);                
-        $this->db->bind(":begin", $begin, null);                
-        $this->db->bind(":finish", $finish, null);                
-        $this->db->bind(":date", $date, null);                
-        $this->db->bind(":checked", $checked, null);                
-        $this->db->bind(":eventId", $eventId, null);                
-        $this->db->bind(":currentUser", $_SESSION['user_id'], null);  
-        
-        if($this->db->execute()){
+        $this->db->bind(":eventText", $text, null);
+        $this->db->bind(":begin", $begin, null);
+        $this->db->bind(":finish", $finish, null);
+        $this->db->bind(":date", $date, null);
+        $this->db->bind(":checked", $checked, null);
+        $this->db->bind(":eventId", $eventId, null);
+        $this->db->bind(":currentUser", $_SESSION['user_id'], null);
+
+        if ($this->db->execute()) {
             return true;
         }
         return false;
     }
 
-    public function removeEventById($queryData){
-       
+    public function removeEventById($queryData)
+    {
+
         $eventId = htmlspecialchars($queryData['eventId']);
         $author = htmlspecialchars($queryData['author']);
-   
-        if(!$_SESSION['user_id'] || $_SESSION['user_id'] !== $queryData['author']){
-           redirect('/');
-        } 
+
+        if (!$_SESSION['user_id'] || $_SESSION['user_id'] !== $queryData['author']) {
+            redirect('/');
+        }
 
         $this->db->query('DELETE FROM events WHERE `id` = :eventId AND user_id = :userId');
         $this->db->bind(":eventId", $eventId, null);
         $this->db->bind(":userId", $author, null);
-        if($this->db->execute()){
+        if ($this->db->execute()) {
+            return true;
+        }
+        return false;
+    }
+
+    public function checkUncheckEventById($queryData)
+    {
+        $eventId = htmlspecialchars($queryData['eventId']);
+        $author = htmlspecialchars($queryData['author']);
+        $checked = htmlspecialchars($queryData['checked']);
+        $checkedValue = $checked == 'false' ? NULL : 1;
+        
+        //TO GET CHECKED STATUS OF THE EVENT HERE
+
+        
+        // echo $eventId . "<br />";
+        // echo "Before:" . "<br />";
+        // echo $checked . "<br >";
+        // echo gettype($checkedValue) . "<br />";
+        // echo "After:" . "<br />";
+        // echo $checked;
+        // echo $checkedValue;
+        // die();
+
+        if (!$_SESSION['user_id'] || $_SESSION['user_id'] !== $queryData['author']) {
+            redirect('/');
+        }
+
+        $this->db->query("UPDATE events 
+                           SET `checkedEvent` = :checked 
+                           WHERE `id` = :eventId AND `user_id` = :author
+                           ");
+        $this->db->bind(":checked", $checkedValue, null);
+        $this->db->bind(":eventId", $eventId, null);
+        $this->db->bind(":author", $author, null);
+
+        if ($this->db->execute()) {
             return true;
         }
         return false;

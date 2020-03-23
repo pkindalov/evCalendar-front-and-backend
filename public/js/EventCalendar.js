@@ -766,6 +766,7 @@ let eventCalendar = (function(calendarContainerId) {
 		this.closeEventWindow();
 		this.showDate(day);
 		this.showEventItems();
+		window.location = `/evCalendar/events/checkUncheckEvent/?eventId=${event.id}&author=${event.user_id}&checked=${event.checked}`;
 	};
 
 	eventCalendar.prototype.createList = function(type, data, addButtons) {
