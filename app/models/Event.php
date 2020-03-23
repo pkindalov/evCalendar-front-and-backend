@@ -47,6 +47,25 @@ class Event
         }
     }
 
+    public function getYearUserEvents($year)
+    {
+        $currentYear = $year;
+        $user = $_SESSION['user_id'];
+        $searched = '%' . $currentYear . '%';
+
+        $this->db->query("SELECT id, date, begin AS `from`, finish AS `to`, text, checkedEvent AS `checked`, user_id FROM events WHERE events.user_id = :userId AND events.date LIKE :search");
+        $this->db->bind(":userId", $user, null);
+        $this->db->bind(":search", $searched, null);
+
+        $results = $this->db->execute();
+        if ($this->db->rowCount($results) == 0) {
+            return [];
+        } else {
+            $results = $this->db->resultSet();
+            return $results;
+        }
+    }
+
     public function updateEvent($eventId, $data)
     {
 

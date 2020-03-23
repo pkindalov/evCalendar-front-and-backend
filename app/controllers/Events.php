@@ -69,6 +69,15 @@ class Events extends Controller
         }
     }
 
+    public function getUserEventsYear($year){
+        if(isset($_SESSION['user_id']) && isset($year)){
+            $yearUserEvents = $this->eventsModel->getYearUserEvents(htmlspecialchars($year));
+            header('Content-Type: application/json');
+            echo json_encode($yearUserEvents);
+            // return ['success' => true, 'data' => json_encode($currYearUserEvents)];
+        }
+    }
+
     public function editEvent($eventId){
 
         if(!isset($_SESSION['user_id']) || !isset($_POST) || !isset($_POST['eventAuthor']) || !isset($eventId)){

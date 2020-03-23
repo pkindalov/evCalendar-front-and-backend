@@ -286,14 +286,25 @@ let eventCalendar = (function(calendarContainerId) {
 		this.drawCalendarBody();
 	};
 
+	eventCalendar.prototype.getYearEventData = function(year){
+		fetch(`events/getUserEventsYear/${year}`)
+			.then((response) => {
+				return response.json();
+			})
+			.then((data) => {
+				this.setData(data);
+				this.checkAndCloseOpenedDateWindow();
+				this.drawCalendarBody();
+			});
+	}
+
 	eventCalendar.prototype.prevYear = function() {
 		that.currentYear--;
 		document.getElementById('yearLabel').textContent = that.currentYear;
 		that.currentMontCountOfDays = this.setCurrentMontCountOfDays(that.currentYear, that.currentMonthNum + 1);
 		that.firstDayOfMonth = this.setFirstDayOfMonth(that.currentYear, that.currentMonthNum);
 		that.indexToStartDays = this.setindexToStartDays(that.firstDayOfMonth);
-		this.checkAndCloseOpenedDateWindow();
-		this.drawCalendarBody();
+		this.getYearEventData(that.currentYear);
 	};
 
 	eventCalendar.prototype.nextYear = function() {
@@ -302,8 +313,7 @@ let eventCalendar = (function(calendarContainerId) {
 		that.currentMontCountOfDays = this.setCurrentMontCountOfDays(that.currentYear, that.currentMonthNum + 1);
 		that.firstDayOfMonth = this.setFirstDayOfMonth(that.currentYear, that.currentMonthNum);
 		that.indexToStartDays = this.setindexToStartDays(that.firstDayOfMonth);
-		this.checkAndCloseOpenedDateWindow();
-		this.drawCalendarBody();
+		this.getYearEventData(that.currentYear);
 	};
 
 	eventCalendar.prototype.checkNameOfDayDiffLang = function(dayIndex) {
@@ -687,23 +697,23 @@ let eventCalendar = (function(calendarContainerId) {
 				textLabelTx = that.eventsLabelsEn[5];
 				checkedEventLbl = that.eventsLabelsEn[9];
 				break;
-				case 'bg':
-					editStaticEvenBtnTx = this.getTranslatedWord(that.buttonLabelsEn[1], 'en', 'bg');
-					clearBtnTx = this.getTranslatedWord(that.buttonLabelsEn[8], 'en', 'bg');
-					dateLabelTx = this.getTranslatedWord(that.eventsLabelsEn[6], 'en', 'bg');
-					beginLabelTx = this.getTranslatedWord(that.eventsLabelsEn[3], 'en', 'bg');
-					finishLabelTx = this.getTranslatedWord(that.eventsLabelsEn[4], 'en', 'bg');
-					textLabelTx = this.getTranslatedWord(that.eventsLabelsEn[5], 'en', 'bg');
-					checkedEventLbl = this.getTranslatedWord(that.eventsLabelsEn[9], 'en', 'bg');
-					break;
-					default:
-						editStaticEvenBtnTx = that.buttonLabelsEn[1];
-						clearBtnTx = that.buttonLabelsEn[8];
-						dateLabelTx = that.eventsLabelsEn[6];
-						beginLabelTx = that.eventsLabelsEn[3];
-						finishLabelTx = that.eventsLabelsEn[4];
-						textLabelTx = that.eventsLabelsEn[5];
-						checkedEventLbl = that.eventsLabelsEn[9];
+			case 'bg':
+				editStaticEvenBtnTx = this.getTranslatedWord(that.buttonLabelsEn[1], 'en', 'bg');
+				clearBtnTx = this.getTranslatedWord(that.buttonLabelsEn[8], 'en', 'bg');
+				dateLabelTx = this.getTranslatedWord(that.eventsLabelsEn[6], 'en', 'bg');
+				beginLabelTx = this.getTranslatedWord(that.eventsLabelsEn[3], 'en', 'bg');
+				finishLabelTx = this.getTranslatedWord(that.eventsLabelsEn[4], 'en', 'bg');
+				textLabelTx = this.getTranslatedWord(that.eventsLabelsEn[5], 'en', 'bg');
+				checkedEventLbl = this.getTranslatedWord(that.eventsLabelsEn[9], 'en', 'bg');
+				break;
+			default:
+				editStaticEvenBtnTx = that.buttonLabelsEn[1];
+				clearBtnTx = that.buttonLabelsEn[8];
+				dateLabelTx = that.eventsLabelsEn[6];
+				beginLabelTx = that.eventsLabelsEn[3];
+				finishLabelTx = that.eventsLabelsEn[4];
+				textLabelTx = that.eventsLabelsEn[5];
+				checkedEventLbl = that.eventsLabelsEn[9];
 				break;
 		}
 
@@ -728,7 +738,7 @@ let eventCalendar = (function(calendarContainerId) {
 				  <input type="reset" class="waves-effect waves-light btn" value="${clearBtnTx}" />
 				  </form>
 				  `;
-				//   <a id="editLocalEvent" href="#" class="waves-effect waves-light btn">${editStaticEvenBtnTx}</a>
+		//   <a id="editLocalEvent" href="#" class="waves-effect waves-light btn">${editStaticEvenBtnTx}</a>
 
 		eventsDashboard.innerHTML += form;
 
