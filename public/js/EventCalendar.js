@@ -293,7 +293,6 @@ let eventCalendar = (function(calendarContainerId) {
 			})
 			.then((data) => {
 				this.setData(data);
-				this.checkAndCloseOpenedDateWindow();
 				this.drawCalendarBody();
 			});
 	}
@@ -304,6 +303,7 @@ let eventCalendar = (function(calendarContainerId) {
 		that.currentMontCountOfDays = this.setCurrentMontCountOfDays(that.currentYear, that.currentMonthNum + 1);
 		that.firstDayOfMonth = this.setFirstDayOfMonth(that.currentYear, that.currentMonthNum);
 		that.indexToStartDays = this.setindexToStartDays(that.firstDayOfMonth);
+		this.checkAndCloseOpenedDateWindow();
 		this.getYearEventData(that.currentYear);
 	};
 
@@ -313,6 +313,7 @@ let eventCalendar = (function(calendarContainerId) {
 		that.currentMontCountOfDays = this.setCurrentMontCountOfDays(that.currentYear, that.currentMonthNum + 1);
 		that.firstDayOfMonth = this.setFirstDayOfMonth(that.currentYear, that.currentMonthNum);
 		that.indexToStartDays = this.setindexToStartDays(that.firstDayOfMonth);
+		this.checkAndCloseOpenedDateWindow();
 		this.getYearEventData(that.currentYear);
 	};
 
