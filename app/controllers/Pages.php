@@ -8,8 +8,8 @@ class Pages extends Controller{
 
     public function index(){
         $data = [
-            'title' => 'Php Simple Framework',
-            'description' => 'Simple social network built on Php simple MVC framework',
+            'title' => 'evCalendar',
+            'description' => 'Simple event calendar to remind you for a simple things/tasks',
         ];
         
         $this->view('pages/index', $data);

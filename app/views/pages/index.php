@@ -40,7 +40,7 @@
             var instances = M.Sidenav.init(elems);
         });
     </script>  -->
-   
+
     <script src="<?php echo URLROOT ?>/js/EventCalendar.js"></script>
     <script>
         // let dataEvents = [{
@@ -80,36 +80,33 @@
 
 
 
-
-        // let data = '<?php //echo $data['events'] ?>';
-        // console.log( JSON.parse(data));
-        // let evCalendar = new eventCalendar({
-        //     calendarContainer: 'simpleCalendarContainer',
-        //     usingThemes: true,
-        //     language: 'bg',
-        //     calendarEventsData: JSON.parse(data)
-        //     // calendarEventsData: dataEvents
-        // });
-        // // evCalendar.setContainer('simpleCalendarContainer');
-        // // evCalendar.setUseOfThemes(false);
-        // // evCalendar.setData(dataEvents);
-        // evCalendar.createCalendar();
-
-
-        // let todayNum = evCalendar.getTodayNum();
-
-        // let dateLabel = document.getElementById('mainDateLabel');
-        // dateLabel.innerText = todayNum;
     </script>
 
 <?php else : ?>
 
-    <div class="jumbotron jumbotron-fluid text-center">
-        <div class="container">
-            <h1 class="display-3"><?php echo $data['title']; ?></h1>
-            <p class="lead"><?php echo $data['description'] ?></p>
+    <div class="col s12 m7 startSplash">
+        <h2 class="header"><?php echo $data['title']; ?></h2>
+        <div class="card horizontal">
+            <div class="card-image">
+                <img src="images/blueFractal1.png">
+            </div>
+            <div class="card-stacked">
+                <div class="card-content">        
+                    <p><?php echo $data['description'] ?></p>
+                </div>
+                <!-- <div class="card-action">
+                    <a href="#">This is a link</a>
+                </div> -->
+            </div>
         </div>
     </div>
+
+    <!-- <div class="jumbotron jumbotron-fluid text-center">
+        <div class="container">
+            <h1 class="display-3"><?php //echo $data['title']; ?></h1>
+            <p class="lead"><?php //echo $data['description'] ?></p>
+        </div>
+    </div> -->
 
 <?php endif; ?>
 

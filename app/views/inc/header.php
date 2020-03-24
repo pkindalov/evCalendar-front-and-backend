@@ -9,19 +9,13 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
      <!--Import materialize.css-->
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-    <link rel="stylesheet" type="text/css" href="css/eventCalendar.css">
+    <link rel="stylesheet" type="text/css" href="<?php echo URLROOT?>/css/eventCalendar.css">
     <link rel="stylesheet" href="<?php echo URLROOT?>/css/styles.css" />
 
-    <?php if(isset($_SESSION['user_id'])) : ?>
-        <!--Import Google Icon Font-->
-     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-     <!--Import materialize.css-->
-     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-    <link rel="stylesheet" type="text/css" href="css/eventCalendar.css">
-    <?php endif; ?>
+    
 
     <title><?php echo SITENAME ?></title>
 </head>
 <body>
 <?php require APPROOT . '/views/inc/navbar.php'; ?>
-<div class="container">
+<div class="container startSplash">
