@@ -159,12 +159,23 @@ let eventCalendar = (function(calendarContainerId) {
 		that.eventsContainer = document.getElementById(eventsContainerId);
 	};
 
+	eventCalendar.prototype.sortDataEventsByDate = function(data){
+		data.sort((a,b) => {
+			a = a.date.split('-').reverse().join('');
+			b = b.date.split('-').reverse().join('');
+			return a > b ? 1 : a < b ? -1 : 0;
+		});
+
+		return data;
+	}
+
 	eventCalendar.prototype.setData = function(data) {
 		if (!data) {
 			throw new Error('Invalid data. Please give array with objects');
 			return;
 		}
-		that.eventsData = data;
+
+		that.eventsData = this.sortDataEventsByDate(data);
 	};
 
 	eventCalendar.prototype.setCurrentMonthNum = function(date) {
@@ -1266,27 +1277,9 @@ let eventCalendar = (function(calendarContainerId) {
 					result.push(evDate);
 				}
 			}
-			// let res = that.eventsData.filter(d => d.date === day);
-			// result.concat(res);
+			
 		}
-
-		// console.log(result);
-		// let dateOne = startDate.split('-');
-		// console.log('dateOne: ' + dateOne);
-		// let dateTwo = finishDate.split('-');
-		// let result = that.eventsData.filter((d) => {
-		// 	let currDate = d.date.split('-');
-		// 	console.log(currDate);
-		// 	if (
-		// 		dateOne[2] <= currDate[2] &&
-		// 		currDate[2] >= dateTwo[2] &&
-		// 		(dateOne[1] <= currDate[1] && currDate[1] >= dateTwo[1])
-		// 	) {
-		// 		return d;
-		// 	}
-		// });
-
-		return result;
+		return this.sortDataEventsByDate(result);
 	};
 
 	eventCalendar.prototype.formattedDate = function(date) {

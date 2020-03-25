@@ -1,6 +1,6 @@
 <?php require_once APPROOT . '/views/inc/header.php' ?>
 <?php if (isset($_SESSION['user_id'])) : ?>
-    <div class="row">
+    <div class="row blueBorder">
         <div class="col s6">
             <div id="simpleCalendarContainer"></div>
         </div>
