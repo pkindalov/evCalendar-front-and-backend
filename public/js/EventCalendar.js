@@ -159,15 +159,16 @@ let eventCalendar = (function(calendarContainerId) {
 		that.eventsContainer = document.getElementById(eventsContainerId);
 	};
 
-	eventCalendar.prototype.sortDataEventsByDate = function(data){
-		data.sort((a,b) => {
-			a = a.date.split('-').reverse().join('');
-			b = b.date.split('-').reverse().join('');
-			return a > b ? 1 : a < b ? -1 : 0;
+	eventCalendar.prototype.sortDataEventsByDate = function(data) {
+		data.sort((a, b) => {
+			return new Date(a.date) - new Date(b.date);
+			// a = a.date.split('-').reverse().join('');
+			// b = b.date.split('-').reverse().join('');
+			// return a > b ? 1 : a < b ? -1 : 0;
 		});
 
 		return data;
-	}
+	};
 
 	eventCalendar.prototype.setData = function(data) {
 		if (!data) {
@@ -283,6 +284,7 @@ let eventCalendar = (function(calendarContainerId) {
 		this.checkAndCloseOpenedDateWindow();
 		this.setThemeAllContainers();
 		this.drawCalendarBody();
+		this.checkRecentlyPastEvents();
 	};
 
 	eventCalendar.prototype.nextMonth = function() {
@@ -295,9 +297,10 @@ let eventCalendar = (function(calendarContainerId) {
 		this.checkAndCloseOpenedDateWindow();
 		this.setThemeAllContainers();
 		this.drawCalendarBody();
+		this.checkRecentlyPastEvents();
 	};
 
-	eventCalendar.prototype.getYearEventData = function(year){
+	eventCalendar.prototype.getYearEventData = function(year) {
 		fetch(`events/getUserEventsYear/${year}`)
 			.then((response) => {
 				return response.json();
@@ -306,7 +309,7 @@ let eventCalendar = (function(calendarContainerId) {
 				this.setData(data);
 				this.drawCalendarBody();
 			});
-	}
+	};
 
 	eventCalendar.prototype.prevYear = function() {
 		that.currentYear--;
@@ -1270,14 +1273,18 @@ let eventCalendar = (function(calendarContainerId) {
 		if (!that.eventsData) return [];
 
 		let result = [];
+		let eventDateArr;
+		let checkingDateArr;
 
 		for (let day of daysToCheck) {
 			for (let evDate of that.eventsData) {
-				if (day === evDate.date) {
+				eventDateArr = evDate.date.split('-');
+				checkingDateArr = day.split('-');
+				//check day and month if are equals
+				if (checkingDateArr[2] === eventDateArr[2] && checkingDateArr[1] === eventDateArr[1]) {
 					result.push(evDate);
 				}
 			}
-			
 		}
 		return this.sortDataEventsByDate(result);
 	};
@@ -1299,21 +1306,53 @@ let eventCalendar = (function(calendarContainerId) {
 
 	eventCalendar.prototype.getStrDatesFromCount = function(type, daysCount) {
 		let res = [];
-
+		let currentMontDays = new Date(that.currentYear, that.currentMonthNum + 1, 0).getDate();
+		let month = that.currentMonthNum;
+		let date = new Date().getDate();
+	
+		//months - from 0 to 11
 		switch (type) {
 			case 'prev':
-				for (let i = 0; i < daysCount; i++) {
+				for (let i = 0; i <= daysCount; i++) {
 					let d = new Date();
-					d.setDate(d.getDate() - i);
+					// let dd = d.getDate() - i;
+					// d.setDate(dd);
+
+					if (date < 0) {
+						date = 1;
+						d.setDate(date);
+						d.setMonth(--month);
+					} else {
+						d.setDate(date);
+						d.setMonth(month);
+					}
+					date--;
+					// d.setDate(d.getDate() - i);
+					// d.setMonth(month);
+					// console.log(this.formattedDate(d));
 					res.push(this.formattedDate(d));
 				}
 				break;
 			case 'next':
-				for (let i = 0; i < daysCount; i++) {
+				for (let i = 0; i <= daysCount; i++) {
 					let d = new Date();
-					d.setDate(d.getDate() + i);
+					// let dd = d.getDate() + i > currentMontDays ? 1 : d.getDate() + i;
+					// console.log(dd);
+					// d.setDate(dd);
+					if (date > currentMontDays) {
+						date = 1;
+						d.setDate(date);
+						d.setMonth(++month);
+					} else {
+						d.setDate(date);
+						d.setMonth(month);
+					}
+					date++;
+					// console.log(this.formattedDate(d));
+					// d.setMonth(that.currentMonthNum);
 					res.push(this.formattedDate(d));
 				}
+				
 				break;
 		}
 
@@ -1339,7 +1378,8 @@ let eventCalendar = (function(calendarContainerId) {
 	};
 
 	eventCalendar.prototype.getCurrentMonthEvents = function() {
-		let currentMonth = new Date().getMonth() + 1;
+		// let currentMonth = new Date().getMonth() + 1;
+		let currentMonth = that.currentMonthNum + 1;
 		let month;
 
 		if (!that.eventsData) return [];
@@ -1372,6 +1412,9 @@ let eventCalendar = (function(calendarContainerId) {
 
 	eventCalendar.prototype.checkRecentlyPastEvents = function() {
 		const WEEKDAYS = 7;
+		this.clearContainerById('previousEvents');
+		this.clearContainerById('eventsSection');
+
 		let pastWeekDates = this.getStrDatesFromCount('prev', WEEKDAYS);
 		let nextWeekDates = this.getStrDatesFromCount('next', WEEKDAYS);
 		let extractedPastEvents = this.extractEvents(pastWeekDates);
