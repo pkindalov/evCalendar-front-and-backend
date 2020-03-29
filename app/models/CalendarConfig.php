@@ -46,4 +46,13 @@ class CalendarConfig
 
         return false;
     }
+
+    public function createDefaultUserCalSettings(){
+        $this->db->query("INSERT INTO settings (`user_id`, `language`, `usingThemes`) VALUES (:userId, 1, NULL)");
+        $this->db->bind(":userId", $_SESSION['user_id'], null);
+        if($this->db->execute()){
+            return true;
+        }
+        return false;
+    }
 }

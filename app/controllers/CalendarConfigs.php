@@ -15,6 +15,12 @@ class CalendarConfigs extends Controller
         }
 
         $userSettings = $this->calConfigModel->getUsersSettingsById();
+        if(empty($userSettings)){
+            $createUserDefaultSettings = $this->calConfigModel->createDefaultUserCalSettings();
+            if($createUserDefaultSettings){
+                $userSettings = $this->calConfigModel->getUsersSettingsById();
+            }
+        }
         $allLanguages = $this->calConfigModel->getAllLanguages();
         $data = ['language' => 'bg', 'languageId' => 2, 'usingThemes' => true, 'allLanguages' => $allLanguages];
 
