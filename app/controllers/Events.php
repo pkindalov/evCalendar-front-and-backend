@@ -2,42 +2,44 @@
 class Events extends Controller
 {
     private $eventsModel;
+    private $calConfigModel;
 
     public function __construct()
     {
         $this->eventsModel = $this->model('Event');
+        $this->calConfigModel = $this->model('CalendarConfig');
     }
 
     public function addDate($date)
     {
         $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
 
-        if(!isset($_SESSION['user_id'])){
+        if (!isset($_SESSION['user_id'])) {
             echo json_encode(['success' => false, 'reason' => 'you must be logged to created events']);
             return;
         }
-        
-        if(!isset($_POST['eventText']) || strlen($_POST['eventText']) < 5 ){
+
+        if (!isset($_POST['eventText']) || strlen($_POST['eventText']) < 5) {
             echo json_encode(['success' => false, 'reason' => 'text of event do not exist or it is too short.']);
             return;
         }
-        if(!isset($_POST['hoursBegin']) || empty($_POST['hoursBegin'])){
+        if (!isset($_POST['hoursBegin']) || empty($_POST['hoursBegin'])) {
             echo json_encode(['success' => false, 'reason' => 'hoursBegin variable do not exist or it is empty']);
             return;
         }
-        if(!isset($_POST['hoursFinish']) || empty($_POST['hoursFinish'])){
+        if (!isset($_POST['hoursFinish']) || empty($_POST['hoursFinish'])) {
             echo json_encode(['success' => false, 'reason' => 'hoursFinish variable do not exist or it is empty']);
             return;
         }
-        if(!isset($_POST['selectedYear']) || empty($_POST['selectedYear'])){
+        if (!isset($_POST['selectedYear']) || empty($_POST['selectedYear'])) {
             echo json_encode(['success' => false, 'reason' => 'selectedYear variable do not exist or it is empty']);
             return;
         }
-        if(!isset($_POST['selectedMonth']) || empty($_POST['selectedMonth'])){
+        if (!isset($_POST['selectedMonth']) || empty($_POST['selectedMonth'])) {
             echo json_encode(['success' => false, 'reason' => 'selectedMonth variable do not exist or it is empty']);
             return;
         }
-        if(!isset($date) || empty($date)){
+        if (!isset($date) || empty($date)) {
             echo json_encode(['success' => false, 'reason' => 'date variable do not exist or it is empty']);
             return;
         }
@@ -53,15 +55,16 @@ class Events extends Controller
             "hoursFinish" => $_POST['hoursFinish'],
             "date" => $fullDate,
         ];
-        
-        if($this->eventsModel->addEvent($data)){
+
+        if ($this->eventsModel->addEvent($data)) {
             redirect('/');
         }
         return;
     }
 
-    public function getUserEventsCurrYear(){
-        if(isset($_SESSION['user_id'])){
+    public function getUserEventsCurrYear()
+    {
+        if (isset($_SESSION['user_id'])) {
             $currYearUserEvents = $this->eventsModel->getCurrYearUserEvents();
             header('Content-Type: application/json');
             echo json_encode($currYearUserEvents);
@@ -69,8 +72,20 @@ class Events extends Controller
         }
     }
 
-    public function getUserEventsYear($year){
-        if(isset($_SESSION['user_id']) && isset($year)){
+    public function getUserCalendarSettings()
+    {
+        $data = ['language' => 'bg', 'usingThemes' => true];
+        $userSettings = $this->calConfigModel->getUsersSettingsById();
+        if($userSettings){
+            $data = ['language' => $userSettings[0]->title, 'usingThemes' => !isset($userSettings[0]->usingThemes) ? false : $userSettings[0]->usingThemes];
+        }
+        header('Content-Type: application/json');
+        echo json_encode($data);
+    }
+
+    public function getUserEventsYear($year)
+    {
+        if (isset($_SESSION['user_id']) && isset($year)) {
             $yearUserEvents = $this->eventsModel->getYearUserEvents(htmlspecialchars($year));
             header('Content-Type: application/json');
             echo json_encode($yearUserEvents);
@@ -78,38 +93,40 @@ class Events extends Controller
         }
     }
 
-    public function editEvent($eventId){
+    public function editEvent($eventId)
+    {
 
-        if(!isset($_SESSION['user_id']) || !isset($_POST) || !isset($_POST['eventAuthor']) || !isset($eventId)){
+        if (!isset($_SESSION['user_id']) || !isset($_POST) || !isset($_POST['eventAuthor']) || !isset($eventId)) {
             redirect('/');
         }
 
-        if($_SESSION['user_id'] !== $_POST['eventAuthor']){
+        if ($_SESSION['user_id'] !== $_POST['eventAuthor']) {
             redirect('/');
         }
 
         $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
 
-        if($this->eventsModel->updateEvent(htmlspecialchars($eventId), $_POST)){
-            redirect('/');
-        }    
-        return;
-    }
-
-    public function deleteEvent($query){
-       $queryData = getQueryData($query);
-       if($this->eventsModel->removeEventById($queryData)){
-           redirect('/');
-       }
-       return;
-    }
-
-    public function checkUncheckEvent($query){
-        $queryData = getQueryData($query);
-        if($this->eventsModel->checkUncheckEventById($queryData)){
+        if ($this->eventsModel->updateEvent(htmlspecialchars($eventId), $_POST)) {
             redirect('/');
         }
         return;
     }
 
+    public function deleteEvent($query)
+    {
+        $queryData = getQueryData($query);
+        if ($this->eventsModel->removeEventById($queryData)) {
+            redirect('/');
+        }
+        return;
+    }
+
+    public function checkUncheckEvent($query)
+    {
+        $queryData = getQueryData($query);
+        if ($this->eventsModel->checkUncheckEventById($queryData)) {
+            redirect('/');
+        }
+        return;
+    }
 }
