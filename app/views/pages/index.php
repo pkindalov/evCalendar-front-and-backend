@@ -43,32 +43,20 @@
 
     <script src="<?php echo URLROOT ?>/js/EventCalendar.js"></script>
     <script>
-        // let dataEvents = [{
-        //         id: 1,
-        //         date: '2020-02-16',
-        //         from: '00:00:00',
-        //         to: '18:00:00',
-        //         text: 'Mother\'s birthday',
-        //         checked: false
-        //     },
-        //     {
-        //         id: 2,
-        //         date: '2020-02-16',
-        //         from: '00:00:00',
-        //         to: '18:00:00',
-        //         text: 'Father\'s birthday',
-        //         checked: false
-        //     },
-        // ];
-
         (async function() {
             let url = '/evCalendar/events/getUserEventsCurrYear';
-            let response = await fetch(url);
-            let data = await response.json(); // read response body and parse as JSON
+            let userEventsData = await fetch(url);
+            let data = await userEventsData.json(); // read response body and parse as JSON
+            
+            url = '/evCalendar/events/getUserCalendarSettings';
+            let userCalendarSettings = await fetch(url);
+            let calendarSettingsData = await userCalendarSettings.json();
+            // console.log(calendarSettingsData);
+
             let evCalendar = new eventCalendar({
                 calendarContainer: 'simpleCalendarContainer',
-                usingThemes: true,
-                language: 'bg',
+                usingThemes: calendarSettingsData['usingThemes'],
+                language: calendarSettingsData['language'],
                 calendarEventsData: data
                 // calendarEventsData: dataEvents
             });
@@ -77,9 +65,6 @@
             // evCalendar.setData(dataEvents);
             evCalendar.createCalendar();
         })();
-
-
-
     </script>
 
 <?php else : ?>

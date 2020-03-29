@@ -34,6 +34,10 @@
     document.addEventListener('DOMContentLoaded', function() {
     var elems = document.querySelectorAll('.sidenav');
     var instances = M.Sidenav.init(elems);
+    var selectElems = document.querySelectorAll('select');
+    var selectInstances = M.FormSelect.init(selectElems);
+
+  
   });
 </script>    
 </body>
