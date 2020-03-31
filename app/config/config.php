@@ -9,7 +9,8 @@
     define('APPROOT', dirname(dirname(__FILE__)));
 
     //URL root
-    define('URLROOT', 'http://192.168.0.125/evCalendar'); 
+    define('URLROOT', 'https://192.168.0.125/evCalendar'); 
+    // define('URLROOT', 'https://127.0.0.2/evCalendar'); 
 
     //Site name
     define('SITENAME', 'evCalendar');

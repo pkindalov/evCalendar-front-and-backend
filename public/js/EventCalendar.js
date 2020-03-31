@@ -253,8 +253,12 @@ let eventCalendar = (function(calendarContainerId) {
 	eventCalendar.prototype.setUseOfThemes = function(useTheme) {
 		if (typeof useTheme !== 'boolean') {
 			// throw new Error('Variable of setUseOfTheme method must be of type boolean');
-			console.log('Variable of setUseOfTheme method must be of type boolean');
-			return;
+			try{
+				useTheme = Boolean(useTheme);
+			}catch{
+				console.log('Variable of setUseOfTheme method must be of type boolean');
+				return;
+			}
 		}
 		that.useThemes = useTheme;
 	};
@@ -794,6 +798,10 @@ let eventCalendar = (function(calendarContainerId) {
 		window.location = `/evCalendar/events/checkUncheckEvent/?eventId=${event.id}&author=${event.user_id}&checked=${event.checked}`;
 	};
 
+	eventCalendar.prototype.reverseDateString = function(dateStr){
+		return dateStr.split('-').reverse().join('-');
+	}
+
 	eventCalendar.prototype.createList = function(type, data, addButtons) {
 		let listCont = document.createElement(type);
 		listCont.setAttribute('id', 'eventsCont');
@@ -801,7 +809,7 @@ let eventCalendar = (function(calendarContainerId) {
 
 		for (let event of data) {
 			li = document.createElement('li');
-			li.innerText = `${event.date} - ${event.from} : ${event.to} - ${event.text}`;
+			li.innerText = `${this.reverseDateString(event.date)} - ${event.from} : ${event.to} - ${event.text}`;
 
 			if (event.checked) {
 				li.setAttribute('class', 'itemChecked');
