@@ -57,7 +57,8 @@
                 calendarContainer: 'simpleCalendarContainer',
                 usingThemes: calendarSettingsData['usingThemes'],
                 language: calendarSettingsData['language'],
-                calendarEventsData: data
+                calendarEventsData: data,
+                notifications: true
                 // calendarEventsData: dataEvents
             });
             // evCalendar.setContainer('simpleCalendarContainer');

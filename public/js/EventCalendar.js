@@ -19,6 +19,8 @@ let eventCalendar = (function(calendarContainerId) {
 	that.eventsPagIndex = 5;
 	that.eventsPageSize = 5;
 	that.eventsResult = null;
+	that.userNotifPermission = false;
+	that.intervalCheckEventsNot = null;
 	(that.useThemes = true),
 		(that.darkThemes = [ 'darkTheme1', 'darkTheme2', 'darkTheme3', 'darkTheme4', 'darkTheme5', 'darkTheme6' ]);
 	that.colorfulThemes = [
@@ -129,6 +131,9 @@ let eventCalendar = (function(calendarContainerId) {
 						break;
 					case 'language':
 						this.setLanguage(config[key]);
+						break;
+					case 'notifications':
+						this.setUserNotifPermission(config[key]);
 						break;
 				}
 			}
@@ -263,8 +268,22 @@ let eventCalendar = (function(calendarContainerId) {
 		that.useThemes = useTheme;
 	};
 
+	eventCalendar.prototype.setUserNotifPermission = function(useNotifications){
+		if (typeof useNotifications !== 'boolean') {
+			// throw new Error('Variable of setUseOfTheme method must be of type boolean');
+			try{
+				useNotifications = Boolean(useNotifications);
+			}catch{
+				console.log('Variable of setUserNotifPermission method must be of type boolean');
+				return;
+			}
+		}
+		that.userNotifPermission = useNotifications;
+	}
+
 	eventCalendar.prototype.setLanguage = function(language) {
 		if (!language) {
+			console.log('Not valid language value.');
 			return;
 		}
 
@@ -1315,19 +1334,21 @@ let eventCalendar = (function(calendarContainerId) {
 	eventCalendar.prototype.getStrDatesFromCount = function(type, daysCount) {
 		let res = [];
 		let currentMontDays = new Date(that.currentYear, that.currentMonthNum + 1, 0).getDate();
+		let prevMonthDays = new Date(that.currentYear, that.currentMonthNum + 1, 0).getDate();
+		
 		let month = that.currentMonthNum;
 		let date = new Date().getDate();
 	
 		//months - from 0 to 11
 		switch (type) {
 			case 'prev':
-				for (let i = 0; i <= daysCount; i++) {
+				for (let i = 0; i < daysCount; i++) {
 					let d = new Date();
 					// let dd = d.getDate() - i;
 					// d.setDate(dd);
 
-					if (date < 0) {
-						date = 1;
+					if (date < 1) {
+						date = prevMonthDays;
 						d.setDate(date);
 						d.setMonth(--month);
 					} else {
@@ -1343,7 +1364,7 @@ let eventCalendar = (function(calendarContainerId) {
 				break;
 			case 'next':
 					date++;
-				for (let i = 0; i <= daysCount; i++) {
+				for (let i = 0; i < daysCount; i++) {
 					let d = new Date();
 					// let dd = d.getDate() + i > currentMontDays ? 1 : d.getDate() + i;
 					// console.log(dd);
@@ -1480,6 +1501,88 @@ let eventCalendar = (function(calendarContainerId) {
 		// let eventsCont = document.getElementById('eventsContainer');
 	};
 
+	eventCalendar.prototype.checkBrowserSupportNotifications = function(){
+		return window.Notification;
+	}
+
+	eventCalendar.prototype.createNotification = function(title, body, icon){
+		return new Notification(title, {
+			body: body,
+			icon: icon
+		});
+	}
+
+	eventCalendar.prototype.getAllEventsTodayTomorrow = function(){
+		let todayDateObj = new Date();
+		let today = this.formattedDate(todayDateObj);
+		let tomorrowObj = new Date(todayDateObj);
+		tomorrowObj.setDate(tomorrowObj.getDate() + 1);
+		let tomorrow = this.formattedDate(tomorrowObj);
+		return that.eventsData.filter(d => d.date === today || d.date == tomorrow);
+	}
+
+	eventCalendar.prototype.getHoursDiffByTwoDates = function(currentDateTime, eventDateAndHours){
+		let diff =(eventDateAndHours.getTime() - currentDateTime.getTime()) / 1000;
+		diff /= 60;
+		return Math.round(diff);
+	}
+
+
+	eventCalendar.prototype.checkUpcomingEvents = function(events){
+		let currentDateTime = new Date();
+		let timeleft;
+		for(let event of events){
+			eventDateAndHours = new Date(event.date + ' ' + event.from);
+			timeleft = this.getHoursDiffByTwoDates(currentDateTime, eventDateAndHours);
+			if(timeleft >= 30 && timeleft <= 60){
+				this.createNotification('Upcoming event in ' + timeleft +  ' mins ' + event.date, event.text, '');
+			}
+			if(timeleft >= 10 && timeleft < 30){
+				this.createNotification('Upcoming event in ' + timeleft  +  ' mins ' + event.date, event.text, '');
+			}
+			if(timeleft < 10 && timeleft > 0){
+				this.createNotification('Hurry up. Event begin in ' + timeleft  +  ' mins ' + event.date, event.text, '');
+
+			}
+		}
+	}
+	
+	eventCalendar.prototype.notificationModule = function(){
+		//check if user is make settings to true of the app notifications
+		if(that.userNotifPermission){
+			//check if the current user`s browser support notifications. If not then turn them off
+			if(!this.checkBrowserSupportNotifications()){
+				that.setUserNotifPermission = false;
+			}
+
+			if(that.eventsData.length === 0){
+				this.createNotification('Внимание', 'Все още няма въведени събития', '');	
+				return;
+			}
+			
+			let upcomingEvents = this.getAllEventsTodayTomorrow();
+			if(upcomingEvents.length == 0){
+				// this.createNotification('Внимание', 'Нямате събития за деня', '');	
+				that.userNotifPermission = false;
+				if(that.intervalCheckEventsNot){
+					clearInterval(that.intervalCheckEventsNot);
+					that.intervalCheckEventsNot = null;
+				}
+				return;
+			}
+
+			// this.checkUpcomingEvents(upcomingEvents);
+			that.intervalCheckEventsNot = setInterval(() => this.checkUpcomingEvents(upcomingEvents), 300000);
+			
+
+		} else {
+			if(that.intervalCheckEventsNot){
+				clearInterval(that.intervalCheckEventsNot);
+				that.intervalCheckEventsNot = null;
+			}
+		}
+	}
+
 	eventCalendar.prototype.createCalendar = function() {
 		if (!that.container) {
 			throw new Error('Problem with container. Invalid container - ' + that.container);
@@ -1496,6 +1599,8 @@ let eventCalendar = (function(calendarContainerId) {
 		this.drawCalendarBody();
 		this.addListenersToCalendar();
 		this.checkRecentlyPastEvents();
+		this.notificationModule();
+		
 		// this.checkUpcomingEvents();
 		// document.getElementById('evCalendarBody').innerHTML += this.drawCalendarBody();
 		// document.getElementById('evCalendarBody').innerHTML = '';
