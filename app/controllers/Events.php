@@ -133,4 +133,20 @@ class Events extends Controller
         }
         return;
     }
+
+    public function showEventFromNotif($eventId){
+        if(!isset($eventId) || empty($eventId)){
+            redirect('/');
+        }
+        
+        if(!$_SESSION['user_id']){
+            redirect('/');
+        }
+
+        $eventData = $this->eventsModel->showEventFromNotif($eventId);
+        // print_r($eventData);
+        $data = ['event' => $eventData];
+       
+        $this->view('events/showEventFromNotif', $data);
+    }
 }

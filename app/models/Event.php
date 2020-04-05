@@ -150,4 +150,23 @@ class Event
         }
         return false;
     }
+
+    public function showEventFromNotif($eventId){
+        $this->db->query("SELECT events.`id`, events.`text`, events.`date`,
+                                 events.`begin`, events.`finish`, events.`checkedEvent`
+                          FROM events WHERE events.`id` = :eventId AND events.`user_id` = :userId       
+        ");
+        $this->db->bind(":eventId", $eventId, null);
+        $this->db->bind(":userId", $_SESSION['user_id'], null);
+
+        $results = $this->db->execute();
+        if ($this->db->rowCount($results) == 0) {
+            return [];
+        } else {
+            $results = $this->db->resultSet();
+            return $results;
+        }
+
+        return $results;
+    }
 }
