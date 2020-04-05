@@ -1334,8 +1334,7 @@ let eventCalendar = (function(calendarContainerId) {
 	eventCalendar.prototype.getStrDatesFromCount = function(type, daysCount) {
 		let res = [];
 		let currentMontDays = new Date(that.currentYear, that.currentMonthNum + 1, 0).getDate();
-		let prevMonthDays = new Date(that.currentYear, that.currentMonthNum + 1, 0).getDate();
-		
+		let prevMonthDays = new Date(that.currentYear, that.currentMonthNum, 0).getDate();
 		let month = that.currentMonthNum;
 		let date = new Date().getDate();
 	
@@ -1349,8 +1348,9 @@ let eventCalendar = (function(calendarContainerId) {
 
 					if (date < 1) {
 						date = prevMonthDays;
+						month--;
+						d.setMonth(month);
 						d.setDate(date);
-						d.setMonth(--month);
 					} else {
 						d.setDate(date);
 						d.setMonth(month);
@@ -1384,7 +1384,7 @@ let eventCalendar = (function(calendarContainerId) {
 				
 				break;
 		}
-
+		
 		return res;
 	};
 
@@ -1506,10 +1506,16 @@ let eventCalendar = (function(calendarContainerId) {
 	}
 
 	eventCalendar.prototype.createNotification = function(title, body, icon){
-		return new Notification(title, {
+		let notification = new Notification(title, {
 			body: body,
-			icon: icon
+			icon: window.location.origin + '/images/calendar.png'
 		});
+		notification.onclick = function(event){
+			event.preventDefault();
+			window.open('https://www.graphicsandphotos.com/', '_blank');
+		}
+
+		return notification;
 	}
 
 	eventCalendar.prototype.getAllEventsTodayTomorrow = function(){
@@ -1535,13 +1541,13 @@ let eventCalendar = (function(calendarContainerId) {
 			eventDateAndHours = new Date(event.date + ' ' + event.from);
 			timeleft = this.getHoursDiffByTwoDates(currentDateTime, eventDateAndHours);
 			if(timeleft >= 30 && timeleft <= 60){
-				this.createNotification('Upcoming event in ' + timeleft +  ' mins ' + event.date, event.text, '');
+				this.createNotification('Upcoming event in ' + timeleft +  ' mins. Start at ' + event.from + ' ' + this.reverseDateString(event.date), event.text, 'images/calendar.png');
 			}
 			if(timeleft >= 10 && timeleft < 30){
-				this.createNotification('Upcoming event in ' + timeleft  +  ' mins ' + event.date, event.text, '');
+				this.createNotification('Upcoming event in ' + timeleft  +  ' mins. Start at ' + event.from + ' ' + this.reverseDateString(event.date), event.text, 'images/calendar.png');
 			}
 			if(timeleft < 10 && timeleft > 0){
-				this.createNotification('Hurry up. Event begin in ' + timeleft  +  ' mins ' + event.date, event.text, '');
+				this.createNotification('Hurry up. Event begin in ' + timeleft  +  ' mins. Start at ' + event.from + ' ' + this.reverseDateString(event.date), event.text, 'images/calendar.png');
 
 			}
 		}
