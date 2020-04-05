@@ -1508,7 +1508,7 @@ let eventCalendar = (function(calendarContainerId) {
 	eventCalendar.prototype.createNotification = function(title, body, icon){
 		let notification = new Notification(title, {
 			body: body,
-			icon: window.location.origin + '/images/calendar.png'
+			icon: window.document.URL.replace(/^(.*\/).*/, "$1") + 'images/calendar.png'
 		});
 		notification.onclick = function(event){
 			event.preventDefault();

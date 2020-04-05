@@ -74,10 +74,14 @@ class Events extends Controller
 
     public function getUserCalendarSettings()
     {
-        $data = ['language' => 'bg', 'usingThemes' => true];
+        $data = ['language' => 'bg', 'usingThemes' => true, 'notifications' => false];
         $userSettings = $this->calConfigModel->getUsersSettingsById();
         if($userSettings){
-            $data = ['language' => $userSettings[0]->title, 'usingThemes' => !isset($userSettings[0]->usingThemes) ? false : $userSettings[0]->usingThemes];
+            $data = [
+                'language' => $userSettings[0]->title, 
+                'usingThemes' => !isset($userSettings[0]->usingThemes) ? false : $userSettings[0]->usingThemes,
+                'notifications' => !isset($userSettings[0]->notifications) ? false : $userSettings[0]->notifications
+            ];
         }
         header('Content-Type: application/json');
         echo json_encode($data);

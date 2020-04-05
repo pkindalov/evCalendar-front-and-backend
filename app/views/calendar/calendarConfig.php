@@ -28,6 +28,16 @@
                                 <span>Use Themes</span>
                             </label>
                         </p>
+                        <p>
+                            <label>
+                                <?php if (isset($data['notifications']) && $data['notifications'] == 1) : ?>
+                                    <input name="notifications" type="checkbox" checked />
+                                <?php else : ?>
+                                    <input name="notifications" type="checkbox" />
+                                <?php endif; ?>
+                                <span>Notifications</span>
+                            </label>
+                        </p>
                     </div><br />
 
                     <input type="submit" value="Save Changes" class="btn btn-success" />

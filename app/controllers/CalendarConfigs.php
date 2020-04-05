@@ -22,14 +22,13 @@ class CalendarConfigs extends Controller
             }
         }
         $allLanguages = $this->calConfigModel->getAllLanguages();
-        $data = ['language' => 'bg', 'languageId' => 2, 'usingThemes' => true, 'allLanguages' => $allLanguages];
-
-
+        $data = ['language' => 'bg', 'languageId' => 2, 'usingThemes' => true, 'notifications' => false, 'allLanguages' => $allLanguages];
         if (isset($userSettings) && !empty($userSettings)) {
             $data = [
                 'language' => $userSettings[0]->title,
                 'languageId' => $userSettings[0]->language,
                 'usingThemes' => $userSettings[0]->usingThemes,
+                'notifications' => $userSettings[0]->notifications,
                 'allLanguages' => $allLanguages
             ];
         }
@@ -50,8 +49,13 @@ class CalendarConfigs extends Controller
 
         $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
         $usingThemes = !isset($_POST['usingThemes']) ? null : $_POST['usingThemes'];
+        $notifications = !isset($_POST['notifications']) ? null : $_POST['notifications'];
         
-        $data = ['languageId' => $_POST['language'], 'usingThemes' => $usingThemes == 'on' ? true : null];
+        $data = [
+            'languageId' => $_POST['language'], 
+            'usingThemes' => $usingThemes == 'on' ? true : null,
+            'notifications' => $notifications == 'on' ? true : null
+        ];
 
         $this->calConfigModel->saveUserSettings($data);
         redirect('/');

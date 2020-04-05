@@ -10,7 +10,7 @@ class CalendarConfig
 
     public function getUsersSettingsById()
     {
-        $this->db->query('SELECT settings.`language`, settings.`usingThemes`, languages.title FROM settings
+        $this->db->query('SELECT settings.`language`, settings.`usingThemes`, settings.`notifications`, languages.`title` FROM settings
         JOIN languages ON  languages.id = settings.`language`
         WHERE settings.user_id = :userId');
 
@@ -36,9 +36,10 @@ class CalendarConfig
     }
 
     public function saveUserSettings($data){
-        $this->db->query("UPDATE settings SET `language` = :languageId, `usingThemes` = :usingThemes WHERE `user_id` = :userId");
+        $this->db->query("UPDATE settings SET `language` = :languageId, `usingThemes` = :usingThemes, `notifications` = :notifications WHERE `user_id` = :userId");
         $this->db->bind(":languageId", $data['languageId'], null);
         $this->db->bind(":usingThemes", $data['usingThemes'], null);
+        $this->db->bind(":notifications", $data['notifications'], null);
         $this->db->bind(":userId", $_SESSION['user_id'], null);
         if($this->db->execute()){
             return true;
@@ -48,7 +49,7 @@ class CalendarConfig
     }
 
     public function createDefaultUserCalSettings(){
-        $this->db->query("INSERT INTO settings (`user_id`, `language`, `usingThemes`) VALUES (:userId, 1, NULL)");
+        $this->db->query("INSERT INTO settings (`user_id`, `language`, `usingThemes`, `notifications`) VALUES (:userId, 1, NULL, NULL)");
         $this->db->bind(":userId", $_SESSION['user_id'], null);
         if($this->db->execute()){
             return true;
