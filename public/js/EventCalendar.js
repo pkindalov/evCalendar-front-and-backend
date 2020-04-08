@@ -677,11 +677,11 @@ let eventCalendar = (function(calendarContainerId) {
 				textLabelTx = this.getTranslatedWord(that.eventsLabelsEn[5], 'en', 'bg');
 				break;
 			default:
-				createEvenBtnTxt = 'Add event';
-				clearBtnTx = 'Clear';
-				beginLabelTx = 'Begin';
-				finishLabelTx = 'Finsish';
-				textLabelTx = 'Text';
+				createEvenBtnTxt = that.buttonLabelsEn[0];
+				clearBtnTx = that.buttonLabelsEn[8];
+				beginLabelTx = that.eventsLabelsEn[3];
+				finishLabelTx = that.eventsLabelsEn[4];
+				textLabelTx = that.eventsLabelsEn[5];
 				break;
 		}
 
@@ -697,7 +697,7 @@ let eventCalendar = (function(calendarContainerId) {
 				  <input type="text" name="hoursFinish" class="timepicker" />  
 				  <input type="hidden" name="selectedMonth" value="${++that.currentMonthNum}" />
 				  <input type="hidden" name="selectedYear" value="${that.currentYear}" />
-				  <input type="submit" class="waves-effect waves-light btn" value="Create Event" />
+				  <input type="submit" class="waves-effect waves-light btn" value="${createEvenBtnTxt}" />
 				  <input type="reset" class="waves-effect waves-light btn" value="${clearBtnTx}" />
 				  </form>
 				  `;
