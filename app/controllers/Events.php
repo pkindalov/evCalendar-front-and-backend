@@ -134,7 +134,10 @@ class Events extends Controller
         return;
     }
 
-    public function showEventFromNotif($eventId){
+    public function showEventFromNotif($query){
+        $queryData = getQueryData($query);
+        $eventId = $queryData['id'];
+        $timeleft = $queryData['timeleft'];
         if(!isset($eventId) || empty($eventId)){
             redirect('/');
         }
@@ -144,8 +147,10 @@ class Events extends Controller
         }
 
         $eventData = $this->eventsModel->showEventFromNotif($eventId);
-        // print_r($eventData);
-        $data = ['event' => $eventData];
+        $data = [
+            'event' => $eventData,
+            'timeleft' => intval($timeleft)
+        ];
        
         $this->view('events/showEventFromNotif', $data);
     }

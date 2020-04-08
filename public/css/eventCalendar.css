@@ -450,3 +450,7 @@ td:hover{
     height: auto;
     overflow: auto;
 }
+
+h6{
+    line-height: 2em;
+}

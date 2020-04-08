@@ -1505,7 +1505,7 @@ let eventCalendar = (function(calendarContainerId) {
 		return window.Notification;
 	}
 
-	eventCalendar.prototype.createNotification = function(title, body, icon, event){
+	eventCalendar.prototype.createNotification = function(title, body, icon, event,timeleft){
 		let notification = new Notification(title, {
 			body: body,
 			icon: window.document.URL.replace(/^(.*\/).*/, "$1") + icon
@@ -1513,7 +1513,8 @@ let eventCalendar = (function(calendarContainerId) {
 		notification.onclick = function(e){
 			e.preventDefault();
 			// window.open(`https://192.168.0.125/evCalendar/events/showEventFromNotif/${event.id}`, '_blank');
-			window.open(`https://192.168.0.125/evCalendar/events/showEventFromNotif/${event.id}`);
+			// window.open(`https://192.168.0.125/evCalendar/events/showEventFromNotif/${event.id}`);
+			window.open(`https://192.168.0.125/evCalendar/events/showEventFromNotif?id=${event.id}&timeleft=${timeleft}`);
 		}
 
 		return notification;
@@ -1542,13 +1543,13 @@ let eventCalendar = (function(calendarContainerId) {
 			eventDateAndHours = new Date(event.date + ' ' + event.from);
 			timeleft = this.getHoursDiffByTwoDates(currentDateTime, eventDateAndHours);
 			if(timeleft >= 30 && timeleft <= 60){
-				this.createNotification('Upcoming event in ' + timeleft +  ' mins. Start at ' + event.from + ' ' + this.reverseDateString(event.date), event.text, 'images/calendar.png', event);
+				this.createNotification('Upcoming event in ' + timeleft +  ' mins. Start at ' + event.from + ' ' + this.reverseDateString(event.date), event.text, 'images/calendar.png', event, timeleft);
 			}
 			if(timeleft >= 10 && timeleft < 30){
-				this.createNotification('Upcoming event in ' + timeleft  +  ' mins. Start at ' + event.from + ' ' + this.reverseDateString(event.date), event.text, 'images/calendar.png', event);
+				this.createNotification('Upcoming event in ' + timeleft  +  ' mins. Start at ' + event.from + ' ' + this.reverseDateString(event.date), event.text, 'images/calendar.png', event, timeleft);
 			}
 			if(timeleft < 10 && timeleft > 0){
-				this.createNotification('Hurry up. Event begin in ' + timeleft  +  ' mins. Start at ' + event.from + ' ' + this.reverseDateString(event.date), event.text, 'images/calendar.png', event);
+				this.createNotification('Hurry up. Event begin in ' + timeleft  +  ' mins. Start at ' + event.from + ' ' + this.reverseDateString(event.date), event.text, 'images/calendar.png', event, timeleft);
 			}
 		}
 	}
