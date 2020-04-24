@@ -154,4 +154,13 @@ class Events extends Controller
        
         $this->view('events/showEventFromNotif', $data);
     }
+
+    public function turnOffNotif($eventId){
+        if(!isset($eventId) || empty($eventId) || !$eventId || !$_SESSION['user_id']){
+            redirect('/');
+        }
+        $eventId = htmlspecialchars($eventId);    
+        $this->eventsModel->turnOffNotif($eventId);
+        redirect('/');
+    }
 }

@@ -32,7 +32,7 @@ class Event
         $user = $_SESSION['user_id'];
         $searched = '%' . $currentYear . '%';
 
-        $this->db->query("SELECT id, date, begin AS `from`, finish AS `to`, text, checkedEvent AS `checked`, user_id FROM events WHERE events.user_id = :userId AND events.date LIKE :search");
+        $this->db->query("SELECT id, date, begin AS `from`, finish AS `to`, text, checkedEvent AS `checked`, user_id, showNotification FROM events WHERE events.user_id = :userId AND events.date LIKE :search");
         $this->db->bind(":userId", $user, null);
         $this->db->bind(":search", $searched, null);
 
@@ -120,10 +120,10 @@ class Event
         $author = htmlspecialchars($queryData['author']);
         $checked = htmlspecialchars($queryData['checked']);
         $checkedValue = $checked == 'false' ? NULL : 1;
-        
+
         //TO GET CHECKED STATUS OF THE EVENT HERE
 
-        
+
         // echo $eventId . "<br />";
         // echo "Before:" . "<br />";
         // echo $checked . "<br >";
@@ -151,7 +151,8 @@ class Event
         return false;
     }
 
-    public function showEventFromNotif($eventId){
+    public function showEventFromNotif($eventId)
+    {
         $this->db->query("SELECT events.`id`, events.`text`, events.`date`,
                                  events.`begin`, events.`finish`, events.`checkedEvent`
                           FROM events WHERE events.`id` = :eventId AND events.`user_id` = :userId       
@@ -168,5 +169,17 @@ class Event
         }
 
         return $results;
+    }
+
+    public function turnOffNotif($eventId)
+    {
+        $this->db->query("UPDATE events SET events.`showNotification` = NULL
+                        WHERE events.`id` = :eventId AND events.`user_id` = :userId");
+        $this->db->bind(":eventId", $eventId, null);
+        $this->db->bind(":userId", $_SESSION['user_id'], null);
+        if ($this->db->execute()) {
+            return true;
+        }
+        return false;
     }
 }

@@ -716,7 +716,6 @@ let eventCalendar = (function(calendarContainerId) {
 	eventCalendar.prototype.editLocalEvent = function(event) {
 		let eventsDashboard = document.getElementById('eventsDashboard');
 		eventsDashboard.innerHTML = '<div id="addEventCont"></div>';
-		console.log(event);
 		let editStaticEvenBtnTx = '';
 		let clearBtnTx = '';
 		let dateLabelTx = '';
@@ -793,7 +792,8 @@ let eventCalendar = (function(calendarContainerId) {
 		let eventIndex = this.getIndexOfSearchedEvent('id', event.id, that.eventsData);
 		if (eventIndex < 0) {
 			alert('No event found.There must be some error');
-			throw new Error('No such event found');
+			console.log('No such event found');
+			// throw new Error('No such event found');
 			return;
 		}
 
@@ -1296,30 +1296,82 @@ let eventCalendar = (function(calendarContainerId) {
 		return generatedCurrentWeekDate;
 	};
 
-	eventCalendar.prototype.extractEvents = function(daysToCheck) {
-		if (!that.eventsData) return [];
-
-		let result = [];
-		let eventDateArr;
-		let checkingDateArr;
-
-		for (let day of daysToCheck) {
-			for (let evDate of that.eventsData) {
-				eventDateArr = evDate.date.split('-');
-				checkingDateArr = day.split('-');
-				//check day and month if are equals
-				if (checkingDateArr[2] === eventDateArr[2] && checkingDateArr[1] === eventDateArr[1]) {
-					result.push(evDate);
-				}
+	//Return object with key date-month and value true for all values of the given arr
+	//Purpose is to search for these dates later and to save time.
+	eventCalendar.prototype.createAvailableDateMonthObj = function(arr){
+		let obj = {};
+		let dateArr;
+		let dateStr = '';
+		if(!arr || arr.length === 0) return obj;
+		for(let day of arr){
+			if(day){
+				dateArr = day.split('-');
+				dateStr += dateArr[2] + '-' + dateArr[1];
+				obj[dateStr] = true;
+				dateStr = '';
 			}
 		}
+
+		return obj;
+	}
+
+	//add new prop dateMonth to objects in given array  and return new array with mofidied objects 
+	eventCalendar.prototype.getArrDateMonthFromObj = function(arrWithObjs){
+		let resultArr = [];
+		let dateStr = '';
+		let dateArr = [];
+		if(arrWithObjs.length === 0) return resultArr;
+		
+		for(let event of arrWithObjs){
+			// console.log(event);
+			if(!event.date || event.date == "") continue;
+			dateArr = event.date.split('-');
+			dateStr += dateArr[2] + '-' + dateArr[1];
+			event.dateMonth = dateStr;
+			resultArr.push(event);
+			dateStr = '';
+		}
+		
+		return resultArr;
+	}
+
+	eventCalendar.prototype.extractEvents = function(daysToCheck) {
+		if (!that.eventsData) return [];
+		// console.log(daysToCheck);
+		// console.log(this.createAvailableDateMonthObj(daysToCheck));
+		let daysToCheckObj = this.createAvailableDateMonthObj(daysToCheck);
+		let eventsDatesArr= this.getArrDateMonthFromObj(that.eventsData);
+		
+		// console.log(daysToCheckObj);
+		let result = [];
+		
+		for(let event of eventsDatesArr){
+			if(daysToCheckObj[event.dateMonth]){
+				result.push(event);
+			}
+		}
+		// let eventDateArr;
+		// let checkingDateArr;
+		
+		// for (let day of daysToCheck) {
+		// 	for (let evDate of that.eventsData) {
+		// 		eventDateArr = evDate.date.split('-');
+		// 		checkingDateArr = day.split('-');
+		// 		//check day and month if are equals
+		// 		if (checkingDateArr[2] === eventDateArr[2] && checkingDateArr[1] === eventDateArr[1]) {
+		// 			result.push(evDate);
+		// 		}
+		// 	}
+		// }
+
+		// console.log(result.length);
 		return this.sortDataEventsByDate(result);
 	};
 
 	eventCalendar.prototype.formattedDate = function(date) {
-		var dd = date.getDate();
-		var mm = date.getMonth() + 1;
-		var yyyy = date.getFullYear();
+		let dd = date.getDate();
+		let mm = date.getMonth() + 1;
+		let yyyy = date.getFullYear();
 		if (dd < 10) {
 			dd = '0' + dd;
 		}
@@ -1447,6 +1499,7 @@ let eventCalendar = (function(calendarContainerId) {
 		let pastWeekDates = this.getStrDatesFromCount('prev', WEEKDAYS);
 		let nextWeekDates = this.getStrDatesFromCount('next', WEEKDAYS);
 		let extractedPastEvents = this.extractEvents(pastWeekDates);
+		// console.log(extractedPastEvents);
 		let extractedNextWeekEvents = this.extractEvents(nextWeekDates);
 		let currеntDayEvents = this.getCurrentDayEvents();
 		let currentMontEvents = this.getCurrentMonthEvents();
@@ -1539,7 +1592,8 @@ let eventCalendar = (function(calendarContainerId) {
 	eventCalendar.prototype.checkUpcomingEvents = function(events){
 		let currentDateTime = new Date();
 		let timeleft;
-		for(let event of events){
+		let filteredEvents = events.filter(event => event.showNotification !== null);
+		for(let event of filteredEvents){
 			eventDateAndHours = new Date(event.date + ' ' + event.from);
 			timeleft = this.getHoursDiffByTwoDates(currentDateTime, eventDateAndHours);
 			if(timeleft >= 30 && timeleft <= 60){

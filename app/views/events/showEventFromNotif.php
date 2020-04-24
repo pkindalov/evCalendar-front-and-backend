@@ -22,7 +22,7 @@
                     <p><?php echo $data['event'][0]->text; ?></p>
                 </div>
                 <div class="card-action">
-                    <a href="/events/turnOffNotif/<?php echo $data['event'][0]->id; ?>">Turn off notification for this event</a>
+                    <a href="<?php echo URLROOT; ?>/events/turnOffNotif/<?php echo $data['event'][0]->id; ?>">Turn off notification for this event</a>
                 </div>
             </div>
         </div>
