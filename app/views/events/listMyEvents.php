@@ -1,0 +1,161 @@
+<?php require_once APPROOT . '/views/inc/header.php' ?>
+<div class="row">
+    <div class="col l4">
+        <div class="input-field col s12">
+            <select name="selectedYear">
+                <!-- <option value="<?php //echo $data['year']; 
+                                    ?>" disabled selected><?php //echo $data['year']; 
+                                                            ?></option> -->
+                <?php
+                $year = intval($data['year']);
+                $upLimit = $year + 20;
+                $downLimit = $year - 40;
+                for ($i = $upLimit; $i >= $downLimit; $i--) {
+                    if ($i === intval($data['year'])) {
+                        echo '<option value="' . ($i) . '" disabled selected>' . ($i) . '</option>';
+                    } else {
+                        echo '<option value="' . ($i) . '">' . ($i) . '</option>';
+                    }
+                    //  echo $i . "<br />";
+                }
+
+
+
+                // $counter = 0;
+                // $year = isset($data['year']) ? intval($data['year']) : intval(date('Y'));
+
+                // while ($counter < 40) {
+                //     echo '<option value="' . ($year) . '">' . ($year) . '</option>';
+                //     $year--;
+                //     $counter++;
+                // }
+                ?>
+            </select>
+            <label>Year</label>
+        </div>
+
+
+    </div>
+    <div class="col l6">
+        <div class="input-field col s12 m6">
+            <select name="selectedMonth" class="icons">
+                <?php
+                $counter = 1;
+                $month = isset($data['month']) ? intval($data['month']) : intval(date('m'));
+                $month = $month < 10 ? '0' . $month : '' . $month;
+                $monthStr = $month < 10 ? '0' . $month : '' . $month;
+                $monthNames = [
+                    '01' => 'January',
+                    '02' => 'February',
+                    '03' => 'March',
+                    '04' => 'April',
+                    '05' => 'May',
+                    '06' => 'June',
+                    '07' => 'July',
+                    '08' => 'August',
+                    '09' => 'September',
+                    '10' => 'October',
+                    '11' => 'November',
+                    '12' => 'December',
+                ];
+
+                echo '<option value="' . $data['month'] . '" disabled selected>' . $monthNames[$data['month']] . '</option>';
+
+                while ($counter <= 12) {
+                    $monthStr = $counter < 10 ? '0' . $counter : '' . $counter;
+                    echo $month;
+                    if ($monthStr !== $month) {
+                        echo '<option data-icon="images/sample-1.jpg" value="' . ($monthStr) . '">' . $monthNames[$monthStr] . '</option>';
+                    }
+                    $counter++;
+                }
+                ?>
+                <!-- <option value="" data-icon="images/sample-1.jpg">example 1</option>
+                <option value="" data-icon="images/office.jpg">example 2</option>
+                <option value="" data-icon="images/yuna.jpg">example 3</option> -->
+            </select>
+            <label>Images in select</label>
+        </div>
+    </div>
+</div>
+
+<?php foreach ($data['events'] as $event) : ?>
+    <!-- <?php //print_r($event); ?> -->
+    <div class="col s12 m7">
+        <h2 class="header"><?php echo $event->date; ?></h2>
+        <div class="card horizontal">
+            <div class="card-image">
+                <!-- <img src="https://lorempixel.com/100/190/nature/6"> -->
+            </div>
+            <div class="card-stacked">
+                <div class="card-content">
+                    <?php if ($event->checkedEvent) : ?>
+                        <p class="checkedEvent"><?php echo $event->text; ?></p>
+                    <?php else : ?>
+                        <p><?php echo $event->text; ?></p>
+                    <?php endif; ?>
+                    <p>Begin: <?php echo $event->begin; ?></p>
+                    <p>Finish: <?php echo $event->finish; ?></p>
+                    <p>Notification Turned ON: <?php echo $event->showNotification == 1 ? "ON" : "OFF"; ?></p>
+                </div>
+                <div class="card-action">
+                    <a href="<?php echo URLROOT; ?>/events/loadEventEdit/<?php echo $event->id; ?>">Edit</a>
+                    <!-- Modal Trigger -->
+                    <button data-target="<?php echo $event->id; ?>" class="btn modal-trigger red accent-4">Delete</button>
+                    <!-- Modal Structure -->
+                    <div id="<?php echo $event->id; ?>" class="modal">
+                        <div class="modal-content">
+                            <h4>Are you sure to delete <?php echo $event->date; ?></h4>
+                            <p><?php echo $event->text; ?></p>
+                        </div>
+                        <div class="modal-footer">
+                            <a href="#!" class="modal-close waves-effect waves-green btn-flat">CANCEL</a>
+                            <!-- /evCalendar/events/deleteEvent/?eventId=${event.id}&author=${event.user_id} -->
+                            <a class="btn red accent-4" href="<?php echo URLROOT;?>/events/deleteEvent/?eventId=<?php echo $event->id; ?>&author=<?php echo $event->user_id; ?>">Delete</a>
+                        </div>
+                    </div>
+                   
+                </div>
+            </div>
+        </div>
+    </div>
+
+<?php endforeach; ?>
+
+<div class="row">
+    <div class="col-md-12">
+
+
+        <?php if ($data['hasPrevPage']) : ?>
+            <a href="<?php echo URLROOT; ?>/events/listMyEvents?year=<?php echo $data['year']; ?>&month=<?php echo $data['month']; ?>&page=<?php echo $data['prevPage']; ?>" class="btn btn-primary pull-left">
+                <i class="fa fa-backward"></i> Prev
+            </a>
+        <?php endif; ?>
+
+        <?php if ($data['hasNextPage']) : ?>
+            <a href="<?php echo URLROOT; ?>/events/listMyEvents?year=<?php echo $data['year']; ?>&month=<?php echo $data['month']; ?>&page=<?php echo $data['nextPage']; ?>" class="btn btn-primary pull-right">
+                <i class="fa fa-forward"></i> Next
+            </a>
+        <?php endif; ?>
+
+    </div>
+</div>
+
+<script>
+    let selYearSelect = document.getElementsByName('selectedYear')[0];
+    let selMontSelect = document.getElementsByName('selectedMonth')[0];
+    selYearSelect.addEventListener('change', function(event) {
+        let year = selYearSelect.value;
+        let month = selMontSelect.value;
+        window.location = `/evCalendar/events/listMyEvents?year=${year}&month=${month}&page=1`;
+
+    });
+    selMontSelect.addEventListener('change', function(event) {
+        let year = selYearSelect.value;
+        let month = selMontSelect.value;
+        window.location = `/evCalendar/events/listMyEvents?year=${year}&month=${month}&page=1`;
+
+    });
+</script>
+
+<?php require_once APPROOT . '/views/inc/footer.php' ?>
