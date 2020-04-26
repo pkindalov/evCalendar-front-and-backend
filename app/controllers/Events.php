@@ -163,4 +163,41 @@ class Events extends Controller
         $this->eventsModel->turnOffNotif($eventId);
         redirect('/');
     }
+
+    public function listMyEvents($query){
+        if(!isset($_SESSION['user_id'])){
+            redirect('/');
+        }
+        $queryData = getQueryData($query);
+        $year = isset($queryData['year']) ? htmlspecialchars($queryData['year']) : date('Y');
+        $page = isset($queryData['page']) ? htmlspecialchars($queryData['page']) : 1;
+        $month = isset($queryData['month']) ? htmlspecialchars($queryData['month']) : date('m');
+        $pageSize = 10;
+        $events = $this->eventsModel->getMyEventsByYearAndMonth($year, $month, $page, $pageSize);
+        $data = [
+            'events' => $events,
+            'page' => $page,
+            'year' => $year,
+            'month' => $month,
+            'hasNextPage' => count($events) > 0,
+            'hasPrevPage' => $page > 1,
+            'nextPage' => $page + 1,
+            'prevPage' => $page - 1,
+        ];
+        $this->view('events/listMyEvents', $data);
+    }
+
+    public function loadEventEdit($eventId){
+        if(!isset($eventId) || !isset($_SESSION['user_id'])){
+            redirect("/");
+        }
+
+        $eventId = htmlspecialchars($eventId);
+        $event = $this->eventsModel->getEventById($eventId);
+        $data = [
+            'event' => $event[0]
+        ];
+        // print_r($event);
+        $this->view('events/editEvent', $data);
+    }
 }

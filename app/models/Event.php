@@ -66,7 +66,6 @@ class Event
 
     public function updateEvent($eventId, $data)
     {
-
         $text = $data['eventTextName'];
         $date = $data['editedDate'];
         $begin = $data['hoursBegin'];
@@ -181,5 +180,53 @@ class Event
             return true;
         }
         return false;
+    }
+
+    public function getMyEventsByYearAndMonth($year, $month, $page, $pageSize)
+    {
+        $offset = ($page - 1) * $pageSize;
+        $searchedYear = '%' . $year . '-' . $month . '%';
+        $this->db->query("SELECT * FROM events
+                          WHERE events.date LIKE :year
+                          AND events.user_id = :userId
+                          ORDER BY events.date DESC
+                          LIMIT :limit
+                          OFFSET :offset
+                         ");
+        $this->db->bind(":year", $searchedYear, null);
+        $this->db->bind(":userId", $_SESSION['user_id'], null);
+        $this->db->bind(":limit", $pageSize, null);
+        $this->db->bind(":offset", $offset, null);
+
+        $results = $this->db->execute();
+        if ($this->db->rowCount($results) == 0) {
+            return [];
+        } else {
+            $results = $this->db->resultSet();
+            return $results;
+        }
+
+        return $results;
+    }
+
+    public function getEventById($eventId)
+    {
+        $this->db->query("SELECT events.* FROM events WHERE events.id = :eventId");
+        $this->db->bind(":eventId", $eventId, null);
+        $results = $this->getResults();
+        return $results;
+    }
+
+    private function getResults()
+    {
+        $results = $this->db->execute();
+        if ($this->db->rowCount($results) == 0) {
+            return [];
+        } else {
+            $results = $this->db->resultSet();
+            return $results;
+        }
+
+        return $results;
     }
 }
