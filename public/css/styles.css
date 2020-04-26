@@ -1,3 +1,7 @@
 .startSplash{
     border: none;
 }
+
+.checkedEvent{
+    text-decoration: line-through;
+}
