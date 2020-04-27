@@ -173,6 +173,31 @@ class Events extends Controller
         redirect('/');
     }
 
+    private function extractEventsByDate($data){
+        $sortedData = [];
+        foreach($data as $event){
+            // print_r($event);
+            $eventDetails = [
+                'id' => $event->id,
+                'text' => $event->text,
+                'begin' => $event->begin,
+                'finish' => $event->finish,
+                'date' => $event->date,
+                'checkedEvent' => $event->checkedEvent,
+                'showNotification' => $event->showNotification,
+                'user_id' => $event->user_id
+            ];
+            // if(!isset($sortedData[$event->date])){
+            //     $sortedData[$event->date][] = $eventDetails; 
+            // } else {
+                
+            // }
+            $sortedData[$event->date][] = $eventDetails; 
+        }
+
+        return $sortedData;
+    }
+
     public function listMyEvents($query){
         if(!isset($_SESSION['user_id'])){
             redirect('/');
@@ -183,8 +208,9 @@ class Events extends Controller
         $month = isset($queryData['month']) ? htmlspecialchars($queryData['month']) : date('m');
         $pageSize = 10;
         $events = $this->eventsModel->getMyEventsByYearAndMonth($year, $month, $page, $pageSize);
+        $sortedByDate = $this->extractEventsByDate($events);
         $data = [
-            'events' => $events,
+            // 'events' => $events,
             'page' => $page,
             'year' => $year,
             'month' => $month,
@@ -192,6 +218,7 @@ class Events extends Controller
             'hasPrevPage' => $page > 1,
             'nextPage' => $page + 1,
             'prevPage' => $page - 1,
+            'sortedData' => $sortedByDate
         ];
         $this->view('events/listMyEvents', $data);
     }
