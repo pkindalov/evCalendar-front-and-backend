@@ -1,6 +1,9 @@
 <?php require_once APPROOT . '/views/inc/header.php' ?>
-<div class="row">
-    <div class="col l4">
+<!-- <?php //print_r($data); 
+        ?> -->
+        <!-- <?php //echo date('Y-m-d'); ?> -->
+<div class="row center-align">
+    <div class="col l12">
         <div class="input-field col s12">
             <select name="selectedYear">
                 <!-- <option value="<?php //echo $data['year']; 
@@ -33,11 +36,12 @@
             </select>
             <label>Year</label>
         </div>
-
-
     </div>
-    <div class="col l6">
-        <div class="input-field col s12 m6">
+</div>
+
+<div class="row">
+<div class="col l12">
+        <div class="input-field col s12">
             <select name="selectedMonth" class="icons">
                 <?php
                 $counter = 1;
@@ -74,14 +78,15 @@
                 <option value="" data-icon="images/office.jpg">example 2</option>
                 <option value="" data-icon="images/yuna.jpg">example 3</option> -->
             </select>
-            <label>Images in select</label>
+            <label>Months</label>
         </div>
     </div>
 </div>
 
 <?php foreach ($data['events'] as $event) : ?>
-    <!-- <?php //print_r($event); ?> -->
-    <div class="col s12 m7">
+    <!-- <?php //print_r($event); 
+            ?> -->
+    <div class="col s12 m7 <?php if($event->date === date('Y-m-d')) echo 'blue lighten-1' ?> center-align">
         <h2 class="header"><?php echo $event->date; ?></h2>
         <div class="card horizontal">
             <div class="card-image">
@@ -96,12 +101,18 @@
                     <?php endif; ?>
                     <p>Begin: <?php echo $event->begin; ?></p>
                     <p>Finish: <?php echo $event->finish; ?></p>
-                    <p>Notification Turned ON: <?php echo $event->showNotification == 1 ? "ON" : "OFF"; ?></p>
+                    <p>Notification Turned <?php echo $event->showNotification == 1 ? "ON" : "OFF"; ?></p>
                 </div>
                 <div class="card-action">
-                    <a href="<?php echo URLROOT; ?>/events/loadEventEdit/<?php echo $event->id; ?>">Edit</a>
+                    <a class="btn blue lighten-2" href="<?php echo URLROOT; ?>/events/loadEventEdit/<?php echo $event->id; ?>">Edit</a>
+                    <?php if ($event->showNotification == 1) : ?>
+                        <a class="btn red lighten-1" href="<?php echo URLROOT; ?>/events/turnOffNotif/<?php echo $event->id; ?>">Notification Turn OFF</a>
+                    <?php else : ?>
+                        <a class="btn cyan accent-3" href="<?php echo URLROOT; ?>/events/turnOnNotif/<?php echo $event->id; ?>">Notification Turn ON</a>
+                    <?php endif; ?>
                     <!-- Modal Trigger -->
                     <button data-target="<?php echo $event->id; ?>" class="btn modal-trigger red accent-4">Delete</button>
+
                     <!-- Modal Structure -->
                     <div id="<?php echo $event->id; ?>" class="modal">
                         <div class="modal-content">
@@ -111,10 +122,10 @@
                         <div class="modal-footer">
                             <a href="#!" class="modal-close waves-effect waves-green btn-flat">CANCEL</a>
                             <!-- /evCalendar/events/deleteEvent/?eventId=${event.id}&author=${event.user_id} -->
-                            <a class="btn red accent-4" href="<?php echo URLROOT;?>/events/deleteEvent/?eventId=<?php echo $event->id; ?>&author=<?php echo $event->user_id; ?>">Delete</a>
+                            <a class="btn red accent-4" href="<?php echo URLROOT; ?>/events/deleteEvent/?eventId=<?php echo $event->id; ?>&author=<?php echo $event->user_id; ?>">Delete</a>
                         </div>
                     </div>
-                   
+
                 </div>
             </div>
         </div>
