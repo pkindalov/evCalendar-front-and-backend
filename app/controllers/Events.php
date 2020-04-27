@@ -164,6 +164,15 @@ class Events extends Controller
         redirect('/');
     }
 
+    public function turnOnNotif($eventId){
+        if(!isset($eventId) || empty($eventId) || !$eventId || !$_SESSION['user_id']){
+            redirect('/');
+        }
+        $eventId = htmlspecialchars($eventId);    
+        $this->eventsModel->turnOnNotif($eventId);
+        redirect('/');
+    }
+
     public function listMyEvents($query){
         if(!isset($_SESSION['user_id'])){
             redirect('/');

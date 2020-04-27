@@ -182,6 +182,18 @@ class Event
         return false;
     }
 
+    public function turnOnNotif($eventId)
+    {
+        $this->db->query("UPDATE events SET events.`showNotification` = 1
+                        WHERE events.`id` = :eventId AND events.`user_id` = :userId");
+        $this->db->bind(":eventId", $eventId, null);
+        $this->db->bind(":userId", $_SESSION['user_id'], null);
+        if ($this->db->execute()) {
+            return true;
+        }
+        return false;
+    }
+
     public function getMyEventsByYearAndMonth($year, $month, $page, $pageSize)
     {
         $offset = ($page - 1) * $pageSize;
