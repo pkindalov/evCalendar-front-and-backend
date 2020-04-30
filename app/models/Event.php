@@ -221,12 +221,28 @@ class Event
         return $results;
     }
 
+
     public function getEventById($eventId)
     {
         $this->db->query("SELECT events.* FROM events WHERE events.id = :eventId");
         $this->db->bind(":eventId", $eventId, null);
         $results = $this->getResults();
         return $results;
+    }
+
+    public function searchEventsByKeyword($keyword, $page, $pageSize){
+        $offset = ($page - 1) * $pageSize;
+        $searchingStr = '%' . $keyword . '%';
+        $this->db->query("SELECT events.* FROM events
+                          WHERE events.`text` LIKE :keyword AND events.user_id = :userId
+                          LIMIT :limit
+                          OFFSET :offset");
+        $this->db->bind(":keyword", $searchingStr, null);
+        $this->db->bind(":userId", $_SESSION['user_id'], null);
+        $this->db->bind(":limit", $pageSize, null);
+        $this->db->bind(":offset", $offset, null);
+        $results = $this->getResults();
+        return $results;                 
     }
 
     private function getResults()
@@ -241,4 +257,5 @@ class Event
 
         return $results;
     }
+
 }

@@ -223,6 +223,39 @@ class Events extends Controller
         $this->view('events/listMyEvents', $data);
     }
 
+    
+    public function searchEvent($query){
+        header('Content-Type: text/html; charset=utf-8');
+        if(!isset($_SESSION['user_id'])){
+            redirect('/');
+        }
+
+        $queryData = getQueryData($query);
+        $keyword = htmlspecialchars(urldecode($queryData['keyword']));
+        if(!isset($keyword) || count($keyword) < 3){
+            redirect('/');
+        }
+        $page = isset($queryData['page']) ? htmlspecialchars($queryData['page']) : 1;
+        $pageSize = 10;
+        $events = $this->eventsModel->searchEventsByKeyword($keyword, $page, $pageSize);
+        $sortedByDate = $this->extractEventsByDate($events);
+
+        $data = [
+            'page' => $page,
+            'hasNextPage' => count($events) > 0,
+            'hasPrevPage' => $page > 1,
+            'nextPage' => $page + 1,
+            'prevPage' => $page - 1,
+            'sortedData' => $sortedByDate,
+            'keyword' => $keyword
+        ];
+        $this->view('events/listSearchResults', $data);
+        
+        
+    }
+
+   
+
     public function loadEventEdit($eventId){
         if(!isset($eventId) || !isset($_SESSION['user_id'])){
             redirect("/");
@@ -236,4 +269,8 @@ class Events extends Controller
         // print_r($event);
         $this->view('events/editEvent', $data);
     }
+
+    // private function stripAccents($stripAccents){
+    //     return strtr($stripAccents,'àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ','aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY');
+    //   }
 }
