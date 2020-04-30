@@ -41,7 +41,6 @@
         </div>
     </div>
 </div>
-
 <div class="row">
     <div class="col l12">
         <div class="input-field col s12">
@@ -65,7 +64,6 @@
                     '11' => 'November',
                     '12' => 'December',
                 ];
-
                 echo '<option value="' . $data['month'] . '" disabled selected>' . $monthNames[$data['month']] . '</option>';
 
                 while ($counter <= 12) {
@@ -85,84 +83,60 @@
         </div>
     </div>
 </div>
-
-<?php $dateKeys = array_keys($data['sortedData']);
-$count = 0; ?>
-<?php foreach ($data['sortedData'] as $eventsData) : ?>
-    <!-- <?php //print_r($dateKeys); 
-            ?> -->
-    <?php if (isset($dateKeys[$count])) : ?>
-        <h2 class="<?php if ($dateKeys[$count] === date('Y-m-d')) echo 'blue lighten-1' ?>"><?php echo $dateKeys[$count]; ?></h2>
-    <?php endif; ?>
-    <?php foreach ($eventsData as $event) : ?>
+<?php foreach ($data['sortedData'] as $key => $eventsData) : ?>
+    <h2 class="<?php if ($key === date('Y-m-d')) echo 'blue lighten-1' ?>"><?php echo $key; ?></h2>
+    <?php foreach ($eventsData as $key => $event) : ?>
         <div>
-            <?php if (isset($dateKeys[$count])) : ?>
-
-
-                <div class="col s12 m7 <?php if ($event['date'] === date('Y-m-d')) echo 'blue lighten-1' ?> center-align">
-                    <!-- <h2 class="header"><?php //echo $event['date']; 
-                                            ?></h2> -->
-                    <div class="card horizontal">
-                        <div class="card-image">
+            <div class="col s12 m7 <?php if ($event['date'] === date('Y-m-d')) echo 'blue lighten-1' ?> center-align">
+                <!-- <h2 class="header"><?php //echo $event['date']; 
+                                        ?></h2> -->
+                <div class="card horizontal">
+                    <div class="card-image">
+                    </div>
+                    <div class="card-stacked">
+                        <div class="card-content">
+                            <?php if ($event['checkedEvent']) : ?>
+                                <p class="checkedEvent"><?php echo $event['text']; ?></p>
+                            <?php else : ?>
+                                <p><?php echo $event['text']; ?></p>
+                            <?php endif; ?>
+                            <p>Begin: <?php echo $event['begin']; ?></p>
+                            <p>Finish: <?php echo $event['finish']; ?></p>
+                            <p>Date: <?php echo $event['date']; ?></p>
+                            <p>Notification Turned <?php echo $event['showNotification'] == 1 ? "ON" : "OFF"; ?></p>
                         </div>
-                        <div class="card-stacked">
-                            <div class="card-content">
-                                <?php if ($event['checkedEvent']) : ?>
-                                    <p class="checkedEvent"><?php echo $event['text']; ?></p>
-                                <?php else : ?>
+                        <div class="card-action">
+                            <a class="btn blue lighten-2" href="<?php echo URLROOT; ?>/events/loadEventEdit/<?php echo $event['id']; ?>">Edit</a>
+                            <?php if ($event['showNotification'] == 1) : ?>
+                                <a class="btn red lighten-1" href="<?php echo URLROOT; ?>/events/turnOffNotif/<?php echo $event['id']; ?>">Notification Turn OFF</a>
+                            <?php else : ?>
+                                <a class="btn cyan accent-3" href="<?php echo URLROOT; ?>/events/turnOnNotif/<?php echo $event['id']; ?>">Notification Turn ON</a>
+                            <?php endif; ?>
+                            <!-- Modal Trigger -->
+                            <button data-target="<?php echo $event['id']; ?>" class="btn modal-trigger red accent-4">Delete</button>
+
+                            <!-- Modal Structure -->
+                            <div id="<?php echo $event['id']; ?>" class="modal">
+                                <div class="modal-content">
+                                    <h4>Are you sure to delete <?php echo $event['date']; ?></h4>
                                     <p><?php echo $event['text']; ?></p>
-                                <?php endif; ?>
-                                <p>Begin: <?php echo $event['begin']; ?></p>
-                                <p>Finish: <?php echo $event['finish']; ?></p>
-                                <p>Notification Turned <?php echo $event['showNotification'] == 1 ? "ON" : "OFF"; ?></p>
-                            </div>
-                            <div class="card-action">
-                                <a class="btn blue lighten-2" href="<?php echo URLROOT; ?>/events/loadEventEdit/<?php echo $event['id']; ?>">Edit</a>
-                                <?php if ($event['showNotification'] == 1) : ?>
-                                    <a class="btn red lighten-1" href="<?php echo URLROOT; ?>/events/turnOffNotif/<?php echo $event['id']; ?>">Notification Turn OFF</a>
-                                <?php else : ?>
-                                    <a class="btn cyan accent-3" href="<?php echo URLROOT; ?>/events/turnOnNotif/<?php echo $event['id']; ?>">Notification Turn ON</a>
-                                <?php endif; ?>
-                                <!-- Modal Trigger -->
-                                <button data-target="<?php echo $event['id']; ?>" class="btn modal-trigger red accent-4">Delete</button>
-
-                                <!-- Modal Structure -->
-                                <div id="<?php echo $event['id']; ?>" class="modal">
-                                    <div class="modal-content">
-                                        <h4>Are you sure to delete <?php echo $event['date']; ?></h4>
-                                        <p><?php echo $event['text']; ?></p>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <a href="#!" class="modal-close waves-effect waves-green btn-flat">CANCEL</a>
-                                        <!-- /evCalendar/events/deleteEvent/?eventId=${event.id}&author=${event.user_id} -->
-                                        <a class="btn red accent-4" href="<?php echo URLROOT; ?>/events/deleteEvent/?eventId=<?php echo $event['id']; ?>&author=<?php echo $event['user_id']; ?>">Delete</a>
-                                    </div>
                                 </div>
-
+                                <div class="modal-footer">
+                                    <a href="#!" class="modal-close waves-effect waves-green btn-flat">CANCEL</a>
+                                    <!-- /evCalendar/events/deleteEvent/?eventId=${event.id}&author=${event.user_id} -->
+                                    <a class="btn red accent-4" href="<?php echo URLROOT; ?>/events/deleteEvent/?eventId=<?php echo $event['id']; ?>&author=<?php echo $event['user_id']; ?>">Delete</a>
+                                </div>
                             </div>
+
                         </div>
                     </div>
                 </div>
-
-
-
-
-
-
-
-
-
-
-            <?php endif ?>
+            </div>
         </div>
-        <?php $count++; ?>
     <?php endforeach; ?>
 <?php endforeach; ?>
-
 <div class="row">
     <div class="col-md-12">
-
-
         <?php if ($data['hasPrevPage']) : ?>
             <a href="<?php echo URLROOT; ?>/events/listMyEvents?year=<?php echo $data['year']; ?>&month=<?php echo $data['month']; ?>&page=<?php echo $data['prevPage']; ?>" class="btn btn-primary pull-left">
                 <i class="fa fa-backward"></i> Prev
@@ -174,10 +148,8 @@ $count = 0; ?>
                 <i class="fa fa-forward"></i> Next
             </a>
         <?php endif; ?>
-
     </div>
 </div>
-
 <script>
     let selYearSelect = document.getElementsByName('selectedYear')[0];
     let selMontSelect = document.getElementsByName('selectedMonth')[0];
@@ -185,14 +157,11 @@ $count = 0; ?>
         let year = selYearSelect.value;
         let month = selMontSelect.value;
         window.location = `/evCalendar/events/listMyEvents?year=${year}&month=${month}&page=1`;
-
     });
     selMontSelect.addEventListener('change', function(event) {
         let year = selYearSelect.value;
         let month = selMontSelect.value;
         window.location = `/evCalendar/events/listMyEvents?year=${year}&month=${month}&page=1`;
-
     });
 </script>
-
 <?php require_once APPROOT . '/views/inc/footer.php' ?>
