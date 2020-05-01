@@ -58,51 +58,50 @@
       window.location = `<?php echo URLROOT; ?>/events/searchEvent?keyword=${searchInput}&page=1`;
     }
 
-    searchBtn.addEventListener('click', function(event) {
-      const searchInput = document.getElementById('autocomplete-input').value;
-      if (!searchInput || searchInput === "" || searchInput === null || searchInput === " " || searchInput.length < 3) {
-        alert('Invalid keyword or too short.');
-        return false;
-      }
-      getKeywordAndSend(searchInput);
-    });
+    if (searchBtn) {
+      searchBtn.addEventListener('click', function(event) {
+        const searchInput = document.getElementById('autocomplete-input').value;
+        if (!searchInput || searchInput === "" || searchInput === null || searchInput === " " || searchInput.length < 3) {
+          alert('Invalid keyword or too short.');
+          return false;
+        }
+        getKeywordAndSend(searchInput);
+      });
+    }
 
-    searchInput.addEventListener('change', function(event){
-      const searchInput = event.target.value;
-      if (!searchInput || searchInput === "" || searchInput === null || searchInput === " " || searchInput.length < 3) {
-        alert('Invalid keyword or too short.');
-        return false;
-      }
-      getKeywordAndSend(searchInput);
-    });
+    if (searchInput) {
+      searchInput.addEventListener('change', function(event) {
+        const searchInput = event.target.value;
+        if (!searchInput || searchInput === "" || searchInput === null || searchInput === " " || searchInput.length < 3) {
+          alert('Invalid keyword or too short.');
+          return false;
+        }
+        getKeywordAndSend(searchInput);
+      });
 
-    searchBtnNav.addEventListener('click', function(event) {
-      const searchInput = document.getElementById("autocomplete-input-nav").value;
-      if (!searchInput || searchInput === "" || searchInput === null || searchInput === " " || searchInput.length < 3) {
-        alert('Invalid keyword or too short.');
-        return false;
-      }
-      getKeywordAndSend(searchInput);
-    });
+    }
 
-    searchInputNav.addEventListener('change', function(event){
-      const searchInput = event.target.value;
-      if (!searchInput || searchInput === "" || searchInput === null || searchInput === " " || searchInput.length < 3) {
-        alert('Invalid keyword or too short.');
-        return false;
-      }
-      getKeywordAndSend(searchInput);
-    });
+    if (searchBtnNav) {
+      searchBtnNav.addEventListener('click', function(event) {
+        const searchInput = document.getElementById("autocomplete-input-nav").value;
+        if (!searchInput || searchInput === "" || searchInput === null || searchInput === " " || searchInput.length < 3) {
+          alert('Invalid keyword or too short.');
+          return false;
+        }
+        getKeywordAndSend(searchInput);
+      });
+    }
 
-
-
-
-    // searchBtn.addEventListener('keydown', function(event){
-    //   alert(1);
-    //   getKeywordAndSend();
-    // });
-
-
+    if (searchInputNav) {
+      searchInputNav.addEventListener('change', function(event) {
+        const searchInput = event.target.value;
+        if (!searchInput || searchInput === "" || searchInput === null || searchInput === " " || searchInput.length < 3) {
+          alert('Invalid keyword or too short.');
+          return false;
+        }
+        getKeywordAndSend(searchInput);
+      });
+    }
   });
 </script>
 </body>
