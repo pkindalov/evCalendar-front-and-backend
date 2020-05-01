@@ -232,7 +232,7 @@ class Events extends Controller
 
         $queryData = getQueryData($query);
         $keyword = htmlspecialchars(urldecode($queryData['keyword']));
-        if(!isset($keyword) || count($keyword) < 3){
+        if(!isset($keyword) || strlen($keyword) < 3){
             redirect('/');
         }
         $page = isset($queryData['page']) ? htmlspecialchars($queryData['page']) : 1;

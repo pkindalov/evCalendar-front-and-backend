@@ -50,6 +50,8 @@
     });
 
     const searchBtn = document.getElementById("searchBtn");
+    const searchInput = document.getElementById("autocomplete-input");
+    const searchInputNav = document.getElementById("autocomplete-input-nav");
     const searchBtnNav = document.getElementById("searchBtnNav");
 
     function getKeywordAndSend(searchInput) {
@@ -64,6 +66,16 @@
       }
       getKeywordAndSend(searchInput);
     });
+
+    searchInput.addEventListener('change', function(event){
+      const searchInput = event.target.value;
+      if (!searchInput || searchInput === "" || searchInput === null || searchInput === " " || searchInput.length < 3) {
+        alert('Invalid keyword or too short.');
+        return false;
+      }
+      getKeywordAndSend(searchInput);
+    });
+
     searchBtnNav.addEventListener('click', function(event) {
       const searchInput = document.getElementById("autocomplete-input-nav").value;
       if (!searchInput || searchInput === "" || searchInput === null || searchInput === " " || searchInput.length < 3) {
@@ -72,6 +84,19 @@
       }
       getKeywordAndSend(searchInput);
     });
+
+    searchInputNav.addEventListener('change', function(event){
+      const searchInput = event.target.value;
+      if (!searchInput || searchInput === "" || searchInput === null || searchInput === " " || searchInput.length < 3) {
+        alert('Invalid keyword or too short.');
+        return false;
+      }
+      getKeywordAndSend(searchInput);
+    });
+
+
+
+
     // searchBtn.addEventListener('keydown', function(event){
     //   alert(1);
     //   getKeywordAndSend();
