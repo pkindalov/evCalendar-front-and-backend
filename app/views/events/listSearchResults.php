@@ -37,6 +37,13 @@
                         </div>
                         <div class="card-action">
                             <a class="btn blue lighten-2" href="<?php echo URLROOT; ?>/events/loadEventEdit/<?php echo $event['id']; ?>">Edit</a>
+                            <?php if ($event['checkedEvent'] == 1) : ?>
+                                <a class="btn red lighten-1" href="<?php echo URLROOT; ?>/events/checkUncheckEvent/?eventId=<?php echo $event['id']; ?>&author=<?php echo $event['user_id']; ?>&checked=false">Uncheck</a>
+
+                            <?php else : ?>
+                                <?php echo $event['checkedEvent']; ?>
+                                <a class="btn cyan accent-3" href="<?php echo URLROOT; ?>/events/checkUncheckEvent/?eventId=<?php echo $event['id']; ?>&author=<?php echo $event['user_id']; ?>&checked=1">Check</a>
+                            <?php endif; ?>
                             <?php if ($event['showNotification'] == 1) : ?>
                                 <a class="btn red lighten-1" href="<?php echo URLROOT; ?>/events/turnOffNotif/<?php echo $event['id']; ?>">Notification Turn OFF</a>
                             <?php else : ?>

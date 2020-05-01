@@ -234,7 +234,7 @@ class Event
         $offset = ($page - 1) * $pageSize;
         $searchingStr = '%' . $keyword . '%';
         $this->db->query("SELECT events.* FROM events
-                          WHERE events.`text` LIKE :keyword AND events.user_id = :userId
+                          WHERE events.`text` LIKE :keyword OR events.`date` LIKE :keyword AND events.user_id = :userId
                           LIMIT :limit
                           OFFSET :offset");
         $this->db->bind(":keyword", $searchingStr, null);
