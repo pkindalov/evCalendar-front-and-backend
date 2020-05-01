@@ -32,7 +32,7 @@
     <p>
         <input type="hidden" name="eventAuthor" value="<?php echo $data['event']->user_id; ?>" />
         <input type="submit" class="waves-effect waves-light btn" value="Save Changes" />
-        <input type="reset" class="waves-effect waves-light btn" value="$Clear" />
+        <input type="reset" class="waves-effect waves-light btn" value="Clear" />
     </p>
 </form>
 <?php require_once APPROOT . '/views/inc/footer.php' ?>

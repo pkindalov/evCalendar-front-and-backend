@@ -83,6 +83,14 @@
         </div>
     </div>
 </div>
+
+<div class="row">
+    <div class="col l12">
+        <a class="btn teal lighten-1" href="#" id="evAddBtn">
+            <i class="material-icons">add</i></a>
+    </div>
+</div>
+
 <?php foreach ($data['sortedData'] as $key => $eventsData) : ?>
     <h2 class="<?php if ($key === date('Y-m-d')) echo 'blue lighten-1' ?>"><?php echo $key; ?></h2>
     <?php foreach ($eventsData as $key => $event) : ?>
@@ -103,7 +111,8 @@
                             <p>Begin: <?php echo $event['begin']; ?></p>
                             <p>Finish: <?php echo $event['finish']; ?></p>
                             <p>Date: <?php echo $event['date']; ?></p>
-                            <!-- <p>Checked: <?php //echo $event['checkedEvent']; ?> </p> -->
+                            <!-- <p>Checked: <?php //echo $event['checkedEvent']; 
+                                                ?> </p> -->
                             <p>Notification Turned <?php echo $event['showNotification'] == 1 ? "ON" : "OFF"; ?></p>
                         </div>
                         <div class="card-action">
@@ -119,7 +128,7 @@
                                 <a class="btn red lighten-1" href="<?php echo URLROOT; ?>/events/turnOffNotif/<?php echo $event['id']; ?>">Notification Turn OFF</a>
                             <?php else : ?>
                                 <a class="btn cyan accent-3" href="<?php echo URLROOT; ?>/events/turnOnNotif/<?php echo $event['id']; ?>">Notification Turn ON</a>
-                            <?php endif; ?>    
+                            <?php endif; ?>
 
 
 
@@ -176,6 +185,11 @@
         let year = selYearSelect.value;
         let month = selMontSelect.value;
         window.location = `/evCalendar/events/listMyEvents?year=${year}&month=${month}&page=1`;
+    });
+
+    const evAddBtn = document.getElementById("evAddBtn");
+    evAddBtn.addEventListener('click', function() {
+        window.location = '<?php echo URLROOT; ?>/events/addNewEvent';
     });
 </script>
 <?php require_once APPROOT . '/views/inc/footer.php' ?>

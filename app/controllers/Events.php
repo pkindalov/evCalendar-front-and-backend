@@ -270,6 +270,21 @@ class Events extends Controller
         $this->view('events/editEvent', $data);
     }
 
+    public function addNewEvent(){
+        if(!isset($_SESSION['user_id'])){
+            redirect('/');
+        }
+        
+        if($_SERVER['REQUEST_METHOD'] === 'POST' && count($_POST) > 0){
+            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+            if ($this->eventsModel->addEvent($_POST)) {
+                redirect('/');
+            }
+            return;
+        }
+        $this->view('events/addNewEvent');
+    }
+
     // private function stripAccents($stripAccents){
     //     return strtr($stripAccents,'àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ','aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY');
     //   }
