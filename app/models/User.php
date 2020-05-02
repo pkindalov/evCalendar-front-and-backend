@@ -40,6 +40,14 @@
             }
         }
 
+        public function fbLogin($email){
+            $this->db->query("SELECT * FROM users WHERE email = :email");
+            $this->db->bind(':email', $email, null);
+
+            $row = $this->db->single();
+            return $row;
+        }
+
         //Find user by email
         public function findUserByEmail($email){
             $this->db->query("SELECT * FROM users WHERE email = :email");

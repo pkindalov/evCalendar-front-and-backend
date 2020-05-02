@@ -125,8 +125,8 @@ class Users extends Controller
                 $data['password_err'] = 'Please enter passord';
             }
 
-             //Check for user/email
-             if($this->userModel->findUserByEmail($data['email'])){
+            //Check for user/email
+            if ($this->userModel->findUserByEmail($data['email'])) {
                 //User found
             } else {
                 $data['email_err'] = 'No user found.';
@@ -138,17 +138,16 @@ class Users extends Controller
                 empty($data['password_err'])
             ) {
                 //Validated
-               //Check and set logged users
-               $loggedUser = $this->userModel->login($data['email'], $data['password']);
+                //Check and set logged users
+                $loggedUser = $this->userModel->login($data['email'], $data['password']);
 
-                if($loggedUser){
+                if ($loggedUser) {
                     //Create Session
-                   $this->createUserSession($loggedUser);
+                    $this->createUserSession($loggedUser);
                 } else {
                     $data['password_err'] = 'Email or Password incorrect';
                     $this->view('users/login', $data);
                 }
-
             } else {
                 $this->view('users/login', $data);
             }
@@ -166,14 +165,23 @@ class Users extends Controller
         }
     }
 
-    public function createUserSession($user){
+    public function createUserSession($user)
+    {
         $_SESSION['user_id'] = $user->id;
         $_SESSION['user_email'] = $user->email;
         $_SESSION['user_name'] = $user->name;
         redirect('pages/index');
     }
 
-    public function logout(){
+    public function createUserSessionWithoutRedirect($user)
+    {
+        $_SESSION['user_id'] = $user->id;
+        $_SESSION['user_email'] = $user->email;
+        $_SESSION['user_name'] = $user->name;
+    }
+
+    public function logout()
+    {
         unset($_SESSION['user_id']);
         unset($_SESSION['user_email']);
         unset($_SESSION['user_name']);
@@ -181,11 +189,40 @@ class Users extends Controller
         redirect('users/login');
     }
 
-    public function isLoggedIn(){
-        if(isset($_SESSION['user_id'])){
+    public function isLoggedIn()
+    {
+        if (isset($_SESSION['user_id'])) {
             return true;
         } else {
             return false;
+        }
+    }
+
+    public function fbLogin()
+    {
+        if (!$_SERVER['REQUEST_METHOD'] === 'POST') {
+            redirect('/');
+        }
+
+        if (!isset($_POST)) {
+            redirect('/');
+        }
+
+        $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+        $userEmail = htmlspecialchars($_POST['email']);
+        // $data = array_values($_POST);
+        // $dataObj = json_decode($data[0]);
+        // print_r($data);
+
+        // echo $dataObj->email;
+        if ($this->userModel->findUserByEmail($userEmail)) {
+            $loggedUser = $this->userModel->fbLogin($userEmail);
+            if (isset($loggedUser)) {
+                $this->createUserSessionWithoutRedirect($loggedUser);
+                echo json_encode(['success' => true]);
+            }
+        } else {
+            echo json_encode(['success' => false]);
         }
     }
 }
