@@ -22,7 +22,7 @@
             </div>
         </li>
 
-       
+
 
         <li><a href="<?php echo URLROOT; ?>/calendarConfigs/userSettings">Cal.Settings</a></li>
         <li><a href="<?php echo URLROOT; ?>/events/listMyEvents?year=<?php echo date('Y'); ?>&month=<?php echo date('m'); ?>&page=1">My Events</a></li>
@@ -31,8 +31,12 @@
         <li><a href="<?php echo URLROOT; ?>/users/register">Register</a></li>
         <li><a href="<?php echo URLROOT; ?>/users/login">Login</a></li>
         <li>
-          <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
-          </fb:login-button>
+          <div>
+            <a>
+            <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
+            </fb:login-button>
+            </a>
+          </div>
         </li>
       <?php endif ?>
     </ul>
@@ -62,9 +66,13 @@
     <li><a href="<?php echo URLROOT; ?>/users/register">Register</a></li>
     <li><a href="<?php echo URLROOT; ?>/users/login">Login</a></li>
     <li>
+      <div class="moveLeft">
+        <a>
           <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
           </fb:login-button>
-        </li>
+        </a>
+      </div>
+    </li>
   <?php endif ?>
 </ul>
 

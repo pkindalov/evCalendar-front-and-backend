@@ -9,3 +9,11 @@
 h1,h2,h3,h4,h5,h6{
     line-height: 1.5em;
 }
+
+.fb_iframe_widget span{
+    vertical-align: middle !important;
+}
+
+.moveLeft{
+    padding-left: 30px;
+}

@@ -200,6 +200,7 @@ class Users extends Controller
 
     public function fbLogin()
     {
+
         if (!$_SERVER['REQUEST_METHOD'] === 'POST') {
             redirect('/');
         }
@@ -210,11 +211,7 @@ class Users extends Controller
 
         $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
         $userEmail = htmlspecialchars($_POST['email']);
-        // $data = array_values($_POST);
-        // $dataObj = json_decode($data[0]);
-        // print_r($data);
 
-        // echo $dataObj->email;
         if ($this->userModel->findUserByEmail($userEmail)) {
             $loggedUser = $this->userModel->fbLogin($userEmail);
             if (isset($loggedUser)) {
@@ -224,5 +221,10 @@ class Users extends Controller
         } else {
             echo json_encode(['success' => false]);
         }
+    }
+
+    public function fbLoginProblem()
+    {
+        $this->view('users/fbLoginProblem');
     }
 }

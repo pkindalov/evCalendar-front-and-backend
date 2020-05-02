@@ -22,14 +22,10 @@
 
     <script>
         function statusChangeCallback(response) { // Called with the results from FB.getLoginStatus().
-            console.log('statusChangeCallback');
-            console.log(response); // The current login status of the person.
             if (response.status === 'connected') { // Logged into your webpage and Facebook.
-                testAPI();
+                fbLogin();
             } else { // Not logged into your webpage or we are unable to tell.
-                window.location = '<?php echo URLROOT; ?>/evCalendar/users/login';
-                // document.getElementById('status').innerHTML = 'Please log ' +
-                //     'into this webpage.';
+                window.location = '<?php echo URLROOT; ?>/evCalendar/users/fbLoginProblem';
             }
         }
 
@@ -39,8 +35,7 @@
             });
         }
 
-        function testAPI() { // Testing Graph API after login.  See statusChangeCallback() for when this call is made.
-            console.log('Welcome!  Fetching your information.... ');
+        function fbLogin() { // Testing Graph API after login.  See statusChangeCallback() for when this call is made.
             FB.api('/me', {
                 fields: 'name, email'
             }, function(response) {
@@ -59,7 +54,7 @@
                             return;
                         }
 
-                        window.location = '<?php echo URLROOT; ?>/users/login';
+                        window.location = '<?php echo URLROOT; ?>/users/fbLoginProblem';
                     }
                 }
 
