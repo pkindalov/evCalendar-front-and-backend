@@ -1,9 +1,14 @@
 <?php
+
+require_once APPROOT . '/libraries/PhpMailSender.php';
+
 class Users extends Controller
 {
     public function __construct()
     {
         $this->userModel = $this->model('User');
+        $this->phpMailer = new PhpMailSender(MAIL_HOST, MAIL_PORT, MAIL_USERNAME, MAIL_PASSWORD);
+        $this->phpMailer->setCharset(CHARSET);
     }
 
     public function register()
@@ -226,5 +231,29 @@ class Users extends Controller
     public function fbLoginProblem()
     {
         $this->view('users/fbLoginProblem');
+    }
+
+    public function sendMail(){
+       try{
+              
+           $this->phpMailer->setIsSMTP();
+           $this->phpMailer->setSMTPAuth(SMTP_AUTH);
+           $this->phpMailer->setSMTPSecure(SMTP_SECURE);
+           $this->phpMailer->setIsHTML(IS_HTML);
+           $this->phpMailer->setFrom(SET_FROM);
+           $this->phpMailer->setSubject("Пращам това от сървъра");
+           $this->phpMailer->setBody("Пробвам да видя дали да включа библиотеката в проекта");
+           $this->phpMailer->setReceiver("ponko88@abv.bg");
+           $this->phpMailer->setMsgSentSuccess('Message sent successfully!');
+
+        //    var_dump($this->phpMailer);
+           echo $this->phpMailer->sendMail();
+        // var_dump(method_exists($this->phpMailer, 'IsSMTP'));
+
+       } catch(Exception $e){
+         echo "Message could not be sent. Mailer Error: {$this->phpMailer->getError()}";
+       } 
+       
+
     }
 }
