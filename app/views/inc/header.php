@@ -35,10 +35,12 @@
             });
         }
 
+
         function fbLogin() { // Testing Graph API after login.  See statusChangeCallback() for when this call is made.
             FB.api('/me', {
                 fields: 'name, email'
             }, function(response) {
+              
                 let formData = new FormData();
                 formData.append('email', response.email);
 
@@ -47,14 +49,31 @@
                 request.send(formData);
                 request.onreadystatechange = function() {
                     if (request.readyState == XMLHttpRequest.DONE) {
-                        // console.log(request.responseText);
                         const serverResp = JSON.parse(request.responseText);
-                        if(serverResp.success){
+                        if (serverResp.success) {
                             window.location = '<?php echo URLROOT; ?>/';
                             return;
                         }
-
-                        window.location = '<?php echo URLROOT; ?>/users/fbLoginProblem';
+                        //if mail is not found on my db
+                       
+                        if (response.name) {
+                            let userFormData = new FormData();
+                            userFormData.append('name', response.name);
+                            userFormData.append('email', response.email);
+                            let regRequest = new XMLHttpRequest();
+                            regRequest.open("POST", "<?php echo URLROOT; ?>/users/fbLoginRegUser");
+                            regRequest.send(userFormData);
+                            regRequest.onreadystatechange = function() {
+                                if (regRequest.readyState == XMLHttpRequest.DONE) {
+                                    const serverResp = JSON.parse(regRequest.responseText);
+                                    if (serverResp.success) {
+                                        window.location = '<?php echo URLROOT; ?>/users/login';
+                                        return;
+                                    }
+                                }
+                            }
+                        }
+                        // window.location = '<?php //echo URLROOT;?>/users/fbLoginProblem';
                     }
                 }
 

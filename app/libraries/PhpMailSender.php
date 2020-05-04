@@ -174,9 +174,9 @@ class PhpMailSender
     public function sendMail()
     {
         if ($this->mail->send()) {
-            return $this->message_sent_successfully;
+            return true;
         }
-        return $this->getError();
+        return false;
     }
 
     public function getError()

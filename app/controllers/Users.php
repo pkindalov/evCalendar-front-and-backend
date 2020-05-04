@@ -205,7 +205,6 @@ class Users extends Controller
 
     public function fbLogin()
     {
-
         if (!$_SERVER['REQUEST_METHOD'] === 'POST') {
             redirect('/');
         }
@@ -213,7 +212,6 @@ class Users extends Controller
         if (!isset($_POST)) {
             redirect('/');
         }
-
         $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
         $userEmail = htmlspecialchars($_POST['email']);
 
@@ -228,32 +226,86 @@ class Users extends Controller
         }
     }
 
+    public function fbLoginRegUser()
+    {
+        if (!$_SERVER['REQUEST_METHOD'] === 'POST') {
+            redirect('/');
+        }
+
+        if (!isset($_POST)) {
+            redirect('/');
+        }
+
+        $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+        $genPass = $this->genRndPassword();
+        $data = [
+            'name' => htmlspecialchars($_POST['name']),
+            'email' =>  htmlspecialchars($_POST['email']),
+            'password' => password_hash($genPass, PASSWORD_DEFAULT)
+        ];
+
+        $subject = 'Registration in evCalendar';
+        $body = 'Your password for the site is ' .$genPass . '.' . '<br />You can change it when you want';
+
+       
+        // if($this->sendMail($subject, $body,$data['email'])){
+        //     flash('register_success', 'You are registered successfully. You can login in your profile now');
+        //     redirect('users/login');
+        // }
+
+        if ($this->userModel->register($data)) {
+            flash('register_success', 'You are registered successfully. You can login in your profile now');
+            $subject = 'Registration in evCalendar';
+            $body = 'Your password for the site is ' .$genPass . '.' . '<br />You can change it when you want';
+            if($this->sendMail($subject, $body,$data['email'])){
+                flash('register_success', 'You are registered successfully. You can login in your profile now');
+                echo json_encode(['success' => true]);
+            } else {
+                echo json_encode(['success' => false]);
+            }
+        } 
+    }
+
     public function fbLoginProblem()
     {
         $this->view('users/fbLoginProblem');
     }
 
-    public function sendMail(){
-       try{
-              
-           $this->phpMailer->setIsSMTP();
-           $this->phpMailer->setSMTPAuth(SMTP_AUTH);
-           $this->phpMailer->setSMTPSecure(SMTP_SECURE);
-           $this->phpMailer->setIsHTML(IS_HTML);
-           $this->phpMailer->setFrom(SET_FROM);
-           $this->phpMailer->setSubject("Пращам това от сървъра");
-           $this->phpMailer->setBody("Пробвам да видя дали да включа библиотеката в проекта");
-           $this->phpMailer->setReceiver("ponko88@abv.bg");
-           $this->phpMailer->setMsgSentSuccess('Message sent successfully!');
+    private function sendMail($subject, $body, $receiver)
+    {
+        try {
 
-        //    var_dump($this->phpMailer);
-           echo $this->phpMailer->sendMail();
-        // var_dump(method_exists($this->phpMailer, 'IsSMTP'));
+            $this->phpMailer->setIsSMTP();
+            $this->phpMailer->setSMTPAuth(SMTP_AUTH);
+            $this->phpMailer->setSMTPSecure(SMTP_SECURE);
+            $this->phpMailer->setIsHTML(IS_HTML);
+            $this->phpMailer->setFrom(SET_FROM);
+            $this->phpMailer->setSubject($subject);
+            $this->phpMailer->setBody($body);
+            $this->phpMailer->setReceiver($receiver);
+            $this->phpMailer->setMsgSentSuccess('Message sent successfully!');
 
-       } catch(Exception $e){
-         echo "Message could not be sent. Mailer Error: {$this->phpMailer->getError()}";
-       } 
-       
+           
+            // print_r($this->phpMailer->getAllSettings());    
 
+            //    var_dump($this->phpMailer);
+            return $this->phpMailer->sendMail();
+            // var_dump(method_exists($this->phpMailer, 'IsSMTP'));
+
+        } catch (Exception $e) {
+            echo "Message could not be sent. Mailer Error: {$this->phpMailer->getError()}";
+        }
+    }
+
+    private function genRndPassword()
+    {
+        $alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+        $pass = array(); //remember to declare $pass as an array
+        $alphaLength = strlen($alphabet) - 1; //put the length -1 in cache
+        for ($i = 0; $i < 8; $i++) {
+            $n = rand(0, $alphaLength);
+            $pass[] = $alphabet[$n];
+        }
+        return implode($pass); //turn the array into a string
     }
 }
