@@ -245,9 +245,9 @@ class Users extends Controller
         ];
 
         $subject = 'Registration in evCalendar';
-        $body = 'Your password for the site is ' .$genPass . '.' . '<br />You can change it when you want';
+        $body = 'Your password for the site is ' . $genPass . '.' . '<br />You can change it when you want';
 
-       
+
         // if($this->sendMail($subject, $body,$data['email'])){
         //     flash('register_success', 'You are registered successfully. You can login in your profile now');
         //     redirect('users/login');
@@ -256,19 +256,57 @@ class Users extends Controller
         if ($this->userModel->register($data)) {
             flash('register_success', 'You are registered successfully. You can login in your profile now');
             $subject = 'Registration in evCalendar';
-            $body = 'Your password for the site is ' .$genPass . '.' . '<br />You can change it when you want';
-            if($this->sendMail($subject, $body,$data['email'])){
+            $body = 'Your password for the site is ' . $genPass . '.' . '<br />You can change it when you want';
+            if ($this->sendMail($subject, $body, $data['email'])) {
                 flash('register_success', 'You are registered successfully. You can login in your profile now');
                 echo json_encode(['success' => true]);
             } else {
                 echo json_encode(['success' => false]);
             }
-        } 
+        }
     }
 
     public function fbLoginProblem()
     {
         $this->view('users/fbLoginProblem');
+    }
+
+    public function settings()
+    {
+        if (!isset($_SESSION['user_id'])) {
+            redirect('/users/login');
+        }
+
+        $this->view('users/settings');
+    }
+
+    public function changePassword()
+    {
+        if (!isset($_POST)) {
+            redirect('/user/settings');
+            return;
+        }
+        if (!isset($_SESSION['user_id'])) {
+            redirect('/user/settings');
+            return;
+        }
+        $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+        $newPassword = $_POST['newPassword'];
+        $confirmNewPassword = $_POST['confirmNewPassword'];
+        if ($newPassword !== $confirmNewPassword) {
+            $data = [
+                'error' => 'passwords don\'t mach'
+            ];
+            $this->view('users/settings', $data);
+        }
+        if ($this->userModel->changeUserPassword($newPassword, $_SESSION['user_id'])) {
+           redirect('users/login');
+           return;
+        }
+        $data = [
+            'error' => 'There is some error updating password.Try later.'
+        ];
+        $this->view('users/settings', $data);
     }
 
     private function sendMail($subject, $body, $receiver)
@@ -285,7 +323,7 @@ class Users extends Controller
             $this->phpMailer->setReceiver($receiver);
             $this->phpMailer->setMsgSentSuccess('Message sent successfully!');
 
-           
+
             // print_r($this->phpMailer->getAllSettings());    
 
             //    var_dump($this->phpMailer);

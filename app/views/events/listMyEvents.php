@@ -151,6 +151,9 @@
                                 </div>
                             </div>
 
+                            <!-- <hr /> -->
+                            <!-- <div class="fb-share-button" data-href="https://192.168.0.125/evCalendar/" data-layout="button_count" data-size="large"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2F192.168.0.125%2FevCalendar%2F&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Споделяне</a></div> -->
+
                         </div>
                     </div>
                 </div>
