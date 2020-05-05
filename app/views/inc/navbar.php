@@ -26,6 +26,7 @@
 
         <li><a href="<?php echo URLROOT; ?>/calendarConfigs/userSettings">Cal.Settings</a></li>
         <li><a href="<?php echo URLROOT; ?>/events/listMyEvents?year=<?php echo date('Y'); ?>&month=<?php echo date('m'); ?>&page=1">My Events</a></li>
+        <li><a href="<?php echo URLROOT; ?>/users/settings">Settings</a></li>
         <li><a href="<?php echo URLROOT; ?>/users/logout">Logout</a></li>
       <?php else : ?>
         <li><a href="<?php echo URLROOT; ?>/users/register">Register</a></li>
@@ -61,6 +62,7 @@
     </li>
     <li><a href="<?php echo URLROOT; ?>/calendarConfigs/userSettings">Cal.Settings</a></li>
     <li><a href="<?php echo URLROOT; ?>/events/listMyEvents?year=<?php echo date('Y'); ?>&month=<?php echo date('m'); ?>&page=1">My Events</a></li>
+    <li><a href="<?php echo URLROOT; ?>/users/settings">Settings</a></li>
     <li><a href="<?php echo URLROOT; ?>/users/logout">Logout</a></li>
   <?php else : ?>
     <li><a href="<?php echo URLROOT; ?>/users/register">Register</a></li>
