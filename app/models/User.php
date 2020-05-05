@@ -80,4 +80,17 @@ class User
 
         return false;
     }
+
+    public function resetUserPasswordByEmail($email, $password)
+    {
+        $this->db->query("UPDATE users SET password = :password WHERE users.email = :email");
+        $hashedPass = password_hash($password, PASSWORD_DEFAULT);
+        $this->db->bind(":email", $email, null);
+        $this->db->bind(":password", $hashedPass, null);
+        if ($this->db->execute()) {
+            return true;
+        }
+
+        return false;
+    }
 }

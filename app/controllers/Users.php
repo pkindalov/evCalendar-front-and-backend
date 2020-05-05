@@ -273,10 +273,6 @@ class Users extends Controller
 
     public function settings()
     {
-        if (!isset($_SESSION['user_id'])) {
-            redirect('/users/login');
-        }
-
         $this->view('users/settings');
     }
 
@@ -307,6 +303,29 @@ class Users extends Controller
             'error' => 'There is some error updating password.Try later.'
         ];
         $this->view('users/settings', $data);
+    }
+
+    public function resetPassword(){
+        $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+        $email = $_POST['email'];
+        $newUserPass = $this->genRndPassword();
+
+        if (!$this->userModel->findUserByEmail($email)) {
+            echo json_encode(['success' => false]);
+            return;
+        }
+
+        if($this->userModel->resetUserPasswordByEmail($email, $newUserPass)){
+            $subject = 'Password reset successfull';
+            $body = 'Your new password for the site is ' . $newUserPass . '.' . '<br />You can change it when you want';
+            if ($this->sendMail($subject, $body, $email)) {
+                echo json_encode(['success' => true]);
+                return;
+            } else {
+                echo json_encode(['success' => false]);
+                return;
+            }
+        }
     }
 
     private function sendMail($subject, $body, $receiver)
