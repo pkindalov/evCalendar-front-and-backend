@@ -49,6 +49,8 @@
       twelveHour: false,
       showClearBtn: true
     });
+    var dropDownElems = document.querySelectorAll('.dropdown-trigger');
+    var instances = M.Dropdown.init(dropDownElems);
 
     const searchBtn = document.getElementById("searchBtn");
     const searchInput = document.getElementById("autocomplete-input");

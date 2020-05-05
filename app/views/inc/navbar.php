@@ -1,6 +1,11 @@
 <nav>
   <div class="nav-wrapper">
-    <a href="<?php echo URLROOT; ?>" class="brand-logo"><?php echo SITENAME; ?></a>
+    <a href="<?php echo URLROOT; ?>" class="brand-logo">
+      <span class="material-icons">
+        calendar_today
+      </span>
+      <?php echo SITENAME; ?>
+    </a>
     <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
     <ul class="right hide-on-med-and-down">
       <!-- <li><a href="<?php echo URLROOT; ?>/pages/about"">About</a></li> -->
@@ -14,7 +19,12 @@
                   <input type="text" placeholder="search" id="autocomplete-input" class="autocomplete white-text">
                 </div>
 
-                <a class="red accent-4" id="searchBtn">Go!</a>
+                <a class="red accent-4" id="searchBtn">
+                  <!-- <span class="material-icons">
+                    find_in_page
+                  </span> -->
+                  GO!!
+                </a>
                 <!-- <input type="button" class="btn red accent-4" id="searchBtn" value="GO!" /> -->
 
 
@@ -24,29 +34,95 @@
 
 
 
-        <li><a href="<?php echo URLROOT; ?>/calendarConfigs/userSettings">Cal.Settings</a></li>
-        <li><a href="<?php echo URLROOT; ?>/events/listMyEvents?year=<?php echo date('Y'); ?>&month=<?php echo date('m'); ?>&page=1">My Events</a></li>
-        <li><a href="<?php echo URLROOT; ?>/users/settings">Settings</a></li>
-        <li><a href="<?php echo URLROOT; ?>/users/logout">Logout</a></li>
-        <?php else : ?>
-          <li><a href="<?php echo URLROOT; ?>/users/register">Register</a></li>
-          <li><a href="<?php echo URLROOT; ?>/users/login">Login</a></li>
-          <li><a href="<?php echo URLROOT; ?>/users/settings">Settings</a></li>
+        <li><a href="<?php echo URLROOT; ?>/calendarConfigs/userSettings">
+            <span class="material-icons">
+              date_range
+            </span>
+            Cal.Settings
+          </a></li>
+        <li><a href="<?php echo URLROOT; ?>/events/listMyEvents?year=<?php echo date('Y'); ?>&month=<?php echo date('m'); ?>&page=1">
+            <span class="material-icons">
+              calendar_today
+            </span>
+            My Events
+          </a></li>
+        <li><a href="<?php echo URLROOT; ?>/users/settings">
+            <span class="material-icons">
+              settings
+            </span>
+            Settings
+          </a></li>
         <li>
+          <a href="<?php echo URLROOT; ?>/users/logout">
+            <span class="material-icons">
+              exit_to_app
+            </span>
+            Logout
+          </a>
+        </li>
+      <?php else : ?>
+        <li><a href="<?php echo URLROOT; ?>/users/settings">
+            <span class="material-icons">
+              settings
+            </span>
+            Settings
+          </a></li>
+        <li>
+
+          <!-- Dropdown Trigger -->
+          <a class='dropdown-trigger btn' href='#' data-target='dropdown1'>
+            <span class="material-icons">
+              compare_arrows
+            </span>
+            Log In/Register</a>
+
+          <!-- Dropdown Structure -->
+          <ul id='dropdown1' class='dropdown-content'>
+            <li><a href="<?php echo URLROOT; ?>/users/login">
+                <span class="material-icons">
+                  exit_to_app
+                </span>
+                Login
+              </a></li>
+            <li>
+              <a>
+                <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
+                </fb:login-button>
+              </a></li>
+            <li class="divider" tabindex="-1"></li>
+            <li><a href="<?php echo URLROOT; ?>/users/register">
+                <span class="material-icons">
+                  create
+                </span>
+                Register
+              </a></li>
+            <li class="divider" tabindex="-1"></li>
+            <li><a href="<?php echo URLROOT; ?>/pages/about">
+                <span class="material-icons">
+                  info
+                </span>
+                About
+              </a></li>
+            <!-- <li><a href="#!">three</a></li>
+              <li><a href="#!"><i class="material-icons">view_module</i>four</a></li>
+              <li><a href="#!"><i class="material-icons">cloud</i>five</a></li> -->
+          </ul>
+
+        </li>
+        <!-- <li>
           <div>
             <a>
-            <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
-            </fb:login-button>
+              <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
+              </fb:login-button>
             </a>
           </div>
-        </li>
+        </li> -->
       <?php endif ?>
     </ul>
   </div>
 </nav>
 
 <ul class="sidenav" id="mobile-demo">
-  <!-- <li><a href="<?php echo URLROOT; ?>/pages/about"">About</a></li> -->
   <?php if (isset($_SESSION['user_id'])) : ?>
     <li>
       <div class="center row">
@@ -61,14 +137,49 @@
         </div>
       </div>
     </li>
-    <li><a href="<?php echo URLROOT; ?>/calendarConfigs/userSettings">Cal.Settings</a></li>
-    <li><a href="<?php echo URLROOT; ?>/events/listMyEvents?year=<?php echo date('Y'); ?>&month=<?php echo date('m'); ?>&page=1">My Events</a></li>
-    <li><a href="<?php echo URLROOT; ?>/users/settings">Settings</a></li>
-    <li><a href="<?php echo URLROOT; ?>/users/logout">Logout</a></li>
-    <?php else : ?>
-      <li><a href="<?php echo URLROOT; ?>/users/register">Register</a></li>
-      <li><a href="<?php echo URLROOT; ?>/users/login">Login</a></li>
-      <li><a href="<?php echo URLROOT; ?>/users/settings">Settings</a></li>
+    <li><a href="<?php echo URLROOT; ?>/calendarConfigs/userSettings">
+        <span class="material-icons">
+          date_range
+        </span>
+        Cal.Settings
+      </a></li>
+    <li><a href="<?php echo URLROOT; ?>/events/listMyEvents?year=<?php echo date('Y'); ?>&month=<?php echo date('m'); ?>&page=1">
+        <span class="material-icons">
+          calendar_today
+        </span>
+        My Events
+      </a></li>
+    <li><a href="<?php echo URLROOT; ?>/users/settings">
+        <span class="material-icons">
+          settings
+        </span>
+        Settings
+      </a></li>
+    <li><a href="<?php echo URLROOT; ?>/users/logout">
+        <span class="material-icons">
+          exit_to_app
+        </span>
+        Logout
+      </a></li>
+  <?php else : ?>
+    <li><a href="<?php echo URLROOT; ?>/users/register">
+        <span class="material-icons">
+          create
+        </span>
+        Register
+      </a></li>
+    <li><a href="<?php echo URLROOT; ?>/users/login">
+        <span class="material-icons">
+          exit_to_app
+        </span>
+        Login
+      </a></li>
+    <li><a href="<?php echo URLROOT; ?>/users/settings">
+        <span class="material-icons">
+          settings
+        </span>
+        Settings
+      </a></li>
     <li>
       <div class="moveLeft">
         <a>
