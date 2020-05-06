@@ -295,33 +295,17 @@ class Events extends Controller
             return;
         }
         $email = $_POST['receiver'];
-
         $tempData = html_entity_decode($_POST['dayEvents']);
         $cleanData = json_decode($tempData);
-
-        $body = '';
+        $body = '<div style="text-align: center; width: 100%; height: 100px; background-color: red; color: white"><h2>evCalendar</h2></div>';
         $subject = 'Daily events';
-        
-
-        // var_dump($cleanData[0]->textContent);
         foreach ($cleanData[0]->textContent as $key => $value) {
             if($key % 4 == 0){
-                $body .= '<br /><hr />';
                 // $body .= '<div style="margin-bottom: 20px;><p>' . $value . '</p></div>';
+                $body .= '<br />';
             }
             $body .= '<p>' . $value . '</p>';
         }
-
-        // print_r($body);
-        // for($i = 0; $i < $body[0]->textContent->length; $i++){
-        //     echo '' . $body[0]->textContent[$i];
-        // }
-        // exit();
-
-        // print_r($email);
-        // print_r($body);
-        // print_r($subject);
-        // exit();
         if (sendMail($this->phpMailer, $subject, $body, $email)) {
             echo json_encode(['success' => true]);
             return;
@@ -329,10 +313,5 @@ class Events extends Controller
             echo json_encode(['success' => false]);
             return;
         }
-       
     }
-
-    // private function stripAccents($stripAccents){
-    //     return strtr($stripAccents,'àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ','aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY');
-    //   }
 }
