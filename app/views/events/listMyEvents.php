@@ -92,74 +92,118 @@
 </div>
 
 <?php foreach ($data['sortedData'] as $key => $eventsData) : ?>
-    <h2 class="<?php if ($key === date('Y-m-d')) echo 'blue lighten-1' ?>"><?php echo $key; ?></h2>
-    <?php foreach ($eventsData as $key => $event) : ?>
+    <div id="<?php echo $key; ?>">
+        <h2 class="<?php if ($key === date('Y-m-d')) echo 'blue lighten-1' ?>"><?php echo $key; ?></h2>
+
+
+
+
+        <button onclick="showMailForm('<?php echo $key; ?>')" class="btn">Mail</button>
+
         <div>
-            <div class="col s12 m7 <?php if ($event['date'] === date('Y-m-d')) echo 'blue lighten-1' ?> center-align">
-                <!-- <h2 class="header"><?php //echo $event['date']; 
-                                        ?></h2> -->
-                <div class="card horizontal">
-                    <div class="card-image">
-                    </div>
-                    <div class="card-stacked">
-                        <div class="card-content">
-                            <?php if ($event['checkedEvent']) : ?>
-                                <p class="checkedEvent"><?php echo $event['text']; ?></p>
-                            <?php else : ?>
-                                <p><?php echo $event['text']; ?></p>
-                            <?php endif; ?>
-                            <p>Begin: <?php echo $event['begin']; ?></p>
-                            <p>Finish: <?php echo $event['finish']; ?></p>
-                            <p>Date: <?php echo $event['date']; ?></p>
-                            <!-- <p>Checked: <?php //echo $event['checkedEvent']; 
-                                                ?> </p> -->
-                            <p>Notification Turned <?php echo $event['showNotification'] == 1 ? "ON" : "OFF"; ?></p>
+            <input class="col-md-6 mailField" type="email" id="input<?php echo $key; ?>" /><br />
+            <span id="invalidMailSpan<?php echo $key; ?>" class="mailField validateMsg"></span>
+            <button id="sendMailBtn<?php echo $key; ?>" onclick="sendMailTo('<?php echo $key; ?>')" class="btn mailField">Send</button>
+
+            <div id="progress<?php echo $key; ?>" class="progress mailField">
+                <div class="indeterminate"></div>
+            </div>
+
+        </div>
+
+
+
+
+
+        <?php foreach ($eventsData as $key => $event) : ?>
+            <div>
+                <div class="col s12 m7 <?php if ($event['date'] === date('Y-m-d')) echo 'blue lighten-1' ?> center-align">
+                    <!-- <h2 class="header"><?php //echo $event['date']; 
+                                            ?></h2> -->
+                    <div class="card horizontal">
+                        <div class="card-image">
                         </div>
-                        <div class="card-action">
-                            <a class="btn blue lighten-2" href="<?php echo URLROOT; ?>/events/loadEventEdit/<?php echo $event['id']; ?>">Edit</a>
-                            <?php if ($event['checkedEvent'] == 1) : ?>
-                                <a class="btn red lighten-1" href="<?php echo URLROOT; ?>/events/checkUncheckEvent/?eventId=<?php echo $event['id']; ?>&author=<?php echo $event['user_id']; ?>&checked=false">Uncheck</a>
-
-                            <?php else : ?>
-                                <?php echo $event['checkedEvent']; ?>
-                                <a class="btn cyan accent-3" href="<?php echo URLROOT; ?>/events/checkUncheckEvent/?eventId=<?php echo $event['id']; ?>&author=<?php echo $event['user_id']; ?>&checked=1">Check</a>
-                            <?php endif; ?>
-                            <?php if ($event['showNotification'] == 1) : ?>
-                                <a class="btn red lighten-1" href="<?php echo URLROOT; ?>/events/turnOffNotif/<?php echo $event['id']; ?>">Notification Turn OFF</a>
-                            <?php else : ?>
-                                <a class="btn cyan accent-3" href="<?php echo URLROOT; ?>/events/turnOnNotif/<?php echo $event['id']; ?>">Notification Turn ON</a>
-                            <?php endif; ?>
-
-
-
-
-
-
-                            <!-- Modal Trigger -->
-                            <button data-target="<?php echo $event['id']; ?>" class="btn modal-trigger red accent-4">Delete</button>
-
-                            <!-- Modal Structure -->
-                            <div id="<?php echo $event['id']; ?>" class="modal">
-                                <div class="modal-content">
-                                    <h4>Are you sure to delete <?php echo $event['date']; ?></h4>
+                        <div class="card-stacked">
+                            <div class="card-content">
+                                <?php if ($event['checkedEvent']) : ?>
+                                    <p class="checkedEvent"><?php echo $event['text']; ?></p>
+                                <?php else : ?>
                                     <p><?php echo $event['text']; ?></p>
-                                </div>
-                                <div class="modal-footer">
-                                    <a href="#!" class="modal-close waves-effect waves-green btn-flat">CANCEL</a>
-                                    <!-- /evCalendar/events/deleteEvent/?eventId=${event.id}&author=${event.user_id} -->
-                                    <a class="btn red accent-4" href="<?php echo URLROOT; ?>/events/deleteEvent/?eventId=<?php echo $event['id']; ?>&author=<?php echo $event['user_id']; ?>">Delete</a>
-                                </div>
+                                <?php endif; ?>
+                                <p>Begin: <?php echo $event['begin']; ?></p>
+                                <p>Finish: <?php echo $event['finish']; ?></p>
+                                <p>Date: <?php echo $event['date']; ?></p>
+                                <!-- <p>Checked: <?php //echo $event['checkedEvent']; 
+                                                    ?> </p> -->
+                                <p>Notification Turned <?php echo $event['showNotification'] == 1 ? "ON" : "OFF"; ?></p>
                             </div>
+                            <div class="card-action">
+                                <a class="btn blue lighten-2" href="<?php echo URLROOT; ?>/events/loadEventEdit/<?php echo $event['id']; ?>">Edit</a>
+                                <?php if ($event['checkedEvent'] == 1) : ?>
+                                    <a class="btn red lighten-1" href="<?php echo URLROOT; ?>/events/checkUncheckEvent/?eventId=<?php echo $event['id']; ?>&author=<?php echo $event['user_id']; ?>&checked=false">Uncheck</a>
 
-                            <!-- <hr /> -->
-                            <!-- <div class="fb-share-button" data-href="https://192.168.0.125/evCalendar/" data-layout="button_count" data-size="large"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2F192.168.0.125%2FevCalendar%2F&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Споделяне</a></div> -->
+                                <?php else : ?>
+                                    <?php echo $event['checkedEvent']; ?>
+                                    <a class="btn cyan accent-3" href="<?php echo URLROOT; ?>/events/checkUncheckEvent/?eventId=<?php echo $event['id']; ?>&author=<?php echo $event['user_id']; ?>&checked=1">Check</a>
+                                <?php endif; ?>
+                                <?php if ($event['showNotification'] == 1) : ?>
+                                    <a class="btn red lighten-1" href="<?php echo URLROOT; ?>/events/turnOffNotif/<?php echo $event['id']; ?>">Notification Turn OFF</a>
+                                <?php else : ?>
+                                    <a class="btn cyan accent-3" href="<?php echo URLROOT; ?>/events/turnOnNotif/<?php echo $event['id']; ?>">Notification Turn ON</a>
+                                <?php endif; ?>
 
+
+
+
+
+
+                                <!-- Modal Trigger -->
+                                <button data-target="<?php echo $event['id']; ?>" class="btn modal-trigger red accent-4">Delete</button>
+
+                                <!-- Modal Structure -->
+                                <div id="<?php echo $event['id']; ?>" class="modal">
+                                    <div class="modal-content">
+                                        <h4>Are you sure to delete <?php echo $event['date']; ?></h4>
+                                        <p><?php echo $event['text']; ?></p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <a href="#!" class="modal-close waves-effect waves-green btn-flat">CANCEL</a>
+                                        <!-- /evCalendar/events/deleteEvent/?eventId=${event.id}&author=${event.user_id} -->
+                                        <a class="btn red accent-4" href="<?php echo URLROOT; ?>/events/deleteEvent/?eventId=<?php echo $event['id']; ?>&author=<?php echo $event['user_id']; ?>">Delete</a>
+                                    </div>
+                                </div>
+
+                                <!-- <hr /> -->
+                                <!-- <div class="fb-share-button" data-href="https://192.168.0.125/evCalendar/" data-layout="button_count" data-size="large"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2F192.168.0.125%2FevCalendar%2F&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Споделяне</a></div> -->
+
+
+
+
+
+                                <!-- <button onclick="showMailForm('<?php //echo $event['date']; 
+                                                                    ?>')" class="btn">Mail</button> -->
+                                <!-- <div>
+                                    <input class="col-md-6 mailField" type="email" id="input<?php //echo $event['date']; 
+                                                                                            ?>" /><br />
+                                    <span id="invalidMailSpan<?php //echo $event['date']; 
+                                                                ?>" class="mailField validateMsg"></span>
+                                    <button id="sendMailBtn<?php //echo $event['date']; 
+                                                            ?>" onclick="sendMailTo('<?php //echo $event['date']; 
+                                                                                                                    ?>')" class="btn mailField">Send</button>
+
+                                    <div id="progress<?php //echo $event['date']; 
+                                                        ?>" class="progress mailField">
+                                        <div class="indeterminate"></div>
+                                    </div>
+
+                                </div> -->
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    <?php endforeach; ?>
+        <?php endforeach; ?>
+    </div>
 <?php endforeach; ?>
 <div class="row">
     <div class="col-md-12">
@@ -194,5 +238,68 @@
     evAddBtn.addEventListener('click', function() {
         window.location = '<?php echo URLROOT; ?>/events/addNewEvent';
     });
+
+    let mailFormShown = false;
+
+    function showMailForm(date) {
+        let mainContainer = document.getElementById(date);
+        let mailField = document.getElementById(`input${date}`);
+        let sendMailBtn = document.getElementById(`sendMailBtn${date}`);
+        let validateSpan = document.getElementById(`invalidMailSpan${date}`);
+        
+        mailFormShown = !mailFormShown;
+        if(mailFormShown){
+            mailField.style.display = 'block';
+            sendMailBtn.style.display = 'block';
+            validateSpan.style.display = 'block';
+        } else {
+            mailField.style.display = 'none';
+            sendMailBtn.style.display = 'none';
+            validateSpan.style.display = 'none';
+        }
+    }
+
+    function sendMailTo(date) {
+        let mail = document.getElementById(`input${date}`).value;
+        let invalidMsgSpan = document.getElementById(`invalidMailSpan${date}`);
+        let progressBar = document.getElementById(`progress${date}`);
+        let dayEventsToSend = document.getElementById(date).innerHTML;
+        const regex = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+        const result = regex.test(String(mail).toLowerCase());
+        if (!result) {
+            invalidMsgSpan.innerText = 'Invalid mail';
+            return false;
+        }
+        invalidMsgSpan.style.display = 'none';
+        progressBar.style.display = 'block';
+
+        let formData = new FormData();
+        formData.append('receiver', mail);
+        formData.append('dayEvents', dayEventsToSend);
+
+        let request = new XMLHttpRequest();
+        request.open('POST', "<?php echo URLROOT; ?>/events/sendToMail");
+        request.send(formData);
+        request.onreadystatechange = function() {
+            if (request.readyState == XMLHttpRequest.DONE) {
+                const serverResp = JSON.parse(request.responseText);
+                if (serverResp.success) {
+                    invalidMsgSpan.style.color = 'green';
+                    invalidMsgSpan.innerText = 'Mail sent successfull';
+                    invalidMsgSpan.style.display = 'block';
+                    progressBar.style.display = 'none';
+                   
+                    return;
+                } else {
+                    invalidMsgSpan.display = 'block';
+                    invalidMsgSpan.innerText = 'There is some problem sending mail';
+                    return;
+                }
+            }
+        }
+
+
+
+    }
 </script>
 <?php require_once APPROOT . '/views/inc/footer.php' ?>
