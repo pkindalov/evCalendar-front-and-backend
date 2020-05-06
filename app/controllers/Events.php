@@ -295,8 +295,28 @@ class Events extends Controller
             return;
         }
         $email = $_POST['receiver'];
-        $body = $_POST['dayEvents'];
+
+        $tempData = html_entity_decode($_POST['dayEvents']);
+        $cleanData = json_decode($tempData);
+
+        $body = '';
         $subject = 'Daily events';
+        
+
+        // var_dump($cleanData[0]->textContent);
+        foreach ($cleanData[0]->textContent as $key => $value) {
+            if($key % 4 == 0){
+                $body .= '<br /><hr />';
+                // $body .= '<div style="margin-bottom: 20px;><p>' . $value . '</p></div>';
+            }
+            $body .= '<p>' . $value . '</p>';
+        }
+
+        // print_r($body);
+        // for($i = 0; $i < $body[0]->textContent->length; $i++){
+        //     echo '' . $body[0]->textContent[$i];
+        // }
+        // exit();
 
         // print_r($email);
         // print_r($body);
