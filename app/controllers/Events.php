@@ -1,4 +1,5 @@
 <?php
+require_once APPROOT . '/libraries/PhpMailSender.php';
 class Events extends Controller
 {
     private $eventsModel;
@@ -8,6 +9,8 @@ class Events extends Controller
     {
         $this->eventsModel = $this->model('Event');
         $this->calConfigModel = $this->model('CalendarConfig');
+        $this->phpMailer = new PhpMailSender(MAIL_HOST, MAIL_PORT, MAIL_USERNAME, MAIL_PASSWORD);
+        $this->phpMailer->setCharset(CHARSET);
     }
 
     public function addDate($date)
@@ -283,6 +286,30 @@ class Events extends Controller
             return;
         }
         $this->view('events/addNewEvent');
+    }
+
+    public function sendToMail(){
+        $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+        if(!isset($_POST['receiver'])){
+            echo json_encode(['success' => false]);
+            return;
+        }
+        $email = $_POST['receiver'];
+        $body = $_POST['dayEvents'];
+        $subject = 'Daily events';
+
+        // print_r($email);
+        // print_r($body);
+        // print_r($subject);
+        // exit();
+        if (sendMail($this->phpMailer, $subject, $body, $email)) {
+            echo json_encode(['success' => true]);
+            return;
+        } else {
+            echo json_encode(['success' => false]);
+            return;
+        }
+       
     }
 
     // private function stripAccents($stripAccents){
