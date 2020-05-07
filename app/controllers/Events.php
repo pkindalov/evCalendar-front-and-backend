@@ -201,6 +201,21 @@ class Events extends Controller
         return $sortedData;
     }
 
+    private function convertForGoogleChart($data){
+        $googleData = [
+            ['Date', 'Events Count']
+        ];
+
+        foreach ($data as $key => $value) {
+            $row = [$key, count($value)];
+            $googleData[] = $row;
+        }
+        if(count($data) == 0){
+            $googleData[] = [0, 0];
+        }
+        return $googleData;
+    }
+    
     public function listMyEvents($query){
         if(!isset($_SESSION['user_id'])){
             redirect('/');
@@ -212,16 +227,19 @@ class Events extends Controller
         $pageSize = 10;
         $events = $this->eventsModel->getMyEventsByYearAndMonth($year, $month, $page, $pageSize);
         $sortedByDate = $this->extractEventsByDate($events);
+        $googleChartData = $this->convertForGoogleChart($sortedByDate);
         $data = [
             // 'events' => $events,
             'page' => $page,
             'year' => $year,
             'month' => $month,
+            'today' => date('Y-m-d'),
             'hasNextPage' => count($events) > 0,
             'hasPrevPage' => $page > 1,
             'nextPage' => $page + 1,
             'prevPage' => $page - 1,
-            'sortedData' => $sortedByDate
+            'sortedData' => $sortedByDate,
+            'googleData' => json_encode($googleChartData)
         ];
         $this->view('events/listMyEvents', $data);
     }

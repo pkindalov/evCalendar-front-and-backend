@@ -1,6 +1,6 @@
 <?php require_once APPROOT . '/views/inc/header.php' ?>
 <!-- <pre>
-    <?php //print_r($data['sortedData']); 
+    <?php //print_r($data['googleData']); 
     ?>
 </pre> -->
 <!-- <?php //print_r($data); 
@@ -91,9 +91,16 @@
     </div>
 </div>
 
+<!-- Google chart here -->
+<div class="row">
+    <div class="col l12">
+        <div id="chart_div"></div>
+    </div>
+</div>
+
 <?php foreach ($data['sortedData'] as $key => $eventsData) : ?>
     <div id="<?php echo $key; ?>">
-        <h2 class="<?php if ($key === date('Y-m-d')) echo 'blue lighten-1' ?>"><?php echo $key; ?></h2>
+        <h2 id="<?php echo $key; ?>" class="<?php if ($key === date('Y-m-d')) echo 'blue lighten-1' ?>"><?php echo $key; ?></h2>
 
 
 
@@ -230,7 +237,44 @@
         <?php endif; ?>
     </div>
 </div>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        
+        if (document.getElementById('<?php echo $data['today']; ?>')) {
+            window.location.hash = "<?php echo $data['today']; ?>";
+        }
+
+        let myGoogleData = <?php echo $data['googleData']; ?>;
+           
+
+            google.charts.load('current', {
+                packages: ['corechart', 'bar']
+            });
+            google.charts.setOnLoadCallback(drawStacked);
+
+            function drawStacked() {
+                var data = google.visualization.arrayToDataTable(myGoogleData);
+
+                var options = {
+                    title: 'Count of events per day',
+                    chartArea: {
+                        width: '50%'
+                    },
+                    isStacked: true,
+                    hAxis: {
+                        title: 'Total Count Of Events',
+                        minValue: 0,
+                    },
+                    vAxis: {
+                        title: 'Dates'
+                    }
+                };
+                var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
+                chart.draw(data, options);
+            }
+    });
+
     let selYearSelect = document.getElementsByName('selectedYear')[0];
     let selMontSelect = document.getElementsByName('selectedMonth')[0];
     selYearSelect.addEventListener('change', function(event) {
@@ -304,18 +348,18 @@
 
 
         let divsArr = [{
-            'date' : date,
+            'date': date,
             'textContent': []
         }];
-       
+
         //iterate divs and search checked ones. Begin from index 3 because from there is the div with checkbox;
-        for(let i = 3; i < mainContainer.children.length; i++){
+        for (let i = 3; i < mainContainer.children.length; i++) {
             let currentDiv = mainContainer.children[i];
             let divContent = currentDiv.children[0].children[0].children[1].children[0];
             let checkbox = currentDiv.children[0].children[0].children[1].children[0].children[0].children[0].children[0].checked;
             // console.log(divContent);
             //these are the <p> content of the main div. - date, begin, finish etc...
-            if(checkbox){
+            if (checkbox) {
                 divsArr[0].textContent.push(divContent.children[1].textContent);
                 divsArr[0].textContent.push(divContent.children[2].textContent);
                 divsArr[0].textContent.push(divContent.children[3].textContent);
@@ -323,7 +367,7 @@
             }
         }
 
-        if(divsArr[0].textContent.length < 1){
+        if (divsArr[0].textContent.length < 1) {
             invalidMsgSpan.innerText = 'You must choose at least one event';
             return;
         }
@@ -343,9 +387,9 @@
         invalidMsgSpan.style.display = 'none';
         progressBar.style.display = 'block';
 
-       
 
-        
+
+
         let formData = new FormData();
         formData.append('receiver', mail);
         formData.append('dayEvents', JSON.stringify(divsArr));
@@ -372,9 +416,6 @@
                 }
             }
         }
-
-
-
     }
 </script>
 <?php require_once APPROOT . '/views/inc/footer.php' ?>
