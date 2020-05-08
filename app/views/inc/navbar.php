@@ -32,6 +32,40 @@
             </div>
         </li>
 
+        <!-- <li><a href="<?php echo URLROOT; ?>/users/profile">
+            <span class="material-icons">
+              account_circle
+            </span>
+            <?php echo $_SESSION['user_name']; ?>
+          </a></li> -->
+
+        <!-- <li><a href="<?php echo URLROOT; ?>/users/settings">
+            <span class="material-icons">
+              pie_chart
+            </span>
+            Events Stats
+          </a></li> -->
+        <!-- Dropdown Trigger -->
+        <li>
+          <a class='dropdown-trigger' href='#' data-target='dropdownCharts'>
+            <span class="material-icons">
+              pie_chart
+            </span>
+            Events Stats
+          </a>
+
+          <!-- Dropdown Structure -->
+          <ul id='dropdownCharts' class='dropdown-content'>
+            <li><a href="<?php echo URLROOT; ?>/events/allWeeksStats">
+                <span class="material-icons">
+                  pie_chart
+                </span>
+                All Weeks
+              </a></li>
+            <li class="divider" tabindex="-1"></li>
+          </ul>
+
+        </li>
 
 
         <li><a href="<?php echo URLROOT; ?>/calendarConfigs/userSettings">
@@ -137,6 +171,33 @@
         </div>
       </div>
     </li>
+    <!-- <li><a href="<?php //echo URLROOT; 
+                      ?>/users/profile">
+        <span class="material-icons">
+          account_circle
+        </span>
+        <?php //echo $_SESSION['user_name']; 
+        ?>
+      </a></li> -->
+    <li>
+      <a class='dropdown-trigger' href='#' data-target='dropdownChartsMobile'>
+        <span class="material-icons">
+          pie_chart
+        </span>
+        Events Stats
+      </a>
+
+      <!-- Dropdown Structure -->
+      <ul id='dropdownChartsMobile' class='dropdown-content'>
+        <li><a href="<?php echo URLROOT; ?>/events/allWeeksStats">
+            <span class="material-icons">
+              pie_chart
+            </span>
+            All Weeks
+          </a></li>
+        <li class="divider" tabindex="-1"></li>
+      </ul>
+    </li>
     <li><a href="<?php echo URLROOT; ?>/calendarConfigs/userSettings">
         <span class="material-icons">
           date_range
@@ -174,7 +235,9 @@
         </span>
         Login
       </a></li>
-    <li><a href="<?php echo URLROOT; ?>/users/settings">
+
+    <li><a href="<?php echo URLROOT;
+                  ?>/users/settings">
         <span class="material-icons">
           settings
         </span>
@@ -190,9 +253,6 @@
     </li>
   <?php endif ?>
 </ul>
-
-
-
 <!-- <nav class=" navbar navbar-expand-lg navbar-dark bg-dark mb-3">
         <div class="container">
           <a class="navbar-brand" href="<?php //echo URLROOT; 

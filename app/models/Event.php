@@ -245,6 +245,41 @@ class Event
         return $results;                 
     }
 
+    public function getAllWeekStatsCurrentYear()
+    {
+        $weeksCount = 52;
+        $year = date('Y');
+        $data = [];
+        $userId = $_SESSION['user_id'];
+
+        for ($i = 1; $i <= $weeksCount; $i++) {
+            $weekStartEndArr = getStartAndEndDate($i, $year);
+            $weekStart =$weekStartEndArr['week_start'];
+            $weekEnd =$weekStartEndArr['week_end'];
+            //    $this->db->query("SELECT * FROM events WHERE events.user_id = :userId 
+            //                      AND events.date 
+            //                      BETWEEN :weekStart AND :weekEnd ORDER BY events.date;
+            //                      "); 
+            $this->db->query("SELECT COUNT(*) AS count FROM events WHERE events.user_id = :userId 
+                             AND events.date 
+                             BETWEEN :weekStart AND :weekEnd;
+                             ");
+            $this->db->bind(":userId", $userId, null);
+            $this->db->bind(":weekStart", $weekStart, null);
+            $this->db->bind(":weekEnd", $weekEnd, null);
+            $results = $this->db->execute();
+
+            if ($this->db->rowCount($results) > 0) {
+                $results = $this->db->resultSet();
+                // echo $results[0]->count . '<br />';
+                // $data[$weekStart] = [$weekStart ,$results[0]->count];
+                $data[$weekStart . '-' . $weekEnd] = [$results[0]->count];
+            }
+        }
+
+        return $data;
+    }
+
     private function getResults()
     {
         $results = $this->db->execute();
