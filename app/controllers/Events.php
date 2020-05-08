@@ -332,4 +332,27 @@ class Events extends Controller
             return;
         }
     }
+
+    public function allWeeksStats(){
+        if(!isset($_SESSION['user_id'])){
+            redirect('/users/login');
+        }
+
+        $mostBusyWeeks = $this->eventsModel->getAllWeekStatsCurrentYear();
+        $dateLabels = getDateLabelsChartJs($mostBusyWeeks);
+        $dateValues = getValueForEachDateChartJs($mostBusyWeeks);
+        // foreach ($mostBusyWeeks as $key => $value) {
+        //     foreach ($value as $key2 => $value2) {
+        //         print_r($value2);
+                
+        //     } 
+        // }
+        // $googleBarChartData = convertForGoogleBarChart($mostBusyWeeks, ['Week', 'Count of events']);
+        $data = [
+            // 'googleBarChartData' => json_encode($googleBarChartData)
+            'dateLabels' => json_encode($dateLabels),
+            'dateValues' => json_encode($dateValues)
+        ];
+        $this->view('events/allWeekStats', $data);
+    }
 }

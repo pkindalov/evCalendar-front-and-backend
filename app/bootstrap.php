@@ -6,6 +6,8 @@
     require_once 'helpers/url_helper.php';
     require_once 'helpers/session_helper.php';
     require_once 'helpers/data_helper.php';
+    require_once 'helpers/dates_helper.php';
+    require_once 'helpers/google_charts_helper.php';
 
     //Load libraries
     // require_once 'libraries/Core.php';

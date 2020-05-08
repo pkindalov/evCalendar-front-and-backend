@@ -328,6 +328,14 @@ class Users extends Controller
         }
     }
 
+    // public function profile(){
+    //     if(!isset($_SESSION['user_id'])){
+    //         redirect('/users/login');
+    //     }
+
+    //     $this->view('users/profile', $data);
+    // }
+
     private function sendMail($subject, $body, $receiver)
     {
         try {

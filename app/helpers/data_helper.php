@@ -7,3 +7,24 @@ function checkIfArrAndIfEmpty($data)
 
     return false;
 }
+
+
+function getDateLabelsChartJs($data){
+  $dateLabels = [];
+  foreach ($data as $key => $value) {
+      $dateLabels[] = $key;
+  }
+
+  return $dateLabels;
+}
+
+function getValueForEachDateChartJs($data){
+    $values = [];
+    $dates = getDateLabelsChartJs($data);
+    foreach ($dates as $key => $value) {
+        $values[] = $data[$value][0];
+        // echo $data[$value][0] . "<br />";
+    }
+
+   return $values;
+}
