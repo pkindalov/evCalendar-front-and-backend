@@ -246,6 +246,34 @@ class Event
         return $results;
     }
 
+    public function getAllMontsStats()
+    {
+        $monthsCount = 12;
+        $year = date('Y');
+        $data = [];
+        $userId = $_SESSION['user_id'];
+
+        for ($i = 1; $i <= $monthsCount; $i++) {
+            $month = $i < 10 ? '0' . $i : $i;
+            $date = '' . $year . '-' . $month;
+            $keyword = '%' . $date . '%';
+            $this->db->query("SELECT COUNT(*) AS count FROM events
+                              WHERE events.date LIKE :keyword
+                              AND events.user_id = :userId
+                              ORDER BY events.date DESC");
+            $this->db->bind(":keyword", $keyword, null);                  
+            $this->db->bind(":userId", $userId, null); 
+            $results = $this->db->execute();
+            if ($this->db->rowCount($results) > 0) {
+                $results = $this->db->resultSet();
+                $data[$date] = [$results[0]->count];
+            }           
+            
+            // print_r($data);
+        }
+        return $data;
+    }
+
     public function getAllWeekStatsCurrentYear()
     {
         $weeksCount = 52;
@@ -269,11 +297,8 @@ class Event
             $this->db->bind(":weekStart", $weekStart, null);
             $this->db->bind(":weekEnd", $weekEnd, null);
             $results = $this->db->execute();
-
             if ($this->db->rowCount($results) > 0) {
                 $results = $this->db->resultSet();
-                // echo $results[0]->count . '<br />';
-                // $data[$weekStart] = [$weekStart ,$results[0]->count];
                 $data[$weekStart . '-' . $weekEnd] = [$results[0]->count];
             }
         }

@@ -79,9 +79,9 @@ class Events extends Controller
     {
         $data = ['language' => 'bg', 'usingThemes' => true, 'notifications' => false];
         $userSettings = $this->calConfigModel->getUsersSettingsById();
-        if($userSettings){
+        if ($userSettings) {
             $data = [
-                'language' => $userSettings[0]->title, 
+                'language' => $userSettings[0]->title,
                 'usingThemes' => !isset($userSettings[0]->usingThemes) ? false : $userSettings[0]->usingThemes,
                 'notifications' => !isset($userSettings[0]->notifications) ? false : $userSettings[0]->notifications
             ];
@@ -137,15 +137,16 @@ class Events extends Controller
         return;
     }
 
-    public function showEventFromNotif($query){
+    public function showEventFromNotif($query)
+    {
         $queryData = getQueryData($query);
         $eventId = $queryData['id'];
         $timeleft = $queryData['timeleft'];
-        if(!isset($eventId) || empty($eventId)){
+        if (!isset($eventId) || empty($eventId)) {
             redirect('/');
         }
-        
-        if(!$_SESSION['user_id']){
+
+        if (!$_SESSION['user_id']) {
             redirect('/');
         }
 
@@ -154,31 +155,34 @@ class Events extends Controller
             'event' => $eventData,
             'timeleft' => intval($timeleft)
         ];
-       
+
         $this->view('events/showEventFromNotif', $data);
     }
 
-    public function turnOffNotif($eventId){
-        if(!isset($eventId) || empty($eventId) || !$eventId || !$_SESSION['user_id']){
+    public function turnOffNotif($eventId)
+    {
+        if (!isset($eventId) || empty($eventId) || !$eventId || !$_SESSION['user_id']) {
             redirect('/');
         }
-        $eventId = htmlspecialchars($eventId);    
+        $eventId = htmlspecialchars($eventId);
         $this->eventsModel->turnOffNotif($eventId);
         redirect('/');
     }
 
-    public function turnOnNotif($eventId){
-        if(!isset($eventId) || empty($eventId) || !$eventId || !$_SESSION['user_id']){
+    public function turnOnNotif($eventId)
+    {
+        if (!isset($eventId) || empty($eventId) || !$eventId || !$_SESSION['user_id']) {
             redirect('/');
         }
-        $eventId = htmlspecialchars($eventId);    
+        $eventId = htmlspecialchars($eventId);
         $this->eventsModel->turnOnNotif($eventId);
         redirect('/');
     }
 
-    private function extractEventsByDate($data){
+    private function extractEventsByDate($data)
+    {
         $sortedData = [];
-        foreach($data as $event){
+        foreach ($data as $event) {
             // print_r($event);
             $eventDetails = [
                 'id' => $event->id,
@@ -193,15 +197,16 @@ class Events extends Controller
             // if(!isset($sortedData[$event->date])){
             //     $sortedData[$event->date][] = $eventDetails; 
             // } else {
-                
+
             // }
-            $sortedData[$event->date][] = $eventDetails; 
+            $sortedData[$event->date][] = $eventDetails;
         }
 
         return $sortedData;
     }
 
-    private function convertForGoogleChart($data){
+    private function convertForGoogleChart($data)
+    {
         $googleData = [
             ['Date', 'Events Count']
         ];
@@ -210,14 +215,15 @@ class Events extends Controller
             $row = [$key, count($value)];
             $googleData[] = $row;
         }
-        if(count($data) == 0){
+        if (count($data) == 0) {
             $googleData[] = [0, 0];
         }
         return $googleData;
     }
-    
-    public function listMyEvents($query){
-        if(!isset($_SESSION['user_id'])){
+
+    public function listMyEvents($query)
+    {
+        if (!isset($_SESSION['user_id'])) {
             redirect('/');
         }
         $queryData = getQueryData($query);
@@ -244,16 +250,17 @@ class Events extends Controller
         $this->view('events/listMyEvents', $data);
     }
 
-    
-    public function searchEvent($query){
+
+    public function searchEvent($query)
+    {
         header('Content-Type: text/html; charset=utf-8');
-        if(!isset($_SESSION['user_id'])){
+        if (!isset($_SESSION['user_id'])) {
             redirect('/');
         }
 
         $queryData = getQueryData($query);
         $keyword = htmlspecialchars(urldecode($queryData['keyword']));
-        if(!isset($keyword) || strlen($keyword) < 3){
+        if (!isset($keyword) || strlen($keyword) < 3) {
             redirect('/');
         }
         $page = isset($queryData['page']) ? htmlspecialchars($queryData['page']) : 1;
@@ -271,14 +278,13 @@ class Events extends Controller
             'keyword' => $keyword
         ];
         $this->view('events/listSearchResults', $data);
-        
-        
     }
 
-   
 
-    public function loadEventEdit($eventId){
-        if(!isset($eventId) || !isset($_SESSION['user_id'])){
+
+    public function loadEventEdit($eventId)
+    {
+        if (!isset($eventId) || !isset($_SESSION['user_id'])) {
             redirect("/");
         }
 
@@ -291,12 +297,13 @@ class Events extends Controller
         $this->view('events/editEvent', $data);
     }
 
-    public function addNewEvent(){
-        if(!isset($_SESSION['user_id'])){
+    public function addNewEvent()
+    {
+        if (!isset($_SESSION['user_id'])) {
             redirect('/');
         }
-        
-        if($_SERVER['REQUEST_METHOD'] === 'POST' && count($_POST) > 0){
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && count($_POST) > 0) {
             $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
             if ($this->eventsModel->addEvent($_POST)) {
                 redirect('/');
@@ -306,9 +313,10 @@ class Events extends Controller
         $this->view('events/addNewEvent');
     }
 
-    public function sendToMail(){
+    public function sendToMail()
+    {
         $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
-        if(!isset($_POST['receiver'])){
+        if (!isset($_POST['receiver'])) {
             echo json_encode(['success' => false]);
             return;
         }
@@ -318,7 +326,7 @@ class Events extends Controller
         $body = '<div style="text-align: center; width: 100%; height: 100px; background-color: red; color: white"><h2>evCalendar</h2></div>';
         $subject = 'Daily events';
         foreach ($cleanData[0]->textContent as $key => $value) {
-            if($key % 4 == 0){
+            if ($key % 4 == 0) {
                 // $body .= '<div style="margin-bottom: 20px;><p>' . $value . '</p></div>';
                 $body .= '<br />';
             }
@@ -333,8 +341,9 @@ class Events extends Controller
         }
     }
 
-    public function allWeeksStats(){
-        if(!isset($_SESSION['user_id'])){
+    public function allWeeksStats()
+    {
+        if (!isset($_SESSION['user_id'])) {
             redirect('/users/login');
         }
 
@@ -343,11 +352,11 @@ class Events extends Controller
         $dateValues = getValueForEachDateChartJs($mostBusyWeeks);
         $currentWeekStrArr = getStartAndEndDate(date('W'), date('Y'));
         $currentWeekStr = $currentWeekStrArr['week_start'] . '-' . $currentWeekStrArr['week_end'];
-        
+
         // foreach ($mostBusyWeeks as $key => $value) {
         //     foreach ($value as $key2 => $value2) {
         //         print_r($value2);
-                
+
         //     } 
         // }
         // $googleBarChartData = convertForGoogleBarChart($mostBusyWeeks, ['Week', 'Count of events']);
@@ -361,16 +370,30 @@ class Events extends Controller
         $this->view('events/allWeekStats', $data);
     }
 
-    //TO FINISH LATER
-    // public function allMonthStats(){
-    //     if(!isset($_SESSION['user_id'])){
-    //         redirect('/users/login');
-    //     }
+    public function allMonthStats(){
+        if(!isset($_SESSION['user_id'])){
+            redirect('/users/login');
+        }
 
-    //     $mostBusyMonths = $this->eventsModel->getAllMontsStatsCurrentYear();
-    // }
+        $mostBusyMonths = $this->eventsModel->getAllMontsStats();
+        $dateLabels = getDateLabelsChartJs($mostBusyMonths);
+        $dateValues = getValueForEachDateChartJs($mostBusyMonths);
+        $date = date('Y') . '-' . date('m');
+       
+        $data = [
+            'dateLabels' => json_encode($dateLabels),
+            'dateValues' => json_encode($dateValues),
+            'busyMonths' => $mostBusyMonths,
+            'currentMonth' => $date
+        ];
+        $this->view('events/allMonthsStats', $data);
+    }
 
-    public function onThisDay(){
+    public function onThisDay()
+    {
+        if (!isset($_SESSION['user_id'])) {
+            redirect('/users/login');
+        }
         $today = date('d');
         $month = date('m');
         $rawData = $this->eventsModel->getEventsHappenedOnDay($today, $month);
