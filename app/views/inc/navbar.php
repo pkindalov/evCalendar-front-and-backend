@@ -63,6 +63,13 @@
                 All Weeks
               </a></li>
             <li class="divider" tabindex="-1"></li>
+            <li><a href="<?php echo URLROOT; ?>/events/allMonthStats">
+                <span class="material-icons">
+                  pie_chart
+                </span>
+                All Months
+              </a></li>
+            <li class="divider" tabindex="-1"></li>
           </ul>
 
         </li>
@@ -74,12 +81,36 @@
             </span>
             Cal.Settings
           </a></li>
-        <li><a href="<?php echo URLROOT; ?>/events/listMyEvents?year=<?php echo date('Y'); ?>&month=<?php echo date('m'); ?>&page=1">
+
+        <li>
+          <a class='dropdown-trigger' href='#' data-target='dropdownEvents'>
             <span class="material-icons">
               calendar_today
             </span>
-            My Events
-          </a></li>
+            Events
+          </a>
+
+          <!-- Dropdown Structure -->
+          <ul id='dropdownEvents' class='dropdown-content'>
+            <li><a href="<?php echo URLROOT; ?>/events/listMyEvents?year=<?php echo date('Y'); ?>&month=<?php echo date('m'); ?>&page=1">
+                <span class="material-icons">
+                  calendar_today
+                </span>
+                My Events
+              </a></li>
+            <li class="divider" tabindex="-1"></li>
+            <li>
+              <a href="<?php echo URLROOT; ?>/events/onThisDay">
+              <span class="material-icons">
+                  calendar_today
+                </span>
+                On this day
+            </a>
+            </li>
+            <li class="divider" tabindex="-1"></li>
+          </ul>
+        </li>
+
         <li><a href="<?php echo URLROOT; ?>/users/settings">
             <span class="material-icons">
               settings
@@ -129,6 +160,12 @@
                   create
                 </span>
                 Register
+              </a></li>
+            <li><a href="<?php echo URLROOT; ?>/users/recommend">
+                <span class="material-icons">
+                  create
+                </span>
+                Recommend
               </a></li>
             <li class="divider" tabindex="-1"></li>
             <li><a href="<?php echo URLROOT; ?>/pages/about">
@@ -196,6 +233,12 @@
             All Weeks
           </a></li>
         <li class="divider" tabindex="-1"></li>
+        <li><a href="<?php echo URLROOT; ?>/events/allMonthStats">
+                <span class="material-icons">
+                  pie_chart
+                </span>
+                All Months
+              </a></li>
       </ul>
     </li>
     <li><a href="<?php echo URLROOT; ?>/calendarConfigs/userSettings">
@@ -204,12 +247,40 @@
         </span>
         Cal.Settings
       </a></li>
-    <li><a href="<?php echo URLROOT; ?>/events/listMyEvents?year=<?php echo date('Y'); ?>&month=<?php echo date('m'); ?>&page=1">
+      <li>
+          <a class='dropdown-trigger' href='#' data-target='dropdownEventsMobile'>
+            <span class="material-icons">
+              calendar_today
+            </span>
+            Events
+          </a>
+
+          <!-- Dropdown Structure -->
+          <ul id='dropdownEventsMobile' class='dropdown-content'>
+            <li><a href="<?php echo URLROOT; ?>/events/listMyEvents?year=<?php echo date('Y'); ?>&month=<?php echo date('m'); ?>&page=1">
+                <span class="material-icons">
+                  calendar_today
+                </span>
+                My Events
+              </a></li>
+            <li class="divider" tabindex="-1"></li>
+            <li>
+              <a href="<?php echo URLROOT; ?>/events/onThisDay">
+              <span class="material-icons">
+                  calendar_today
+                </span>
+                On this day
+            </a>
+            </li>
+            <li class="divider" tabindex="-1"></li>
+          </ul>
+        </li>
+    <!-- <li><a href="<?php echo URLROOT; ?>/events/listMyEvents?year=<?php echo date('Y'); ?>&month=<?php echo date('m'); ?>&page=1">
         <span class="material-icons">
           calendar_today
         </span>
         My Events
-      </a></li>
+      </a></li> -->
     <li><a href="<?php echo URLROOT; ?>/users/settings">
         <span class="material-icons">
           settings

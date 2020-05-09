@@ -28,3 +28,16 @@ function getValueForEachDateChartJs($data){
 
    return $values;
 }
+
+function extractEventsDataFromAPIData($data){
+
+    $eventsData = [];
+    foreach ($data->data->Events as $key => $value){
+        $eventsData[$key]['year'] = $value->year;
+        $eventsData[$key]['text'] = $value->text;
+        $eventsData[$key]['html'] = $value->html;
+    }
+
+    return $eventsData;
+    
+}
