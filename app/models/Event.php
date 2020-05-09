@@ -230,7 +230,8 @@ class Event
         return $results;
     }
 
-    public function searchEventsByKeyword($keyword, $page, $pageSize){
+    public function searchEventsByKeyword($keyword, $page, $pageSize)
+    {
         $offset = ($page - 1) * $pageSize;
         $searchingStr = '%' . $keyword . '%';
         $this->db->query("SELECT events.* FROM events
@@ -242,7 +243,7 @@ class Event
         $this->db->bind(":limit", $pageSize, null);
         $this->db->bind(":offset", $offset, null);
         $results = $this->getResults();
-        return $results;                 
+        return $results;
     }
 
     public function getAllWeekStatsCurrentYear()
@@ -254,8 +255,8 @@ class Event
 
         for ($i = 1; $i <= $weeksCount; $i++) {
             $weekStartEndArr = getStartAndEndDate($i, $year);
-            $weekStart =$weekStartEndArr['week_start'];
-            $weekEnd =$weekStartEndArr['week_end'];
+            $weekStart = $weekStartEndArr['week_start'];
+            $weekEnd = $weekStartEndArr['week_end'];
             //    $this->db->query("SELECT * FROM events WHERE events.user_id = :userId 
             //                      AND events.date 
             //                      BETWEEN :weekStart AND :weekEnd ORDER BY events.date;
@@ -280,6 +281,20 @@ class Event
         return $data;
     }
 
+    public function getEventsHappenedOnDay($day, $month)
+    {
+        $url = "http://history.muffinlabs.com/date/" . $month . "/" . $day;
+        $ch = curl_init($url); // such as http://example.com/example.xml
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        $data = json_decode(curl_exec($ch));
+        curl_close($ch);
+        return $data;
+        // print_r($data);
+        // $events = extractEventsDataFromAPIData($data);
+        // return $events;
+    }
+
     private function getResults()
     {
         $results = $this->db->execute();
@@ -292,5 +307,4 @@ class Event
 
         return $results;
     }
-
 }

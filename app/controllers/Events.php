@@ -341,6 +341,9 @@ class Events extends Controller
         $mostBusyWeeks = $this->eventsModel->getAllWeekStatsCurrentYear();
         $dateLabels = getDateLabelsChartJs($mostBusyWeeks);
         $dateValues = getValueForEachDateChartJs($mostBusyWeeks);
+        $currentWeekStrArr = getStartAndEndDate(date('W'), date('Y'));
+        $currentWeekStr = $currentWeekStrArr['week_start'] . '-' . $currentWeekStrArr['week_end'];
+        
         // foreach ($mostBusyWeeks as $key => $value) {
         //     foreach ($value as $key2 => $value2) {
         //         print_r($value2);
@@ -351,8 +354,32 @@ class Events extends Controller
         $data = [
             // 'googleBarChartData' => json_encode($googleBarChartData)
             'dateLabels' => json_encode($dateLabels),
-            'dateValues' => json_encode($dateValues)
+            'dateValues' => json_encode($dateValues),
+            'busyWeeks' => $mostBusyWeeks,
+            'currentWeek' => $currentWeekStr
         ];
         $this->view('events/allWeekStats', $data);
+    }
+
+    //TO FINISH LATER
+    // public function allMonthStats(){
+    //     if(!isset($_SESSION['user_id'])){
+    //         redirect('/users/login');
+    //     }
+
+    //     $mostBusyMonths = $this->eventsModel->getAllMontsStatsCurrentYear();
+    // }
+
+    public function onThisDay(){
+        $today = date('d');
+        $month = date('m');
+        $rawData = $this->eventsModel->getEventsHappenedOnDay($today, $month);
+        $events = extractEventsDataFromAPIData($rawData);
+        $data = [
+            'events' => $events,
+            'today' => $today . ' ' . date('M'),
+            'todayURL' => $rawData->url
+        ];
+        $this->view('events/eventsOnThisDay', $data);
     }
 }
