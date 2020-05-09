@@ -1,8 +1,39 @@
 <?php require APPROOT . '/views/inc/header.php'; ?>
 
-<!-- <pre>
-    <?php print_r($data['googleBarChartData']); ?>
-</pre> -->
+<pre>
+    <!-- <?php //print_r($data['busyWeeks']); 
+            // echo date('w');
+            ?> -->
+</pre>
+
+<div class="row">
+    <div class="col l12">
+        <table class="highlight">
+            <thead>
+                <tr>
+                    <th>Week</th>
+                    <th>Events Count</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <?php foreach ($data['busyWeeks'] as $key => $value) : ?>
+                    <?php if ($key == $data['currentWeek']) : ?>
+                        <tr class="currentWeek">
+                            <td><?php echo $key; ?></td>
+                            <td class="center-align"><?php echo $value[0]; ?></td>
+                        </tr>
+                    <?php else : ?>
+                        <tr>
+                            <td><?php echo $key; ?></td>
+                            <td class="center-align"><?php echo $value[0]; ?></td>
+                        </tr>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+</div>
 
 <!-- Google chart here -->
 <div class="row">
@@ -11,6 +42,7 @@
         <!-- <div id="chart_div"></div> -->
     </div>
 </div>
+
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.js"></script>
 <!-- <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script> -->
@@ -83,7 +115,7 @@
                         'rgba(255, 159, 64, 0.2)',
                         'rgba(255, 99, 132, 0.2)',
                         'rgba(54, 162, 235, 0.2)',
-                     ],
+                    ],
                     // borderColor: [
                     //     'rgba(255, 99, 132, 1)',
                     //     'rgba(54, 162, 235, 1)',
