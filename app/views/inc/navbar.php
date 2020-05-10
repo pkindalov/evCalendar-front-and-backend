@@ -135,7 +135,7 @@
         <li>
 
           <!-- Dropdown Trigger -->
-          <a class='dropdown-trigger btn' href='#' data-target='dropdown1'>
+          <a class='dropdown-trigger' href='#' data-target='dropdown1'>
             <span class="material-icons">
               compare_arrows
             </span>
