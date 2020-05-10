@@ -399,7 +399,8 @@ class Events extends Controller
         $rawData = $this->eventsModel->getEventsHappenedOnDay($today, $month);
         $events = extractEventsDataFromAPIData($rawData);
         $data = [
-            'events' => $events,
+            // 'events' => $events,
+            'eventsEnc' => json_encode($events),
             'today' => $today . ' ' . date('M'),
             'todayURL' => $rawData->url
         ];

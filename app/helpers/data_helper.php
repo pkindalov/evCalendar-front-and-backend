@@ -36,7 +36,10 @@ function extractEventsDataFromAPIData($data){
         $eventsData[$key]['year'] = $value->year;
         $eventsData[$key]['text'] = $value->text;
         $eventsData[$key]['html'] = $value->html;
+        $eventsData[$key]['id'] = $key;
     }
+
+    rsort($eventsData);
 
     return $eventsData;
     
