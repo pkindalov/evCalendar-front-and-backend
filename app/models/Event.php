@@ -326,6 +326,7 @@ class Event
                           WHERE events.date 
                           LIKE :today 
                           AND events.user_id = :userId
+                          ORDER BY events.readed
                         --   AND events.readed IS NULL
                           LIMIT :limit
                           OFFSET :offset
@@ -351,6 +352,15 @@ class Event
         $this->db->bind(":eventId", $eventId, null);
         $this->db->bind(":userId", $_SESSION['user_id'], null);
         $result = execQueryRetTrueOrFalse($this->db);
+        return $result;
+    }
+
+    public function getCountOfMyTodayEvents(){
+        $today = getTodayDateYmdStr();
+        $this->db->query("SELECT COUNT(*) AS count FROM events WHERE events.date = :today AND events.user_id = :userId AND events.readed IS NULL");
+        $this->db->bind(":today", $today, null);
+        $this->db->bind(":userId", $_SESSION['user_id'], null);
+        $result = getResults($this->db);
         return $result;
     }
 

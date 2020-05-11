@@ -87,7 +87,11 @@
             <span class="material-icons">
               calendar_today
             </span>
-            Events
+            <?php if (isset($data['todayEvents']) and $data['todayEvents'] > 0) : ?>
+              Events<span class="new badge"><?php echo $data['todayEvents']; ?></span>
+            <?php else : ?>
+              Events
+            <?php endif; ?>
           </a>
 
           <!-- Dropdown Structure -->
@@ -101,20 +105,24 @@
             <li class="divider" tabindex="-1"></li>
             <li>
               <a href="<?php echo URLROOT; ?>/events/onThisDay">
-              <span class="material-icons">
+                <span class="material-icons">
                   calendar_today
                 </span>
                 On this day
-            </a>
+              </a>
             </li>
             <li class="divider" tabindex="-1"></li>
             <li>
               <a href="<?php echo URLROOT; ?>/events/myTodayEvents?page=1">
-              <span class="material-icons">
+                <span class="material-icons">
                   calendar_today
                 </span>
-                Today Tasks
-            </a>
+                <?php if (isset($data['todayEvents']) and $data['todayEvents'] > 0) : ?>
+                  Today Tasks<span class="new badge"><?php echo $data['todayEvents']; ?></span>
+                <?php else : ?>
+                  Today Tasks
+                <?php endif; ?>
+              </a>
             </li>
           </ul>
         </li>
@@ -242,11 +250,11 @@
           </a></li>
         <li class="divider" tabindex="-1"></li>
         <li><a href="<?php echo URLROOT; ?>/events/allMonthStats">
-                <span class="material-icons">
-                  pie_chart
-                </span>
-                All Months
-              </a></li>
+            <span class="material-icons">
+              pie_chart
+            </span>
+            All Months
+          </a></li>
       </ul>
     </li>
     <li><a href="<?php echo URLROOT; ?>/calendarConfigs/userSettings">
@@ -255,42 +263,50 @@
         </span>
         Cal.Settings
       </a></li>
-      <li>
-          <a class='dropdown-trigger' href='#' data-target='dropdownEventsMobile'>
+    <li>
+      <a class='dropdown-trigger' href='#' data-target='dropdownEventsMobile'>
+        <span class="material-icons">
+          calendar_today
+        </span>
+        <?php if (isset($data['todayEvents']) and $data['todayEvents'] > 0) : ?>
+          Events<span class="new badge"><?php echo $data['todayEvents']; ?></span>
+        <?php else : ?>
+          Events
+        <?php endif; ?>
+      </a>
+
+      <!-- Dropdown Structure -->
+      <ul id='dropdownEventsMobile' class='dropdown-content'>
+        <li><a href="<?php echo URLROOT; ?>/events/listMyEvents?year=<?php echo date('Y'); ?>&month=<?php echo date('m'); ?>&page=1">
             <span class="material-icons">
               calendar_today
             </span>
-            Events
+            My Events
+          </a></li>
+        <li class="divider" tabindex="-1"></li>
+        <li>
+          <a href="<?php echo URLROOT; ?>/events/onThisDay">
+            <span class="material-icons">
+              calendar_today
+            </span>
+            On this day
           </a>
-
-          <!-- Dropdown Structure -->
-          <ul id='dropdownEventsMobile' class='dropdown-content'>
-            <li><a href="<?php echo URLROOT; ?>/events/listMyEvents?year=<?php echo date('Y'); ?>&month=<?php echo date('m'); ?>&page=1">
-                <span class="material-icons">
-                  calendar_today
-                </span>
-                My Events
-              </a></li>
-            <li class="divider" tabindex="-1"></li>
-            <li>
-              <a href="<?php echo URLROOT; ?>/events/onThisDay">
-              <span class="material-icons">
-                  calendar_today
-                </span>
-                On this day
-            </a>
-            </li>
-            <li class="divider" tabindex="-1"></li>
-            <li>
-              <a href="<?php echo URLROOT; ?>/events/myTodayEvents?page=1">
-              <span class="material-icons">
-                  calendar_today
-                </span>
-                Today Tasks
-            </a>
-            </li>
-          </ul>
         </li>
+        <li class="divider" tabindex="-1"></li>
+        <li>
+          <a href="<?php echo URLROOT; ?>/events/myTodayEvents?page=1">
+            <span class="material-icons">
+              calendar_today
+            </span>
+            <?php if (isset($data['todayEvents']) and $data['todayEvents'] > 0) : ?>
+              Today Tasks<span class="new badge"><?php echo $data['todayEvents']; ?></span>
+            <?php else : ?>
+              Today Tasks
+            <?php endif; ?>
+          </a>
+        </li>
+      </ul>
+    </li>
     <!-- <li><a href="<?php echo URLROOT; ?>/events/listMyEvents?year=<?php echo date('Y'); ?>&month=<?php echo date('m'); ?>&page=1">
         <span class="material-icons">
           calendar_today
