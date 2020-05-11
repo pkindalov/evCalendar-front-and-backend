@@ -4,13 +4,13 @@
         ?>
     </pre> -->
 
-<?php if(count($data['events']) == 0) : ?>
+<?php if (count($data['events']) == 0) : ?>
     <h2>You have no task for today.</h2>
-<?php endif; ?>    
+<?php endif; ?>
 
+<h2 class="header"><?php echo $data['todayDate']; ?></h2>
 <?php foreach ($data['events'] as $key => $event) : ?>
     <div class="col s12 m7">
-        <h2 class="header"><?php echo $event->date; ?></h2>
         <div class="card horizontal">
             <div class="card-image"></div>
             <div class="card-stacked">

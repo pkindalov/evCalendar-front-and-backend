@@ -456,6 +456,7 @@ class Events extends Controller
             'hasPrevPage' => $page > 1,
             'nextPage' => $page + 1,
             'prevPage' => $page - 1,
+            'todayDate' => $today
         ];
         $this->view('events/myTodayTasks', $data);
     }
