@@ -389,7 +389,7 @@
 
 
 
-
+        
         let formData = new FormData();
         formData.append('receiver', mail);
         formData.append('dayEvents', JSON.stringify(divsArr));

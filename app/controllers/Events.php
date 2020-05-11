@@ -341,6 +341,38 @@ class Events extends Controller
         }
     }
 
+    public function sendEventsOnThisDay()
+    {
+        if (!isset($_POST['receiver'])) {
+            echo json_encode(['success' => false]);
+            return;
+        }
+        $email = $_POST['receiver'];
+        $tempData = ($_POST['dayEvents']);
+        $cleanData = json_decode($tempData);
+
+
+        $body = '<div style="text-align: center; width: 100%; height: 100px; background-color: red; color: white"><h2>evCalendar</h2></div>';
+        $subject = 'Events Happened Today';
+        foreach ($cleanData[0]->textContent as $key => $value) {
+            //    print_r($value->event);
+
+            if ($key % 4 == 0) {
+                // $body .= '<div style="margin-bottom: 20px;><p>' . $value . '</p></div>';
+                $body .= '<br />';
+            }
+            $body .= '<p>' . $value->event . '</p>';
+        }
+
+        if (sendMail($this->phpMailer, $subject, $body, $email)) {
+            echo json_encode(['success' => true]);
+            return;
+        } else {
+            echo json_encode(['success' => false]);
+            return;
+        }
+    }
+
     public function allWeeksStats()
     {
         if (!isset($_SESSION['user_id'])) {
@@ -370,8 +402,9 @@ class Events extends Controller
         $this->view('events/allWeekStats', $data);
     }
 
-    public function allMonthStats(){
-        if(!isset($_SESSION['user_id'])){
+    public function allMonthStats()
+    {
+        if (!isset($_SESSION['user_id'])) {
             redirect('/users/login');
         }
 
@@ -379,7 +412,7 @@ class Events extends Controller
         $dateLabels = getDateLabelsChartJs($mostBusyMonths);
         $dateValues = getValueForEachDateChartJs($mostBusyMonths);
         $date = date('Y') . '-' . date('m');
-       
+
         $data = [
             'dateLabels' => json_encode($dateLabels),
             'dateValues' => json_encode($dateValues),
