@@ -320,6 +320,40 @@ class Event
         // return $events;
     }
 
+    public function getMyTodayEvents($today, $page, $pageSize){
+        $offset = ($page - 1) * $pageSize;
+        $this->db->query("SELECT * FROM events 
+                          WHERE events.date 
+                          LIKE :today 
+                          AND events.user_id = :userId
+                        --   AND events.readed IS NULL
+                          LIMIT :limit
+                          OFFSET :offset
+                          ");
+        $this->db->bind(":today", $today, null);
+        $this->db->bind(":userId", $_SESSION['user_id'], null);
+        $this->db->bind(":limit", $pageSize, null);
+        $this->db->bind(":offset", $offset, null);
+        $results = getResults($this->db);
+        return $results;
+    }
+
+    public function markAsReaded($eventId){
+        $this->db->query("UPDATE events SET events.readed = 1 WHERE events.id = :eventId AND events.user_id = :userId");
+        $this->db->bind(":eventId", $eventId, null);
+        $this->db->bind(":userId", $_SESSION['user_id'], null);
+        $result = execQueryRetTrueOrFalse($this->db);
+        return $result;
+    }
+
+    public function markAsUnReaded($eventId){
+        $this->db->query("UPDATE events SET events.readed = NULL WHERE events.id = :eventId AND events.user_id = :userId");
+        $this->db->bind(":eventId", $eventId, null);
+        $this->db->bind(":userId", $_SESSION['user_id'], null);
+        $result = execQueryRetTrueOrFalse($this->db);
+        return $result;
+    }
+
     private function getResults()
     {
         $results = $this->db->execute();

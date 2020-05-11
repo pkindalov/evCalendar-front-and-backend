@@ -439,4 +439,40 @@ class Events extends Controller
         ];
         $this->view('events/eventsOnThisDay', $data);
     }
+
+    public function myTodayEvents($query){
+        if(!$_SESSION['user_id']){
+            redirect('/');
+        }
+        $queryData = getQueryData($query);
+        $page = isset($queryData['page']) ? htmlspecialchars($queryData['page']) : 1;
+        $pageSize = 5;
+        $today = date('Y') . '-' .date('m') . '-' . date('d');
+        $todayEvents = $this->eventsModel->getMyTodayEvents($today, $page, $pageSize);
+        $data = [
+            'events' => $todayEvents,
+            'page' => $page,
+            'hasNextPage' => count($todayEvents) > 0,
+            'hasPrevPage' => $page > 1,
+            'nextPage' => $page + 1,
+            'prevPage' => $page - 1,
+        ];
+        $this->view('events/myTodayTasks', $data);
+    }
+
+    public function markAsReaded($eventId){
+        if(!isset($_SESSION['user_id'])){
+            redirect('/');
+        }
+        $this->eventsModel->markAsReaded(htmlspecialchars($eventId));
+        redirect('events/myTodayEvents?page=1');
+    }
+
+    public function markAsUnread($eventId){
+        if(!isset($_SESSION['user_id'])){
+            redirect('/');
+        }
+        $this->eventsModel->markAsUnReaded(htmlspecialchars($eventId));
+        redirect('events/myTodayEvents?page=1');
+    }
 }

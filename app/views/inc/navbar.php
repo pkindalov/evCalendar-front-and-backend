@@ -108,6 +108,14 @@
             </a>
             </li>
             <li class="divider" tabindex="-1"></li>
+            <li>
+              <a href="<?php echo URLROOT; ?>/events/myTodayEvents?page=1">
+              <span class="material-icons">
+                  calendar_today
+                </span>
+                Today Tasks
+            </a>
+            </li>
           </ul>
         </li>
 
@@ -273,6 +281,14 @@
             </a>
             </li>
             <li class="divider" tabindex="-1"></li>
+            <li>
+              <a href="<?php echo URLROOT; ?>/events/myTodayEvents?page=1">
+              <span class="material-icons">
+                  calendar_today
+                </span>
+                Today Tasks
+            </a>
+            </li>
           </ul>
         </li>
     <!-- <li><a href="<?php echo URLROOT; ?>/events/listMyEvents?year=<?php echo date('Y'); ?>&month=<?php echo date('m'); ?>&page=1">
