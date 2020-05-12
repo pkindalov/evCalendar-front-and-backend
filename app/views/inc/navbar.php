@@ -88,7 +88,7 @@
               calendar_today
             </span>
             <?php if (isset($data['todayEvents']) and $data['todayEvents'] > 0) : ?>
-              Events<span class="new badge"><?php echo $data['todayEvents']; ?></span>
+              Events<span class="new badge blue"><?php echo $data['todayEvents']; ?></span>
             <?php else : ?>
               Events
             <?php endif; ?>

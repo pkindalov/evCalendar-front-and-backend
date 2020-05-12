@@ -7,6 +7,7 @@ class Users extends Controller
     public function __construct()
     {
         $this->userModel = $this->model('User');
+        $this->eventsModel = $this->model('Event');
         $this->phpMailer = new PhpMailSender(MAIL_HOST, MAIL_PORT, MAIL_USERNAME, MAIL_PASSWORD);
         $this->phpMailer->setCharset(CHARSET);
     }
@@ -273,6 +274,12 @@ class Users extends Controller
 
     public function settings()
     {
+        if (isset($_SESSION['user_id'])) {
+            $todayEventsCount = $this->eventsModel->getCountOfMyTodayEvents();
+            $data['todayEvents'] = $todayEventsCount[0]->count;
+            $this->view('users/settings', $data);
+            return;
+        }
         $this->view('users/settings');
     }
 
@@ -293,19 +300,24 @@ class Users extends Controller
             $data = [
                 'error' => 'passwords don\'t mach'
             ];
+            $todayEventsCount = $this->eventsModel->getCountOfMyTodayEvents();
+            $data['todayEvents'] = $todayEventsCount[0]->count;
             $this->view('users/settings', $data);
         }
         if ($this->userModel->changeUserPassword($newPassword, $_SESSION['user_id'])) {
-           redirect('users/login');
-           return;
+            redirect('users/login');
+            return;
         }
         $data = [
             'error' => 'There is some error updating password.Try later.'
         ];
+        $todayEventsCount = $this->eventsModel->getCountOfMyTodayEvents();
+        $data['todayEvents'] = $todayEventsCount[0]->count;
         $this->view('users/settings', $data);
     }
 
-    public function resetPassword(){
+    public function resetPassword()
+    {
         $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
         $email = $_POST['email'];
         $newUserPass = $this->genRndPassword();
@@ -315,7 +327,7 @@ class Users extends Controller
             return;
         }
 
-        if($this->userModel->resetUserPasswordByEmail($email, $newUserPass)){
+        if ($this->userModel->resetUserPasswordByEmail($email, $newUserPass)) {
             $subject = 'Password reset successfull';
             $body = 'Your new password for the site is ' . $newUserPass . '.' . '<br />You can change it when you want';
             if ($this->sendMail($subject, $body, $email)) {

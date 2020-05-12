@@ -146,7 +146,7 @@ class Events extends Controller
             redirect('/');
         }
 
-        if (!$_SESSION['user_id']) {
+        if (!isset($_SESSION['user_id'])) {
             redirect('/');
         }
 
@@ -155,6 +155,11 @@ class Events extends Controller
             'event' => $eventData,
             'timeleft' => intval($timeleft)
         ];
+
+
+        $todayEventsCount = $this->eventsModel->getCountOfMyTodayEvents();
+        $data['todayEvents'] = $todayEventsCount[0]->count;
+
 
         $this->view('events/showEventFromNotif', $data);
     }
@@ -247,6 +252,11 @@ class Events extends Controller
             'sortedData' => $sortedByDate,
             'googleData' => json_encode($googleChartData)
         ];
+
+
+        $todayEventsCount = $this->eventsModel->getCountOfMyTodayEvents();
+        $data['todayEvents'] = $todayEventsCount[0]->count;
+
         $this->view('events/listMyEvents', $data);
     }
 
@@ -277,6 +287,10 @@ class Events extends Controller
             'sortedData' => $sortedByDate,
             'keyword' => $keyword
         ];
+
+        $todayEventsCount = $this->eventsModel->getCountOfMyTodayEvents();
+        $data['todayEvents'] = $todayEventsCount[0]->count;
+
         $this->view('events/listSearchResults', $data);
     }
 
@@ -293,7 +307,11 @@ class Events extends Controller
         $data = [
             'event' => $event[0]
         ];
-        // print_r($event);
+
+
+        $todayEventsCount = $this->eventsModel->getCountOfMyTodayEvents();
+        $data['todayEvents'] = $todayEventsCount[0]->count;
+
         $this->view('events/editEvent', $data);
     }
 
@@ -310,6 +328,11 @@ class Events extends Controller
             }
             return;
         }
+
+
+        $todayEventsCount = $this->eventsModel->getCountOfMyTodayEvents();
+        $data['todayEvents'] = $todayEventsCount[0]->count;
+
         $this->view('events/addNewEvent');
     }
 
@@ -399,6 +422,11 @@ class Events extends Controller
             'busyWeeks' => $mostBusyWeeks,
             'currentWeek' => $currentWeekStr
         ];
+
+
+        $todayEventsCount = $this->eventsModel->getCountOfMyTodayEvents();
+        $data['todayEvents'] = $todayEventsCount[0]->count;
+
         $this->view('events/allWeekStats', $data);
     }
 
@@ -419,6 +447,11 @@ class Events extends Controller
             'busyMonths' => $mostBusyMonths,
             'currentMonth' => $date
         ];
+
+
+        $todayEventsCount = $this->eventsModel->getCountOfMyTodayEvents();
+        $data['todayEvents'] = $todayEventsCount[0]->count;
+
         $this->view('events/allMonthsStats', $data);
     }
 
@@ -437,17 +470,20 @@ class Events extends Controller
             'today' => $today . ' ' . date('M'),
             'todayURL' => $rawData->url
         ];
+        $todayEventsCount = $this->eventsModel->getCountOfMyTodayEvents();
+        $data['todayEvents'] = $todayEventsCount[0]->count;
         $this->view('events/eventsOnThisDay', $data);
     }
 
-    public function myTodayEvents($query){
-        if(!$_SESSION['user_id']){
+    public function myTodayEvents($query)
+    {
+        if (!isset($_SESSION['user_id'])) {
             redirect('/');
         }
         $queryData = getQueryData($query);
         $page = isset($queryData['page']) ? htmlspecialchars($queryData['page']) : 1;
         $pageSize = 5;
-        $today = date('Y') . '-' .date('m') . '-' . date('d');
+        $today = date('Y') . '-' . date('m') . '-' . date('d');
         $todayEvents = $this->eventsModel->getMyTodayEvents($today, $page, $pageSize);
         $data = [
             'events' => $todayEvents,
@@ -458,19 +494,26 @@ class Events extends Controller
             'prevPage' => $page - 1,
             'todayDate' => $today
         ];
+
+
+        $todayEventsCount = $this->eventsModel->getCountOfMyTodayEvents();
+        $data['todayEvents'] = $todayEventsCount[0]->count;
+
         $this->view('events/myTodayTasks', $data);
     }
 
-    public function markAsReaded($eventId){
-        if(!isset($_SESSION['user_id'])){
+    public function markAsReaded($eventId)
+    {
+        if (!isset($_SESSION['user_id'])) {
             redirect('/');
         }
         $this->eventsModel->markAsReaded(htmlspecialchars($eventId));
         redirect('events/myTodayEvents?page=1');
     }
 
-    public function markAsUnread($eventId){
-        if(!isset($_SESSION['user_id'])){
+    public function markAsUnread($eventId)
+    {
+        if (!isset($_SESSION['user_id'])) {
             redirect('/');
         }
         $this->eventsModel->markAsUnReaded(htmlspecialchars($eventId));

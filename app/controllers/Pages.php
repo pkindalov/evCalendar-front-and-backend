@@ -28,6 +28,11 @@ class Pages extends Controller
             'title' => 'About Us',
             'description' => 'App to share posts with other users'
         ];
+
+        if (isset($_SESSION['user_id'])) {
+            $todayEventsCount = $this->eventsModel->getCountOfMyTodayEvents();
+            $data['todayEvents'] = $todayEventsCount[0]->count;
+        }
         $this->view('pages/about', $data);
     }
 }
