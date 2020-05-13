@@ -87,8 +87,11 @@
             <span class="material-icons">
               calendar_today
             </span>
-            <?php if (isset($data['todayEvents']) and $data['todayEvents'] > 0) : ?>
-              Events<span class="new badge blue"><?php echo $data['todayEvents']; ?></span>
+            <?php if ((isset($data['todayEvents']) and $data['todayEvents'] > 0) ||
+              (isset($data['upcomingEventsInHour']) and count($data['upcomingEventsInHour']) > 0)
+            ) : ?>
+              Events<span class="new badge blue">
+                <?php echo $data['todayEvents'] == 0 ? count($data['upcomingEventsInHour']) : $data['todayEvents']; ?></span>
             <?php else : ?>
               Events
             <?php endif; ?>
@@ -124,6 +127,16 @@
                 <?php endif; ?>
               </a>
             </li>
+            <?php if (count($data['upcomingEventsInHour']) > 0) : ?>
+              <li>
+                <a href="<?php echo URLROOT; ?>/events/upcomingInHour?page=1">
+                  <span class="material-icons">
+                    calendar_today
+                  </span>
+                  Upcoming... soon<span class="new badge"><?php echo count($data['upcomingEventsInHour']); ?></span>
+                </a>
+              </li>
+            <?php endif; ?>
           </ul>
         </li>
 
@@ -268,8 +281,11 @@
         <span class="material-icons">
           calendar_today
         </span>
-        <?php if (isset($data['todayEvents']) and $data['todayEvents'] > 0) : ?>
-          Events<span class="new badge"><?php echo $data['todayEvents']; ?></span>
+        <?php if ((isset($data['todayEvents']) and $data['todayEvents'] > 0) ||
+          (isset($data['upcomingEventsInHour']) and count($data['upcomingEventsInHour']) > 0)
+        ) : ?>
+          Events<span class="new badge blue">
+            <?php echo $data['todayEvents'] == 0 ? count($data['upcomingEventsInHour']) : $data['todayEvents']; ?></span>
         <?php else : ?>
           Events
         <?php endif; ?>
@@ -305,6 +321,16 @@
             <?php endif; ?>
           </a>
         </li>
+        <?php if (count($data['upcomingEventsInHour']) > 0) : ?>
+          <li>
+            <a href="<?php echo URLROOT; ?>/events/upcomingInHour?page=1">
+              <span class="material-icons">
+                calendar_today
+              </span>
+              Upcoming... soon<span class="new badge"><?php echo count($data['upcomingEventsInHour']); ?></span>
+            </a>
+          </li>
+        <?php endif; ?>
       </ul>
     </li>
     <!-- <li><a href="<?php echo URLROOT; ?>/events/listMyEvents?year=<?php echo date('Y'); ?>&month=<?php echo date('m'); ?>&page=1">
