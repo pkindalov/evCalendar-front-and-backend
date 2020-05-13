@@ -261,14 +261,14 @@ class Event
                               WHERE events.date LIKE :keyword
                               AND events.user_id = :userId
                               ORDER BY events.date DESC");
-            $this->db->bind(":keyword", $keyword, null);                  
-            $this->db->bind(":userId", $userId, null); 
+            $this->db->bind(":keyword", $keyword, null);
+            $this->db->bind(":userId", $userId, null);
             $results = $this->db->execute();
             if ($this->db->rowCount($results) > 0) {
                 $results = $this->db->resultSet();
                 $data[$date] = [$results[0]->count];
-            }           
-            
+            }
+
             // print_r($data);
         }
         return $data;
@@ -320,7 +320,8 @@ class Event
         // return $events;
     }
 
-    public function getMyTodayEvents($today, $page, $pageSize){
+    public function getMyTodayEvents($today, $page, $pageSize)
+    {
         $offset = ($page - 1) * $pageSize;
         $this->db->query("SELECT * FROM events 
                           WHERE events.date 
@@ -339,7 +340,8 @@ class Event
         return $results;
     }
 
-    public function markAsReaded($eventId){
+    public function markAsReaded($eventId)
+    {
         $this->db->query("UPDATE events SET events.readed = 1 WHERE events.id = :eventId AND events.user_id = :userId");
         $this->db->bind(":eventId", $eventId, null);
         $this->db->bind(":userId", $_SESSION['user_id'], null);
@@ -347,7 +349,8 @@ class Event
         return $result;
     }
 
-    public function markAsUnReaded($eventId){
+    public function markAsUnReaded($eventId)
+    {
         $this->db->query("UPDATE events SET events.readed = NULL WHERE events.id = :eventId AND events.user_id = :userId");
         $this->db->bind(":eventId", $eventId, null);
         $this->db->bind(":userId", $_SESSION['user_id'], null);
@@ -355,9 +358,33 @@ class Event
         return $result;
     }
 
-    public function getCountOfMyTodayEvents(){
+    public function getCountOfMyTodayEvents()
+    {
         $today = getTodayDateYmdStr();
         $this->db->query("SELECT COUNT(*) AS count FROM events WHERE events.date = :today AND events.user_id = :userId AND events.readed IS NULL");
+        $this->db->bind(":today", $today, null);
+        $this->db->bind(":userId", $_SESSION['user_id'], null);
+        $result = getResults($this->db);
+        return $result;
+    }
+
+    public function upcomingSoonInHourEvents()
+    {
+        $today = getTodayDateYmdStr();
+        $this->db->query("
+                SELECT events.*, CAST(CONCAT(events.date, ' ', events.`begin`) AS DATETIME) AS dt,
+                TIME_FORMAT(TIMEDIFF(NOW(),CONCAT(events.date, ' ', events.`begin`)),'%H:%i:%s') AS timeleft
+                FROM events
+                WHERE events.date = :today 
+                AND
+                CAST(TIME_FORMAT(TIMEDIFF(NOW(), CAST(CONCAT(events.date, ' ', events.`begin`) AS DATETIME)),'%H') AS INT) >= -1
+                AND
+                CAST(TIME_FORMAT(TIMEDIFF(NOW(), CAST(CONCAT(events.date, ' ', events.`begin`) AS DATETIME)),'%H') AS INT) <= 0 
+                AND
+                CAST(TIME_FORMAT(TIMEDIFF(NOW(), CAST(CONCAT(events.date, ' ', events.`begin`) AS DATETIME)),'%i') AS INT) <= 0 
+                
+                AND events.user_id = :userId
+        ");
         $this->db->bind(":today", $today, null);
         $this->db->bind(":userId", $_SESSION['user_id'], null);
         $result = getResults($this->db);

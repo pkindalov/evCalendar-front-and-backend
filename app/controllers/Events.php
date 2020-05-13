@@ -519,4 +519,19 @@ class Events extends Controller
         $this->eventsModel->markAsUnReaded(htmlspecialchars($eventId));
         redirect('events/myTodayEvents?page=1');
     }
+
+    public function upcomingInHour(){
+        if(!isset($_SESSION['user_id'])){
+            redirect('/users/login');
+        }
+        $todayDate = getTodayDateYmdStr(); 
+        $upcomingEventsInHour = $this->eventsModel->upcomingSoonInHourEvents();
+        $data = [
+            'upcomingInHour' => $upcomingEventsInHour,
+            'todayDate' => $todayDate
+        ];
+        $todayEventsCount = $this->eventsModel->getCountOfMyTodayEvents();
+        $data['todayEvents'] = $todayEventsCount[0]->count;
+        $this->view('events/upcomingInHour', $data);
+    }
 }
