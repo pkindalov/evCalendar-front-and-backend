@@ -19,8 +19,8 @@ class Pages extends Controller
             if(!$upcomingEventsInHour){
                 $upcomingEventsInHour = [];
             }
-            $data['todayEvents'] = $todayEventsCount[0]->count;
             $data['upcomingEventsInHour'] = $upcomingEventsInHour;
+            $data['todayEvents'] = $todayEventsCount[0]->count;
         }
         
         $this->view('pages/index', $data);

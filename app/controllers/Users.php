@@ -277,6 +277,12 @@ class Users extends Controller
         if (isset($_SESSION['user_id'])) {
             $todayEventsCount = $this->eventsModel->getCountOfMyTodayEvents();
             $data['todayEvents'] = $todayEventsCount[0]->count;
+
+            $upcomingEventsInHour = $this->eventsModel->upcomingSoonInHourEvents();
+            if (!$upcomingEventsInHour) {
+                $upcomingEventsInHour = [];
+            }
+            $data['upcomingEventsInHour'] = $upcomingEventsInHour;
             $this->view('users/settings', $data);
             return;
         }
@@ -302,6 +308,12 @@ class Users extends Controller
             ];
             $todayEventsCount = $this->eventsModel->getCountOfMyTodayEvents();
             $data['todayEvents'] = $todayEventsCount[0]->count;
+
+            $upcomingEventsInHour = $this->eventsModel->upcomingSoonInHourEvents();
+            if (!$upcomingEventsInHour) {
+                $upcomingEventsInHour = [];
+            }
+            $data['upcomingEventsInHour'] = $upcomingEventsInHour;
             $this->view('users/settings', $data);
         }
         if ($this->userModel->changeUserPassword($newPassword, $_SESSION['user_id'])) {
@@ -313,6 +325,11 @@ class Users extends Controller
         ];
         $todayEventsCount = $this->eventsModel->getCountOfMyTodayEvents();
         $data['todayEvents'] = $todayEventsCount[0]->count;
+        $upcomingEventsInHour = $this->eventsModel->upcomingSoonInHourEvents();
+        if (!$upcomingEventsInHour) {
+            $upcomingEventsInHour = [];
+        }
+        $data['upcomingEventsInHour'] = $upcomingEventsInHour;
         $this->view('users/settings', $data);
     }
 

@@ -6,6 +6,7 @@ class CalendarConfigs extends Controller
     public function __construct()
     {
         $this->calConfigModel = $this->model('CalendarConfig');
+        $this->eventsModel = $this->model('Event');
     }
 
     public function userSettings()
@@ -15,9 +16,9 @@ class CalendarConfigs extends Controller
         }
 
         $userSettings = $this->calConfigModel->getUsersSettingsById();
-        if(empty($userSettings)){
+        if (empty($userSettings)) {
             $createUserDefaultSettings = $this->calConfigModel->createDefaultUserCalSettings();
-            if($createUserDefaultSettings){
+            if ($createUserDefaultSettings) {
                 $userSettings = $this->calConfigModel->getUsersSettingsById();
             }
         }
@@ -33,7 +34,14 @@ class CalendarConfigs extends Controller
             ];
         }
 
-        // print_r($data);
+        $todayEventsCount = $this->eventsModel->getCountOfMyTodayEvents();
+        $data['todayEvents'] = $todayEventsCount[0]->count;
+
+        $upcomingEventsInHour = $this->eventsModel->upcomingSoonInHourEvents();
+        if (!$upcomingEventsInHour) {
+            $upcomingEventsInHour = [];
+        }
+        $data['upcomingEventsInHour'] = $upcomingEventsInHour;
         $this->view('calendar/calendarConfig', $data);
     }
 
@@ -50,9 +58,9 @@ class CalendarConfigs extends Controller
         $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
         $usingThemes = !isset($_POST['usingThemes']) ? null : $_POST['usingThemes'];
         $notifications = !isset($_POST['notifications']) ? null : $_POST['notifications'];
-        
+
         $data = [
-            'languageId' => $_POST['language'], 
+            'languageId' => $_POST['language'],
             'usingThemes' => $usingThemes == 'on' ? true : null,
             'notifications' => $notifications == 'on' ? true : null
         ];

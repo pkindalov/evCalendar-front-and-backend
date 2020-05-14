@@ -160,6 +160,12 @@ class Events extends Controller
         $todayEventsCount = $this->eventsModel->getCountOfMyTodayEvents();
         $data['todayEvents'] = $todayEventsCount[0]->count;
 
+        $upcomingEventsInHour = $this->eventsModel->upcomingSoonInHourEvents();
+        if (!$upcomingEventsInHour) {
+            $upcomingEventsInHour = [];
+        }
+        $data['upcomingEventsInHour'] = $upcomingEventsInHour;
+
 
         $this->view('events/showEventFromNotif', $data);
     }
@@ -257,6 +263,12 @@ class Events extends Controller
         $todayEventsCount = $this->eventsModel->getCountOfMyTodayEvents();
         $data['todayEvents'] = $todayEventsCount[0]->count;
 
+        $upcomingEventsInHour = $this->eventsModel->upcomingSoonInHourEvents();
+        if (!$upcomingEventsInHour) {
+            $upcomingEventsInHour = [];
+        }
+        $data['upcomingEventsInHour'] = $upcomingEventsInHour;
+
         $this->view('events/listMyEvents', $data);
     }
 
@@ -291,6 +303,12 @@ class Events extends Controller
         $todayEventsCount = $this->eventsModel->getCountOfMyTodayEvents();
         $data['todayEvents'] = $todayEventsCount[0]->count;
 
+        $upcomingEventsInHour = $this->eventsModel->upcomingSoonInHourEvents();
+        if (!$upcomingEventsInHour) {
+            $upcomingEventsInHour = [];
+        }
+        $data['upcomingEventsInHour'] = $upcomingEventsInHour;
+
         $this->view('events/listSearchResults', $data);
     }
 
@@ -311,6 +329,12 @@ class Events extends Controller
 
         $todayEventsCount = $this->eventsModel->getCountOfMyTodayEvents();
         $data['todayEvents'] = $todayEventsCount[0]->count;
+
+        $upcomingEventsInHour = $this->eventsModel->upcomingSoonInHourEvents();
+        if (!$upcomingEventsInHour) {
+            $upcomingEventsInHour = [];
+        }
+        $data['upcomingEventsInHour'] = $upcomingEventsInHour;
 
         $this->view('events/editEvent', $data);
     }
@@ -333,7 +357,13 @@ class Events extends Controller
         $todayEventsCount = $this->eventsModel->getCountOfMyTodayEvents();
         $data['todayEvents'] = $todayEventsCount[0]->count;
 
-        $this->view('events/addNewEvent');
+        $upcomingEventsInHour = $this->eventsModel->upcomingSoonInHourEvents();
+        if (!$upcomingEventsInHour) {
+            $upcomingEventsInHour = [];
+        }
+        $data['upcomingEventsInHour'] = $upcomingEventsInHour;
+
+        $this->view('events/addNewEvent', $data);
     }
 
     public function sendToMail()
@@ -427,6 +457,12 @@ class Events extends Controller
         $todayEventsCount = $this->eventsModel->getCountOfMyTodayEvents();
         $data['todayEvents'] = $todayEventsCount[0]->count;
 
+        $upcomingEventsInHour = $this->eventsModel->upcomingSoonInHourEvents();
+        if (!$upcomingEventsInHour) {
+            $upcomingEventsInHour = [];
+        }
+        $data['upcomingEventsInHour'] = $upcomingEventsInHour;
+
         $this->view('events/allWeekStats', $data);
     }
 
@@ -452,6 +488,12 @@ class Events extends Controller
         $todayEventsCount = $this->eventsModel->getCountOfMyTodayEvents();
         $data['todayEvents'] = $todayEventsCount[0]->count;
 
+        $upcomingEventsInHour = $this->eventsModel->upcomingSoonInHourEvents();
+        if (!$upcomingEventsInHour) {
+            $upcomingEventsInHour = [];
+        }
+        $data['upcomingEventsInHour'] = $upcomingEventsInHour;
+
         $this->view('events/allMonthsStats', $data);
     }
 
@@ -472,6 +514,12 @@ class Events extends Controller
         ];
         $todayEventsCount = $this->eventsModel->getCountOfMyTodayEvents();
         $data['todayEvents'] = $todayEventsCount[0]->count;
+
+        $upcomingEventsInHour = $this->eventsModel->upcomingSoonInHourEvents();
+        if (!$upcomingEventsInHour) {
+            $upcomingEventsInHour = [];
+        }
+        $data['upcomingEventsInHour'] = $upcomingEventsInHour;
         $this->view('events/eventsOnThisDay', $data);
     }
 
@@ -499,6 +547,12 @@ class Events extends Controller
         $todayEventsCount = $this->eventsModel->getCountOfMyTodayEvents();
         $data['todayEvents'] = $todayEventsCount[0]->count;
 
+        $upcomingEventsInHour = $this->eventsModel->upcomingSoonInHourEvents();
+        if (!$upcomingEventsInHour) {
+            $upcomingEventsInHour = [];
+        }
+        $data['upcomingEventsInHour'] = $upcomingEventsInHour;
+
         $this->view('events/myTodayTasks', $data);
     }
 
@@ -520,11 +574,12 @@ class Events extends Controller
         redirect('events/myTodayEvents?page=1');
     }
 
-    public function upcomingInHour(){
-        if(!isset($_SESSION['user_id'])){
+    public function upcomingInHour()
+    {
+        if (!isset($_SESSION['user_id'])) {
             redirect('/users/login');
         }
-        $todayDate = getTodayDateYmdStr(); 
+        $todayDate = getTodayDateYmdStr();
         $upcomingEventsInHour = $this->eventsModel->upcomingSoonInHourEvents();
         $data = [
             'upcomingInHour' => $upcomingEventsInHour,
@@ -532,6 +587,13 @@ class Events extends Controller
         ];
         $todayEventsCount = $this->eventsModel->getCountOfMyTodayEvents();
         $data['todayEvents'] = $todayEventsCount[0]->count;
+
+        $upcomingEventsInHour = $this->eventsModel->upcomingSoonInHourEvents();
+        if (!$upcomingEventsInHour) {
+            $upcomingEventsInHour = [];
+        }
+        $data['upcomingEventsInHour'] = $upcomingEventsInHour;
+        
         $this->view('events/upcomingInHour', $data);
     }
 }
