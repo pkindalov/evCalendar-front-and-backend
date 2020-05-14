@@ -127,7 +127,7 @@
                 <?php endif; ?>
               </a>
             </li>
-            <?php if (count($data['upcomingEventsInHour']) > 0) : ?>
+            <?php if (isset($data['upcomingEventsInHour']) && count($data['upcomingEventsInHour']) > 0) : ?>
               <li>
                 <a href="<?php echo URLROOT; ?>/events/upcomingInHour?page=1">
                   <span class="material-icons">
@@ -321,7 +321,7 @@
             <?php endif; ?>
           </a>
         </li>
-        <?php if (count($data['upcomingEventsInHour']) > 0) : ?>
+        <?php if (isset($data['upcomingEventsInHour']) && count($data['upcomingEventsInHour']) > 0) : ?>
           <li>
             <a href="<?php echo URLROOT; ?>/events/upcomingInHour?page=1">
               <span class="material-icons">

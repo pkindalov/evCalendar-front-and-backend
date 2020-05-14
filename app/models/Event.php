@@ -382,7 +382,6 @@ class Event
                 CAST(TIME_FORMAT(TIMEDIFF(NOW(), CAST(CONCAT(events.date, ' ', events.`begin`) AS DATETIME)),'%H') AS INT) <= 0 
                 AND
                 CAST(TIME_FORMAT(TIMEDIFF(NOW(), CAST(CONCAT(events.date, ' ', events.`begin`) AS DATETIME)),'%i') AS INT) <= 0 
-                
                 AND events.user_id = :userId
         ");
         $this->db->bind(":today", $today, null);

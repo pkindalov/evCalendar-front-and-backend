@@ -16,6 +16,9 @@ class Pages extends Controller
         if (isset($_SESSION['user_id'])) {
             $todayEventsCount = $this->eventsModel->getCountOfMyTodayEvents();
             $upcomingEventsInHour = $this->eventsModel->upcomingSoonInHourEvents();
+            if(!$upcomingEventsInHour){
+                $upcomingEventsInHour = [];
+            }
             $data['todayEvents'] = $todayEventsCount[0]->count;
             $data['upcomingEventsInHour'] = $upcomingEventsInHour;
         }

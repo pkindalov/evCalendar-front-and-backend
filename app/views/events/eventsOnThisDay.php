@@ -65,7 +65,7 @@
 
   function addContent(slicedData) {
     mainContainer.innerHTML = '';
-    for (let index = 0; index < slicedData.length; index++) {
+    for (let index = 0; index < slicedData.length - 1; index++) {
       let content = slicedData[index].html;
       let contentId = slicedData[index].id;
       let cardDiv = `<div id="event-${contentId}" class="col l12 m7">
@@ -175,7 +175,7 @@
         'textContent': []
       }];
 
-      for (let i = 0; i < mainContainer.children.length - 2; i++) {
+      for (let i = 0; i < mainContainer.children.length - 1; i++) {
         // console.log(mainContainer.children[i]);
         if (mainContainer.children[i].children[0]) {
           const checkBox = mainContainer.children[i].children[0].children[1].children[0].children[0].children[0].children[0];
