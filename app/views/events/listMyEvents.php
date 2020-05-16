@@ -168,6 +168,13 @@
                                 <?php else : ?>
                                     <a class="btn cyan accent-3" href="<?php echo URLROOT; ?>/events/turnOnNotif/<?php echo $event['id']; ?>">Notification Turn ON</a>
                                 <?php endif; ?>
+                                <a class="btn cyan accent-1" href="#btnMoveEv<?php echo $event['id']; ?>" onclick="showHideMoveEventForm(<?php echo $event['id']; ?>)">Move</a>
+                                <div class="mailField" id="moveEventForm<?php echo $event['id']; ?>">
+                                    <label for="moveToNewDate<?php echo $event['id']; ?>">Choose Date To Move Event</label>
+                                    <input type="text" name="moveToNewDate" id="moveToNewDate<?php echo $event['id']; ?>" class="datepicker" />
+                                    <a class="btn"  onclick="moveEvent(<?php echo $event['id']; ?>)">Confirm Move</a>
+                                    <span id="moveToNewDateSpanWarn<?php echo $event['id']; ?>" class="validateMsg"></span>
+                                </div>
 
 
 
@@ -416,6 +423,45 @@
                 }
             }
         }
+    }
+
+    function setHash(newHash) {
+        location.hash = 'Idontexists';
+        location.hash = newHash;
+    }
+
+    let isMoveEventFormShown = false;
+    //move events functionality
+    function showHideMoveEventForm(eventId) {
+        setHash( `btnMoveEv${eventId}`);
+        // window.location.hash = `btnMoveEv${eventId}`;
+        let currentMoveEventFormDiv = document.getElementById(`moveEventForm${eventId}`);
+        isMoveEventFormShown = !isMoveEventFormShown;
+        if(isMoveEventFormShown){
+            currentMoveEventFormDiv.style.display = 'block';
+            return;
+        }
+        currentMoveEventFormDiv.style.display = 'none';
+
+    }
+
+    function moveEvent(eventId) {
+        let dateToMove = document.getElementById(`moveToNewDate${eventId}`).value;
+        let warningSpan = document.getElementById(`moveToNewDateSpanWarn${eventId}`);
+        // window.location.hash = null;
+        if(!eventId) {
+            setHash( `btnMoveEv${eventId}`);
+            warningSpan.innerText = 'Problem with event id';
+            return;
+        }
+        if(!isMoveEventFormShown) return;
+        if(!dateToMove) {
+            setHash( `btnMoveEv${eventId}`);
+            warningSpan.innerText = 'Wrong or empty date';
+            return;
+        }
+        warningSpan.innerText = '';
+        window.location = `/evCalendar/events/moveToNewDate?event=${eventId}&newDate=${dateToMove}`;
     }
 </script>
 <?php require_once APPROOT . '/views/inc/footer.php' ?>

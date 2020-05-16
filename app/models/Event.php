@@ -390,6 +390,16 @@ class Event
         return $result;
     }
 
+    public function moveEventByDate($eventId, $editedDate){
+        $this->db->query("UPDATE events SET events.date = :date 
+                              WHERE events.id = :eventId 
+                              AND events.user_id = :userId ");
+        $this->db->bind(":date", $editedDate, null);
+        $this->db->bind(":eventId", $eventId, null);
+        $this->db->bind(":userId", $_SESSION['user_id'], null);
+        return execQueryRetTrueOrFalse($this->db);
+    }
+
     private function getResults()
     {
         $results = $this->db->execute();

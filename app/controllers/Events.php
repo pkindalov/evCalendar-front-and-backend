@@ -596,4 +596,28 @@ class Events extends Controller
         
         $this->view('events/upcomingInHour', $data);
     }
+
+    public function moveToNewDate($query){
+        if(!isset($_SESSION['user_id'])){
+            redirect('/users/login');
+            return;
+        }
+        $year = date('Y');
+        $month = date('m');
+
+        if(!isset($query)){
+            redirect('/events/listMyEvents?year=' . $year . '&month=' . $month .'&page=1');
+            return;
+        }
+        $queryData =  getQueryData($query);
+        $eventId = htmlspecialchars($queryData['event']);
+        $editedDate = htmlspecialchars($queryData['newDate']);
+
+        if(!$eventId || !$editedDate){
+            redirect('/events/listMyEvents?year=' . $year . '&month=' . $month .'&page=1');
+            return;
+        }
+        $this->eventsModel->moveEventByDate($eventId, $editedDate);
+        redirect('/events/listMyEvents?year=' . $year . '&month=' . $month .'&page=1');
+    }
 }
