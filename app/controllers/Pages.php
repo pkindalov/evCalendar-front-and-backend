@@ -1,4 +1,5 @@
 <?php
+
 class Pages extends Controller
 {
 
@@ -14,15 +15,21 @@ class Pages extends Controller
             'description' => 'Simple event calendar to remind you for a simple things/tasks',
         ];
         if (isset($_SESSION['user_id'])) {
+            //get ids of montly selected events
+            $montlyEvents = $this->eventsModel->getMontlyEvents();
+            if (count($montlyEvents)) {
+                $eventsIdsDatesForUpdate = getIdsAndDates($montlyEvents);
+                $this->eventsModel->updateMonthOfEvents($eventsIdsDatesForUpdate);
+            }
             $todayEventsCount = $this->eventsModel->getCountOfMyTodayEvents();
             $upcomingEventsInHour = $this->eventsModel->upcomingSoonInHourEvents();
-            if(!$upcomingEventsInHour){
+            if (!$upcomingEventsInHour) {
                 $upcomingEventsInHour = [];
             }
             $data['upcomingEventsInHour'] = $upcomingEventsInHour;
             $data['todayEvents'] = $todayEventsCount[0]->count;
         }
-        
+
         $this->view('pages/index', $data);
     }
 

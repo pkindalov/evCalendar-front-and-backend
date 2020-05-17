@@ -203,6 +203,7 @@ class Events extends Controller
                 'date' => $event->date,
                 'checkedEvent' => $event->checkedEvent,
                 'showNotification' => $event->showNotification,
+                'isMonthly' => $event->isMonthly,
                 'user_id' => $event->user_id
             ];
             // if(!isset($sortedData[$event->date])){
@@ -618,6 +619,28 @@ class Events extends Controller
             return;
         }
         $this->eventsModel->moveEventByDate($eventId, $editedDate);
+        redirect('/events/listMyEvents?year=' . $year . '&month=' . $month .'&page=1');
+    }
+
+    public function makeMonthly($eventId){
+        if(!isset($_SESSION['user_id'])){
+            redirect('/users/login');
+            return;
+        }
+        $this->eventsModel->makeEventMonthly(htmlspecialchars($eventId));
+        $year = date('Y');
+        $month = date('m');
+        redirect('/events/listMyEvents?year=' . $year . '&month=' . $month .'&page=1');
+    }
+
+    public function makeNotMonthly($eventId){
+        if(!isset($_SESSION['user_id'])){
+            redirect('/users/login');
+            return;
+        }
+        $this->eventsModel->makeEventNotMonthly(htmlspecialchars($eventId));
+        $year = date('Y');
+        $month = date('m');
         redirect('/events/listMyEvents?year=' . $year . '&month=' . $month .'&page=1');
     }
 }
