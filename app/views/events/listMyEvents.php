@@ -1,8 +1,8 @@
 <?php require_once APPROOT . '/views/inc/header.php' ?>
-<!-- <pre>
-    <?php //print_r($data['googleData']); 
-    ?>
-</pre> -->
+<!-- <pre>-->
+<!--    --><?php //print_r($data['sortedData']);
+//    ?>
+<!--</pre> -->
 <!-- <?php //print_r($data); 
         ?> -->
 <!-- <?php //echo date('Y-m-d'); 
@@ -153,6 +153,21 @@
                                 <!-- <p>Checked: <?php //echo $event['checkedEvent']; 
                                                     ?> </p> -->
                                 <p>Notification Turned <?php echo $event['showNotification'] == 1 ? "ON" : "OFF"; ?></p>
+                                <hr />
+                                <div>
+                                    <?php if(isset($event['isMonthly']) && $event['isMonthly'] == 1) : ?>
+                                        <label>
+                                            <input type="checkbox" checked="checked" />
+                                            <span>Montly</span>
+                                        </label>
+                                    <?php else : ?>
+                                        <label>
+                                            <input type="checkbox" />
+                                            <span>Not Monthly Currently</span>
+                                        </label>
+                                    <?php endif; ?>
+
+                                </div>
                             </div>
                             <div class="card-action">
                                 <a class="btn blue lighten-2" href="<?php echo URLROOT; ?>/events/loadEventEdit/<?php echo $event['id']; ?>">Edit</a>
@@ -175,12 +190,6 @@
                                     <a class="btn"  onclick="moveEvent(<?php echo $event['id']; ?>)">Confirm Move</a>
                                     <span id="moveToNewDateSpanWarn<?php echo $event['id']; ?>" class="validateMsg"></span>
                                 </div>
-
-
-
-
-
-
                                 <!-- Modal Trigger -->
                                 <button data-target="<?php echo $event['id']; ?>" class="btn modal-trigger red accent-4">Delete</button>
 
@@ -196,6 +205,22 @@
                                         <a class="btn red accent-4" href="<?php echo URLROOT; ?>/events/deleteEvent/?eventId=<?php echo $event['id']; ?>&author=<?php echo $event['user_id']; ?>">Delete</a>
                                     </div>
                                 </div>
+
+<!--                                --><?php
+//                                    echo $event['date'] . ' - ' . date('Y-m-d') . '<br />';
+//                                    echo $event['date'] < date('Y-m-d');
+//
+//                                ?>
+
+                                <!-- <?php //if(($event['date'] < date('Y-m-d') == 1)) : ?> -->
+                                    <?php if(isset($event['isMonthly']) && $event['isMonthly'] == 1)  : ?>
+                                        <a class="btn" href="<?php echo URLROOT; ?>/events/makeNotMonthly/<?php echo  $event['id']; ?>">Not Monthly</a>
+                                    <?php else : ?>
+                                        <a class="btn" href="<?php echo URLROOT; ?>/events/makeMonthly/<?php echo  $event['id']; ?>">Monthly</a>
+                                    <?php endif; ?>
+                                <!-- <?php //endif; ?> -->
+
+
 
                                 <!-- <hr /> -->
                                 <!-- <div class="fb-share-button" data-href="https://192.168.0.125/evCalendar/" data-layout="button_count" data-size="large"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2F192.168.0.125%2FevCalendar%2F&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Споделяне</a></div> -->

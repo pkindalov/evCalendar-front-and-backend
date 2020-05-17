@@ -230,6 +230,19 @@ class Event
         return $results;
     }
 
+    private function getResults()
+    {
+        $results = $this->db->execute();
+        if ($this->db->rowCount($results) == 0) {
+            return [];
+        } else {
+            $results = $this->db->resultSet();
+            return $results;
+        }
+
+        return $results;
+    }
+
     public function searchEventsByKeyword($keyword, $page, $pageSize)
     {
         $offset = ($page - 1) * $pageSize;
@@ -285,10 +298,10 @@ class Event
             $weekStartEndArr = getStartAndEndDate($i, $year);
             $weekStart = $weekStartEndArr['week_start'];
             $weekEnd = $weekStartEndArr['week_end'];
-            //    $this->db->query("SELECT * FROM events WHERE events.user_id = :userId 
-            //                      AND events.date 
+            //    $this->db->query("SELECT * FROM events WHERE events.user_id = :userId
+            //                      AND events.date
             //                      BETWEEN :weekStart AND :weekEnd ORDER BY events.date;
-            //                      "); 
+            //                      ");
             $this->db->query("SELECT COUNT(*) AS count FROM events WHERE events.user_id = :userId 
                              AND events.date 
                              BETWEEN :weekStart AND :weekEnd;
@@ -390,7 +403,8 @@ class Event
         return $result;
     }
 
-    public function moveEventByDate($eventId, $editedDate){
+    public function moveEventByDate($eventId, $editedDate)
+    {
         $this->db->query("UPDATE events SET events.date = :date 
                               WHERE events.id = :eventId 
                               AND events.user_id = :userId ");
@@ -400,16 +414,50 @@ class Event
         return execQueryRetTrueOrFalse($this->db);
     }
 
-    private function getResults()
+    public function makeEventMonthly($eventId)
     {
-        $results = $this->db->execute();
-        if ($this->db->rowCount($results) == 0) {
-            return [];
-        } else {
-            $results = $this->db->resultSet();
-            return $results;
-        }
+        $this->db->query("UPDATE events SET events.isMonthly = 1 WHERE events.id = :id AND events.user_id = :userId");
+        $this->db->bind(":id", $eventId, null);
+        $this->db->bind(":userId", $_SESSION['user_id'], null);
+        return execQueryRetTrueOrFalse($this->db);
+    }
 
-        return $results;
+    public function makeEventNotMonthly($eventId)
+    {
+        $this->db->query("UPDATE events SET events.isMonthly = NULL WHERE events.id = :id AND events.user_id = :userId");
+        $this->db->bind(":id", $eventId, null);
+        $this->db->bind(":userId", $_SESSION['user_id'], null);
+        return execQueryRetTrueOrFalse($this->db);
+    }
+
+    public function getMontlyEvents()
+    {
+        $this->db->query("SELECT events.id, events.date 
+                             FROM events 
+                             WHERE events.isMonthly = 1 
+                             AND events.user_id = :userId
+                             
+                             ");
+        $this->db->bind(":userId", $_SESSION['user_id'], null);
+        $result = getResults($this->db);
+        return $result;
+    }
+
+    public function updateMonthOfEvents($idsNum)
+    {
+        foreach ($idsNum as $key => $value) {
+            // echo $value['date'] . '<br />' . date('Y-m-d');
+            // echo $value['date'] < date('Y-m-d');
+            if ($value['date'] < date('Y-m-d') == 1) {
+                $this->db->query("UPDATE events SET events.`date` = (
+                                  SELECT DATE_ADD(CAST(events.`date` AS DATE), INTERVAL 1 MONTH) AS newDate
+                                  FROM events
+                                  WHERE events.id = :eventId)
+                                  WHERE events.id = :eventId AND events.user_id = :userId;");
+                $this->db->bind(":eventId", $value['id'], null);
+                $this->db->bind(":userId", $_SESSION['user_id'], null);
+                $this->db->execute();
+            }
+        };
     }
 }

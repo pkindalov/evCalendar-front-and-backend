@@ -44,3 +44,20 @@ function extractEventsDataFromAPIData($data){
     return $eventsData;
     
 }
+
+function getIds($data){
+    $ids = [];
+    foreach($data as $value){
+        $ids[] = $value->id;
+    }
+    return $ids;
+}
+
+function getIdsAndDates($data){
+    $idsDates = [];
+    foreach($data as $key => $value){
+        $idsDates[$key]['id'] = $value->id;
+        $idsDates[$key]['date'] = $value->date;
+    }
+    return $idsDates;
+}
