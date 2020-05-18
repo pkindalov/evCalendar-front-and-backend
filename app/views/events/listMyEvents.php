@@ -167,6 +167,19 @@
                                         </label>
                                     <?php endif; ?>
 
+                                    <?php if(isset($event['isYearly']) && $event['isYearly'] == 1) : ?>
+                                        <label>
+                                            <input type="checkbox" checked="checked" />
+                                            <span>Yearly</span>
+                                        </label>
+                                    <?php else : ?>
+                                        <label>
+                                            <input type="checkbox" />
+                                            <span>Not Yearly Currently</span>
+                                        </label>
+                                    <?php endif; ?>
+
+
                                 </div>
                             </div>
                             <div class="card-action">
@@ -219,6 +232,12 @@
                                         <a class="btn" href="<?php echo URLROOT; ?>/events/makeMonthly/<?php echo  $event['id']; ?>">Monthly</a>
                                     <?php endif; ?>
                                 <!-- <?php //endif; ?> -->
+
+                                <?php if(isset($event['isYearly']) && $event['isYearly'] == 1)  : ?>
+                                        <a class="btn" href="<?php echo URLROOT; ?>/events/makeNotYearly/<?php echo  $event['id']; ?>">Not Yearly</a>
+                                    <?php else : ?>
+                                        <a class="btn" href="<?php echo URLROOT; ?>/events/makeYearly/<?php echo  $event['id']; ?>">Yearly</a>
+                                    <?php endif; ?>
 
 
 

@@ -204,6 +204,7 @@ class Events extends Controller
                 'checkedEvent' => $event->checkedEvent,
                 'showNotification' => $event->showNotification,
                 'isMonthly' => $event->isMonthly,
+                'isYearly' => $event->isYearly,
                 'user_id' => $event->user_id
             ];
             // if(!isset($sortedData[$event->date])){
@@ -643,4 +644,27 @@ class Events extends Controller
         $month = date('m');
         redirect('/events/listMyEvents?year=' . $year . '&month=' . $month .'&page=1');
     }
+
+    public function makeYearly($eventId){
+        if(!isset($_SESSION['user_id'])){
+            redirect('/users/login');
+            return;
+        }
+        $this->eventsModel->makeEventYearly(htmlspecialchars($eventId));
+        $year = date('Y');
+        $month = date('m');
+        redirect('/events/listMyEvents?year=' . $year . '&month=' . $month .'&page=1');
+    }
+
+    public function makeNotYearly($eventId){
+        if(!isset($_SESSION['user_id'])){
+            redirect('/users/login');
+            return;
+        }
+        $this->eventsModel->makeEventNotYearly(htmlspecialchars($eventId));
+        $year = date('Y');
+        $month = date('m');
+        redirect('/events/listMyEvents?year=' . $year . '&month=' . $month .'&page=1');
+    }
+
 }

@@ -17,10 +17,16 @@ class Pages extends Controller
         if (isset($_SESSION['user_id'])) {
             //get ids of montly selected events
             $montlyEvents = $this->eventsModel->getMontlyEvents();
+            $yearlyEvents = $this->eventsModel->getYearlyEvents();
             if (count($montlyEvents)) {
                 $eventsIdsDatesForUpdate = getIdsAndDates($montlyEvents);
                 $this->eventsModel->updateMonthOfEvents($eventsIdsDatesForUpdate);
             }
+            if (count($yearlyEvents)) {
+                $eventsIdsDatesForUpdate = getIdsAndDates($yearlyEvents);
+                $this->eventsModel->updateYearOfEvents($eventsIdsDatesForUpdate);
+            }
+
             $todayEventsCount = $this->eventsModel->getCountOfMyTodayEvents();
             $upcomingEventsInHour = $this->eventsModel->upcomingSoonInHourEvents();
             if (!$upcomingEventsInHour) {

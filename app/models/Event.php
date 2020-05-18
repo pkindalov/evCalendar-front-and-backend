@@ -430,6 +430,22 @@ class Event
         return execQueryRetTrueOrFalse($this->db);
     }
 
+    public function makeEventYearly($eventId)
+    {
+        $this->db->query("UPDATE events SET events.isYearly = 1 WHERE events.id = :id AND events.user_id = :userId");
+        $this->db->bind(":id", $eventId, null);
+        $this->db->bind(":userId", $_SESSION['user_id'], null);
+        return execQueryRetTrueOrFalse($this->db);
+    }
+
+    public function makeEventNotYearly($eventId)
+    {
+        $this->db->query("UPDATE events SET events.isYearly = NULL WHERE events.id = :id AND events.user_id = :userId");
+        $this->db->bind(":id", $eventId, null);
+        $this->db->bind(":userId", $_SESSION['user_id'], null);
+        return execQueryRetTrueOrFalse($this->db);
+    }
+
     public function getMontlyEvents()
     {
         $this->db->query("SELECT events.id, events.date 
@@ -443,13 +459,27 @@ class Event
         return $result;
     }
 
+    public function getYearlyEvents()
+    {
+        $this->db->query("SELECT events.id, events.date 
+                             FROM events 
+                             WHERE events.isYearly = 1 
+                             AND events.user_id = :userId
+                             
+                             ");
+        $this->db->bind(":userId", $_SESSION['user_id'], null);
+        $result = getResults($this->db);
+        return $result;
+    }
+
     public function updateMonthOfEvents($idsNum)
     {
         foreach ($idsNum as $key => $value) {
             // echo $value['date'] . '<br />' . date('Y-m-d');
             // echo $value['date'] < date('Y-m-d');
-            if ($value['date'] < date('Y-m-d') == 1) {
-                $this->db->query("UPDATE events SET events.`date` = (
+            if ($value['date'] <= date('Y-m-d') == 1) {
+                $this->db->query("UPDATE events 
+                                  SET events.`date` = (
                                   SELECT DATE_ADD(CAST(events.`date` AS DATE), INTERVAL 1 MONTH) AS newDate
                                   FROM events
                                   WHERE events.id = :eventId)
@@ -460,4 +490,22 @@ class Event
             }
         };
     }
+    public function updateYearOfEvents($idsNum)
+    {
+        foreach ($idsNum as $key => $value) {
+            // echo $value['date'] < date('Y-m-d') . '<br />';
+            if ($value['date'] <= date('Y-m-d') == 1) {
+                $this->db->query("UPDATE events 
+                                  SET events.`date` = (
+                                  SELECT DATE_ADD(CAST(events.`date` AS DATE), INTERVAL 1 YEAR) AS newDate
+                                  FROM events
+                                  WHERE events.id = :eventId)
+                                  WHERE events.id = :eventId AND events.user_id = :userId;");
+                $this->db->bind(":eventId", $value['id'], null);
+                $this->db->bind(":userId", $_SESSION['user_id'], null);
+                $this->db->execute();
+            }
+        };
+    }
+
 }
