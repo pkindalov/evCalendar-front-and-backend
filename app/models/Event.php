@@ -446,6 +446,22 @@ class Event
         return execQueryRetTrueOrFalse($this->db);
     }
 
+    public function makeEventWeekly($eventId)
+    {
+        $this->db->query("UPDATE events SET events.isWeekly = 1 WHERE events.id = :id AND events.user_id = :userId");
+        $this->db->bind(":id", $eventId, null);
+        $this->db->bind(":userId", $_SESSION['user_id'], null);
+        return execQueryRetTrueOrFalse($this->db);
+    }
+
+    public function makeEventNotWeekly($eventId)
+    {
+        $this->db->query("UPDATE events SET events.isWeekly = NULL WHERE events.id = :id AND events.user_id = :userId");
+        $this->db->bind(":id", $eventId, null);
+        $this->db->bind(":userId", $_SESSION['user_id'], null);
+        return execQueryRetTrueOrFalse($this->db);
+    }
+
     public function getMontlyEvents()
     {
         $this->db->query("SELECT events.id, events.date 
@@ -472,6 +488,19 @@ class Event
         return $result;
     }
 
+    public function getWeeklyEvents()
+    {
+        $this->db->query("SELECT events.id, events.date 
+                             FROM events 
+                             WHERE events.isWeekly = 1 
+                             AND events.user_id = :userId
+                             
+                             ");
+        $this->db->bind(":userId", $_SESSION['user_id'], null);
+        $result = getResults($this->db);
+        return $result;
+    }
+
     public function updateMonthOfEvents($idsNum)
     {
         foreach ($idsNum as $key => $value) {
@@ -490,6 +519,7 @@ class Event
             }
         };
     }
+
     public function updateYearOfEvents($idsNum)
     {
         foreach ($idsNum as $key => $value) {
@@ -498,6 +528,23 @@ class Event
                 $this->db->query("UPDATE events 
                                   SET events.`date` = (
                                   SELECT DATE_ADD(CAST(events.`date` AS DATE), INTERVAL 1 YEAR) AS newDate
+                                  FROM events
+                                  WHERE events.id = :eventId)
+                                  WHERE events.id = :eventId AND events.user_id = :userId;");
+                $this->db->bind(":eventId", $value['id'], null);
+                $this->db->bind(":userId", $_SESSION['user_id'], null);
+                $this->db->execute();
+            }
+        };
+    }
+
+    public function updateWeekOfEvents($idsNum)
+    {
+        foreach ($idsNum as $key => $value) {
+            if ($value['date'] <= date('Y-m-d') == 1) {
+                $this->db->query("UPDATE events 
+                                  SET events.`date` = (
+                                  SELECT DATE_ADD(CAST(events.`date` AS DATE), INTERVAL 1 WEEK) AS newDate
                                   FROM events
                                   WHERE events.id = :eventId)
                                   WHERE events.id = :eventId AND events.user_id = :userId;");

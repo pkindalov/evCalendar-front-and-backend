@@ -1,116 +1,116 @@
 <?php require_once APPROOT . '/views/inc/header.php' ?>
-<!-- <pre>-->
-<!--    --><?php //print_r($data['sortedData']);
+    <!-- <pre>-->
+    <!--    --><?php //print_r($data['sortedData']);
 //    ?>
-<!--</pre> -->
-<!-- <?php //print_r($data); 
-        ?> -->
-<!-- <?php //echo date('Y-m-d'); 
-        ?> -->
+    <!--</pre> -->
+    <!-- <?php //print_r($data);
+    ?> -->
+    <!-- <?php //echo date('Y-m-d');
+    ?> -->
 
-<div class="row center-align">
-    <div class="col l12">
-        <div class="input-field col s12">
-            <select name="selectedYear">
-                <?php
-                $year = intval($data['year']);
-                $upLimit = $year + 20;
-                $downLimit = $year - 40;
-                for ($i = $upLimit; $i >= $downLimit; $i--) {
-                    if ($i === intval($data['year'])) {
-                        echo '<option value="' . ($i) . '" disabled selected>' . ($i) . '</option>';
-                    } else {
-                        echo '<option value="' . ($i) . '">' . ($i) . '</option>';
+    <div class="row center-align">
+        <div class="col l12">
+            <div class="input-field col s12">
+                <select name="selectedYear">
+                    <?php
+                    $year = intval($data['year']);
+                    $upLimit = $year + 20;
+                    $downLimit = $year - 40;
+                    for ($i = $upLimit; $i >= $downLimit; $i--) {
+                        if ($i === intval($data['year'])) {
+                            echo '<option value="' . ($i) . '" disabled selected>' . ($i) . '</option>';
+                        } else {
+                            echo '<option value="' . ($i) . '">' . ($i) . '</option>';
+                        }
+                        //  echo $i . "<br />";
                     }
-                    //  echo $i . "<br />";
-                }
 
 
+                    // $counter = 0;
+                    // $year = isset($data['year']) ? intval($data['year']) : intval(date('Y'));
 
-                // $counter = 0;
-                // $year = isset($data['year']) ? intval($data['year']) : intval(date('Y'));
-
-                // while ($counter < 40) {
-                //     echo '<option value="' . ($year) . '">' . ($year) . '</option>';
-                //     $year--;
-                //     $counter++;
-                // }
-                ?>
-            </select>
-            <label>Year</label>
+                    // while ($counter < 40) {
+                    //     echo '<option value="' . ($year) . '">' . ($year) . '</option>';
+                    //     $year--;
+                    //     $counter++;
+                    // }
+                    ?>
+                </select>
+                <label>Year</label>
+            </div>
         </div>
     </div>
-</div>
-<div class="row">
-    <div class="col l12">
-        <div class="input-field col s12">
-            <select name="selectedMonth" class="icons">
-                <?php
-                $counter = 1;
-                $month = isset($data['month']) ? intval($data['month']) : intval(date('m'));
-                $month = $month < 10 ? '0' . $month : '' . $month;
-                $monthStr = $month < 10 ? '0' . $month : '' . $month;
-                $monthNames = [
-                    '01' => 'January',
-                    '02' => 'February',
-                    '03' => 'March',
-                    '04' => 'April',
-                    '05' => 'May',
-                    '06' => 'June',
-                    '07' => 'July',
-                    '08' => 'August',
-                    '09' => 'September',
-                    '10' => 'October',
-                    '11' => 'November',
-                    '12' => 'December',
-                ];
-                echo '<option value="' . $data['month'] . '" disabled selected>' . $monthNames[$data['month']] . '</option>';
+    <div class="row">
+        <div class="col l12">
+            <div class="input-field col s12">
+                <select name="selectedMonth" class="icons">
+                    <?php
+                    $counter = 1;
+                    $month = isset($data['month']) ? intval($data['month']) : intval(date('m'));
+                    $month = $month < 10 ? '0' . $month : '' . $month;
+                    $monthStr = $month < 10 ? '0' . $month : '' . $month;
+                    $monthNames = [
+                        '01' => 'January',
+                        '02' => 'February',
+                        '03' => 'March',
+                        '04' => 'April',
+                        '05' => 'May',
+                        '06' => 'June',
+                        '07' => 'July',
+                        '08' => 'August',
+                        '09' => 'September',
+                        '10' => 'October',
+                        '11' => 'November',
+                        '12' => 'December',
+                    ];
+                    echo '<option value="' . $data['month'] . '" disabled selected>' . $monthNames[$data['month']] . '</option>';
 
-                while ($counter <= 12) {
-                    $monthStr = $counter < 10 ? '0' . $counter : '' . $counter;
-                    echo $month;
-                    if ($monthStr !== $month) {
-                        echo '<option data-icon="images/sample-1.jpg" value="' . ($monthStr) . '">' . $monthNames[$monthStr] . '</option>';
+                    while ($counter <= 12) {
+                        $monthStr = $counter < 10 ? '0' . $counter : '' . $counter;
+                        echo $month;
+                        if ($monthStr !== $month) {
+                            echo '<option data-icon="images/sample-1.jpg" value="' . ($monthStr) . '">' . $monthNames[$monthStr] . '</option>';
+                        }
+                        $counter++;
                     }
-                    $counter++;
-                }
-                ?>
-                <!-- <option value="" data-icon="images/sample-1.jpg">example 1</option>
-                <option value="" data-icon="images/office.jpg">example 2</option>
-                <option value="" data-icon="images/yuna.jpg">example 3</option> -->
-            </select>
-            <label>Months</label>
+                    ?>
+                    <!-- <option value="" data-icon="images/sample-1.jpg">example 1</option>
+                    <option value="" data-icon="images/office.jpg">example 2</option>
+                    <option value="" data-icon="images/yuna.jpg">example 3</option> -->
+                </select>
+                <label>Months</label>
+            </div>
         </div>
     </div>
-</div>
 
-<div class="row">
-    <div class="col l12">
-        <a class="btn teal lighten-1" href="#" id="evAddBtn">
-            <i class="material-icons">add</i></a>
+    <div class="row">
+        <div class="col l12">
+            <a class="btn teal lighten-1" href="#" id="evAddBtn">
+                <i class="material-icons">add</i></a>
+        </div>
     </div>
-</div>
 
-<!-- Google chart here -->
-<div class="row">
-    <div class="col l12">
-        <div id="chart_div"></div>
+    <!-- Google chart here -->
+    <div class="row">
+        <div class="col l12">
+            <div id="chart_div"></div>
+        </div>
     </div>
-</div>
 
 <?php foreach ($data['sortedData'] as $key => $eventsData) : ?>
     <div id="<?php echo $key; ?>">
-        <h2 id="<?php echo $key; ?>" class="<?php if ($key === date('Y-m-d')) echo 'blue lighten-1' ?>"><?php echo $key; ?></h2>
-
-
+        <h2 id="<?php echo $key; ?>"
+            class="<?php if ($key === date('Y-m-d')) echo 'blue lighten-1' ?>"><?php echo $key; ?></h2>
 
 
         <button onclick="showMailForm('<?php echo $key; ?>')" class="btn">Mail</button>
 
         <div>
-            <input class="col-md-6 mailField" type="email" id="input<?php echo $key; ?>" /><br />
+            <input class="col-md-6 mailField" type="email" id="input<?php echo $key; ?>"/><br/>
             <span id="invalidMailSpan<?php echo $key; ?>" class="mailField validateMsg"></span>
-            <button id="sendMailBtn<?php echo $key; ?>" onclick="sendMailTo('<?php echo $key; ?>')" class="btn mailField">Send</button>
+            <button id="sendMailBtn<?php echo $key; ?>" onclick="sendMailTo('<?php echo $key; ?>')"
+                    class="btn mailField">Send
+            </button>
 
             <div id="progress<?php echo $key; ?>" class="progress mailField">
                 <div class="indeterminate"></div>
@@ -119,22 +119,20 @@
         </div>
 
 
-
-
-
         <?php foreach ($eventsData as $key => $event) : ?>
             <div>
                 <div class="col s12 m7 <?php if ($event['date'] === date('Y-m-d')) echo 'blue lighten-1' ?> center-align">
                     <!-- <h2 class="header"><?php //echo $event['date']; 
-                                            ?></h2> -->
+                    ?></h2> -->
                     <div class="card horizontal">
                         <div class="card-image">
                         </div>
                         <div class="card-stacked">
                             <div class="card-content">
-                                <div id="checkedDay<?php echo $event['date']; ?>Num<?php echo $key; ?>" class="leftAligned mailField">
+                                <div id="checkedDay<?php echo $event['date']; ?>Num<?php echo $key; ?>"
+                                     class="leftAligned mailField">
                                     <label>
-                                        <input type="checkbox" />
+                                        <input type="checkbox"/>
                                         <span>Choose to send</span>
                                     </label>
                                 </div>
@@ -151,31 +149,43 @@
                                 <p>Finish: <?php echo $event['finish']; ?></p>
                                 <p>Date: <?php echo $event['date']; ?></p>
                                 <!-- <p>Checked: <?php //echo $event['checkedEvent']; 
-                                                    ?> </p> -->
+                                ?> </p> -->
                                 <p>Notification Turned <?php echo $event['showNotification'] == 1 ? "ON" : "OFF"; ?></p>
-                                <hr />
+                                <hr/>
                                 <div>
-                                    <?php if(isset($event['isMonthly']) && $event['isMonthly'] == 1) : ?>
+                                    <?php if (isset($event['isMonthly']) && $event['isMonthly'] == 1) : ?>
                                         <label>
-                                            <input type="checkbox" checked="checked" />
+                                            <input type="checkbox" checked="checked"/>
                                             <span>Montly</span>
                                         </label>
                                     <?php else : ?>
                                         <label>
-                                            <input type="checkbox" />
+                                            <input type="checkbox"/>
                                             <span>Not Monthly Currently</span>
                                         </label>
                                     <?php endif; ?>
 
-                                    <?php if(isset($event['isYearly']) && $event['isYearly'] == 1) : ?>
+                                    <?php if (isset($event['isYearly']) && $event['isYearly'] == 1) : ?>
                                         <label>
-                                            <input type="checkbox" checked="checked" />
+                                            <input type="checkbox" checked="checked"/>
                                             <span>Yearly</span>
                                         </label>
                                     <?php else : ?>
                                         <label>
-                                            <input type="checkbox" />
+                                            <input type="checkbox"/>
                                             <span>Not Yearly Currently</span>
+                                        </label>
+                                    <?php endif; ?>
+
+                                    <?php if (isset($event['isWeekly']) && $event['isWeekly'] == 1) : ?>
+                                        <label>
+                                            <input type="checkbox" checked="checked"/>
+                                            <span>Weekly</span>
+                                        </label>
+                                    <?php else : ?>
+                                        <label>
+                                            <input type="checkbox"/>
+                                            <span>Not Weekly Currently</span>
                                         </label>
                                     <?php endif; ?>
 
@@ -183,28 +193,41 @@
                                 </div>
                             </div>
                             <div class="card-action">
-                                <a class="btn blue lighten-2" href="<?php echo URLROOT; ?>/events/loadEventEdit/<?php echo $event['id']; ?>">Edit</a>
+                                <a class="btn blue lighten-2"
+                                   href="<?php echo URLROOT; ?>/events/loadEventEdit/<?php echo $event['id']; ?>">Edit</a>
                                 <?php if ($event['checkedEvent'] == 1) : ?>
-                                    <a class="btn red lighten-1" href="<?php echo URLROOT; ?>/events/checkUncheckEvent/?eventId=<?php echo $event['id']; ?>&author=<?php echo $event['user_id']; ?>&checked=false">Uncheck</a>
+                                    <a class="btn red lighten-1"
+                                       href="<?php echo URLROOT; ?>/events/checkUncheckEvent/?eventId=<?php echo $event['id']; ?>&author=<?php echo $event['user_id']; ?>&checked=false">Uncheck</a>
 
                                 <?php else : ?>
                                     <?php echo $event['checkedEvent']; ?>
-                                    <a class="btn cyan accent-3" href="<?php echo URLROOT; ?>/events/checkUncheckEvent/?eventId=<?php echo $event['id']; ?>&author=<?php echo $event['user_id']; ?>&checked=1">Check</a>
+                                    <a class="btn cyan accent-3"
+                                       href="<?php echo URLROOT; ?>/events/checkUncheckEvent/?eventId=<?php echo $event['id']; ?>&author=<?php echo $event['user_id']; ?>&checked=1">Check</a>
                                 <?php endif; ?>
                                 <?php if ($event['showNotification'] == 1) : ?>
-                                    <a class="btn red lighten-1" href="<?php echo URLROOT; ?>/events/turnOffNotif/<?php echo $event['id']; ?>">Notification Turn OFF</a>
+                                    <a class="btn red lighten-1"
+                                       href="<?php echo URLROOT; ?>/events/turnOffNotif/<?php echo $event['id']; ?>">Notification
+                                        Turn OFF</a>
                                 <?php else : ?>
-                                    <a class="btn cyan accent-3" href="<?php echo URLROOT; ?>/events/turnOnNotif/<?php echo $event['id']; ?>">Notification Turn ON</a>
+                                    <a class="btn cyan accent-3"
+                                       href="<?php echo URLROOT; ?>/events/turnOnNotif/<?php echo $event['id']; ?>">Notification
+                                        Turn ON</a>
                                 <?php endif; ?>
-                                <a class="btn cyan accent-1" href="#btnMoveEv<?php echo $event['id']; ?>" onclick="showHideMoveEventForm(<?php echo $event['id']; ?>)">Move</a>
+                                <a class="btn cyan accent-1" href="#btnMoveEv<?php echo $event['id']; ?>"
+                                   onclick="showHideMoveEventForm(<?php echo $event['id']; ?>)">Move</a>
                                 <div class="mailField" id="moveEventForm<?php echo $event['id']; ?>">
-                                    <label for="moveToNewDate<?php echo $event['id']; ?>">Choose Date To Move Event</label>
-                                    <input type="text" name="moveToNewDate" id="moveToNewDate<?php echo $event['id']; ?>" class="datepicker" />
-                                    <a class="btn"  onclick="moveEvent(<?php echo $event['id']; ?>)">Confirm Move</a>
-                                    <span id="moveToNewDateSpanWarn<?php echo $event['id']; ?>" class="validateMsg"></span>
+                                    <label for="moveToNewDate<?php echo $event['id']; ?>">Choose Date To Move
+                                        Event</label>
+                                    <input type="text" name="moveToNewDate"
+                                           id="moveToNewDate<?php echo $event['id']; ?>" class="datepicker"/>
+                                    <a class="btn" onclick="moveEvent(<?php echo $event['id']; ?>)">Confirm Move</a>
+                                    <span id="moveToNewDateSpanWarn<?php echo $event['id']; ?>"
+                                          class="validateMsg"></span>
                                 </div>
                                 <!-- Modal Trigger -->
-                                <button data-target="<?php echo $event['id']; ?>" class="btn modal-trigger red accent-4">Delete</button>
+                                <button data-target="<?php echo $event['id']; ?>"
+                                        class="btn modal-trigger red accent-4">Delete
+                                </button>
 
                                 <!-- Modal Structure -->
                                 <div id="<?php echo $event['id']; ?>" class="modal">
@@ -215,52 +238,64 @@
                                     <div class="modal-footer">
                                         <a href="#!" class="modal-close waves-effect waves-green btn-flat">CANCEL</a>
                                         <!-- /evCalendar/events/deleteEvent/?eventId=${event.id}&author=${event.user_id} -->
-                                        <a class="btn red accent-4" href="<?php echo URLROOT; ?>/events/deleteEvent/?eventId=<?php echo $event['id']; ?>&author=<?php echo $event['user_id']; ?>">Delete</a>
+                                        <a class="btn red accent-4"
+                                           href="<?php echo URLROOT; ?>/events/deleteEvent/?eventId=<?php echo $event['id']; ?>&author=<?php echo $event['user_id']; ?>">Delete</a>
                                     </div>
                                 </div>
 
-<!--                                --><?php
-//                                    echo $event['date'] . ' - ' . date('Y-m-d') . '<br />';
-//                                    echo $event['date'] < date('Y-m-d');
-//
-//                                ?>
+                                <!--                                --><?php
+                                //                                    echo $event['date'] . ' - ' . date('Y-m-d') . '<br />';
+                                //                                    echo $event['date'] < date('Y-m-d');
+                                //
+                                //                                ?>
 
                                 <!-- <?php //if(($event['date'] < date('Y-m-d') == 1)) : ?> -->
-                                    <?php if(isset($event['isMonthly']) && $event['isMonthly'] == 1)  : ?>
-                                        <a class="btn" href="<?php echo URLROOT; ?>/events/makeNotMonthly/<?php echo  $event['id']; ?>">Not Monthly</a>
-                                    <?php else : ?>
-                                        <a class="btn" href="<?php echo URLROOT; ?>/events/makeMonthly/<?php echo  $event['id']; ?>">Monthly</a>
-                                    <?php endif; ?>
+                                <?php if (isset($event['isMonthly']) && $event['isMonthly'] == 1)  : ?>
+                                    <a class="btn"
+                                       href="<?php echo URLROOT; ?>/events/makeNotMonthly/<?php echo $event['id']; ?>">Not
+                                        Monthly</a>
+                                <?php else : ?>
+                                    <a class="btn"
+                                       href="<?php echo URLROOT; ?>/events/makeMonthly/<?php echo $event['id']; ?>">Monthly</a>
+                                <?php endif; ?>
                                 <!-- <?php //endif; ?> -->
 
-                                <?php if(isset($event['isYearly']) && $event['isYearly'] == 1)  : ?>
-                                        <a class="btn" href="<?php echo URLROOT; ?>/events/makeNotYearly/<?php echo  $event['id']; ?>">Not Yearly</a>
-                                    <?php else : ?>
-                                        <a class="btn" href="<?php echo URLROOT; ?>/events/makeYearly/<?php echo  $event['id']; ?>">Yearly</a>
-                                    <?php endif; ?>
+                                <?php if (isset($event['isYearly']) && $event['isYearly'] == 1)  : ?>
+                                    <a class="btn"
+                                       href="<?php echo URLROOT; ?>/events/makeNotYearly/<?php echo $event['id']; ?>">Not
+                                        Yearly</a>
+                                <?php else : ?>
+                                    <a class="btn"
+                                       href="<?php echo URLROOT; ?>/events/makeYearly/<?php echo $event['id']; ?>">Yearly</a>
+                                <?php endif; ?>
 
+                                <?php if (isset($event['isWeekly']) && $event['isWeekly'] == 1)  : ?>
+                                    <a class="btn"
+                                       href="<?php echo URLROOT; ?>/events/makeNotWeekly/<?php echo $event['id']; ?>">Not
+                                        Weekly</a>
+                                <?php else : ?>
+                                    <a class="btn"
+                                       href="<?php echo URLROOT; ?>/events/makeWeekly/<?php echo $event['id']; ?>">Weekly</a>
+                                <?php endif; ?>
 
 
                                 <!-- <hr /> -->
                                 <!-- <div class="fb-share-button" data-href="https://192.168.0.125/evCalendar/" data-layout="button_count" data-size="large"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2F192.168.0.125%2FevCalendar%2F&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Споделяне</a></div> -->
 
 
-
-
-
-                                <!-- <button onclick="showMailForm('<?php //echo $event['date']; 
-                                                                    ?>')" class="btn">Mail</button> -->
+                                <!-- <button onclick="showMailForm('<?php //echo $event['date'];
+                                ?>')" class="btn">Mail</button> -->
                                 <!-- <div>
                                     <input class="col-md-6 mailField" type="email" id="input<?php //echo $event['date']; 
-                                                                                            ?>" /><br />
+                                ?>" /><br />
                                     <span id="invalidMailSpan<?php //echo $event['date']; 
-                                                                ?>" class="mailField validateMsg"></span>
+                                ?>" class="mailField validateMsg"></span>
                                     <button id="sendMailBtn<?php //echo $event['date']; 
-                                                            ?>" onclick="sendMailTo('<?php //echo $event['date']; 
-                                                                                        ?>')" class="btn mailField">Send</button>
+                                ?>" onclick="sendMailTo('<?php //echo $event['date'];
+                                ?>')" class="btn mailField">Send</button>
 
                                     <div id="progress<?php //echo $event['date']; 
-                                                        ?>" class="progress mailField">
+                                ?>" class="progress mailField">
                                         <div class="indeterminate"></div>
                                     </div>
 
@@ -273,31 +308,33 @@
         <?php endforeach; ?>
     </div>
 <?php endforeach; ?>
-<div class="row">
-    <div class="col-md-12">
-        <?php if ($data['hasPrevPage']) : ?>
-            <a href="<?php echo URLROOT; ?>/events/listMyEvents?year=<?php echo $data['year']; ?>&month=<?php echo $data['month']; ?>&page=<?php echo $data['prevPage']; ?>" class="btn btn-primary pull-left">
-                <i class="fa fa-backward"></i> Prev
-            </a>
-        <?php endif; ?>
+    <div class="row">
+        <div class="col-md-12">
+            <?php if ($data['hasPrevPage']) : ?>
+                <a href="<?php echo URLROOT; ?>/events/listMyEvents?year=<?php echo $data['year']; ?>&month=<?php echo $data['month']; ?>&page=<?php echo $data['prevPage']; ?>"
+                   class="btn btn-primary pull-left">
+                    <i class="fa fa-backward"></i> Prev
+                </a>
+            <?php endif; ?>
 
-        <?php if ($data['hasNextPage']) : ?>
-            <a href="<?php echo URLROOT; ?>/events/listMyEvents?year=<?php echo $data['year']; ?>&month=<?php echo $data['month']; ?>&page=<?php echo $data['nextPage']; ?>" class="btn btn-primary pull-right">
-                <i class="fa fa-forward"></i> Next
-            </a>
-        <?php endif; ?>
+            <?php if ($data['hasNextPage']) : ?>
+                <a href="<?php echo URLROOT; ?>/events/listMyEvents?year=<?php echo $data['year']; ?>&month=<?php echo $data['month']; ?>&page=<?php echo $data['nextPage']; ?>"
+                   class="btn btn-primary pull-right">
+                    <i class="fa fa-forward"></i> Next
+                </a>
+            <?php endif; ?>
+        </div>
     </div>
-</div>
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        
-        if (document.getElementById('<?php echo $data['today']; ?>')) {
-            window.location.hash = "<?php echo $data['today']; ?>";
-        }
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
 
-        let myGoogleData = <?php echo $data['googleData']; ?>;
-           
+            if (document.getElementById('<?php echo $data['today']; ?>')) {
+                window.location.hash = "<?php echo $data['today']; ?>";
+            }
+
+            let myGoogleData = <?php echo $data['googleData']; ?>;
+
 
             google.charts.load('current', {
                 packages: ['corechart', 'bar']
@@ -324,188 +361,187 @@
                 var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
                 chart.draw(data, options);
             }
-    });
+        });
 
-    let selYearSelect = document.getElementsByName('selectedYear')[0];
-    let selMontSelect = document.getElementsByName('selectedMonth')[0];
-    selYearSelect.addEventListener('change', function(event) {
-        let year = selYearSelect.value;
-        let month = selMontSelect.value;
-        window.location = `/evCalendar/events/listMyEvents?year=${year}&month=${month}&page=1`;
-    });
-    selMontSelect.addEventListener('change', function(event) {
-        let year = selYearSelect.value;
-        let month = selMontSelect.value;
-        window.location = `/evCalendar/events/listMyEvents?year=${year}&month=${month}&page=1`;
-    });
+        let selYearSelect = document.getElementsByName('selectedYear')[0];
+        let selMontSelect = document.getElementsByName('selectedMonth')[0];
+        selYearSelect.addEventListener('change', function (event) {
+            let year = selYearSelect.value;
+            let month = selMontSelect.value;
+            window.location = `/evCalendar/events/listMyEvents?year=${year}&month=${month}&page=1`;
+        });
+        selMontSelect.addEventListener('change', function (event) {
+            let year = selYearSelect.value;
+            let month = selMontSelect.value;
+            window.location = `/evCalendar/events/listMyEvents?year=${year}&month=${month}&page=1`;
+        });
 
-    const evAddBtn = document.getElementById("evAddBtn");
-    evAddBtn.addEventListener('click', function() {
-        window.location = '<?php echo URLROOT; ?>/events/addNewEvent';
-    });
+        const evAddBtn = document.getElementById("evAddBtn");
+        evAddBtn.addEventListener('click', function () {
+            window.location = '<?php echo URLROOT; ?>/events/addNewEvent';
+        });
 
-    let mailFormShown = false;
+        let mailFormShown = false;
 
-    function showCheckBoxes(count, date) {
-        for (let i = 0; i < count; i++) {
-            let checkBoxId = `checkedDay${date}Num${i}`;
-            let checkBox = document.getElementById(checkBoxId);
-            checkBox.style.display = 'block';
-        }
-    }
-
-    function hideCheckBoxes(count, date) {
-        for (let i = 0; i < count; i++) {
-            let checkBoxId = `checkedDay${date}Num${i}`;
-            let checkBox = document.getElementById(checkBoxId);
-            checkBox.style.display = 'none';
-        }
-    }
-
-    function showMailForm(date) {
-        let mainContainer = document.getElementById(date);
-        let mailField = document.getElementById(`input${date}`);
-        let sendMailBtn = document.getElementById(`sendMailBtn${date}`);
-        let validateSpan = document.getElementById(`invalidMailSpan${date}`);
-        const importantDivStarPos = 3;
-        const checkBoxNum = mainContainer.children.length - importantDivStarPos;
-        // console.log(checkBoxNum);
-        // console.log(mainContainer.children);
-        // console.log(mainContainer.children.length);
-
-        mailFormShown = !mailFormShown;
-        if (mailFormShown) {
-            mailField.style.display = 'block';
-            sendMailBtn.style.display = 'block';
-            validateSpan.style.display = 'block';
-            //enable visility of checkboxes
-            showCheckBoxes(checkBoxNum, date);
-
-
-        } else {
-            mailField.style.display = 'none';
-            sendMailBtn.style.display = 'none';
-            validateSpan.style.display = 'none';
-            hideCheckBoxes(checkBoxNum, date);
-        }
-    }
-
-    function sendMailTo(date) {
-        let mainContainer = document.getElementById(date);
-        let mail = document.getElementById(`input${date}`).value;
-        let invalidMsgSpan = document.getElementById(`invalidMailSpan${date}`);
-        let progressBar = document.getElementById(`progress${date}`);
-        let dayEventsToSend = document.getElementById(date).innerHTML;
-
-
-        let divsArr = [{
-            'date': date,
-            'textContent': []
-        }];
-
-        //iterate divs and search checked ones. Begin from index 3 because from there is the div with checkbox;
-        for (let i = 3; i < mainContainer.children.length; i++) {
-            let currentDiv = mainContainer.children[i];
-            let divContent = currentDiv.children[0].children[0].children[1].children[0];
-            let checkbox = currentDiv.children[0].children[0].children[1].children[0].children[0].children[0].children[0].checked;
-            // console.log(divContent);
-            //these are the <p> content of the main div. - date, begin, finish etc...
-            if (checkbox) {
-                divsArr[0].textContent.push(divContent.children[1].textContent);
-                divsArr[0].textContent.push(divContent.children[2].textContent);
-                divsArr[0].textContent.push(divContent.children[3].textContent);
-                divsArr[0].textContent.push(divContent.children[4].textContent);
+        function showCheckBoxes(count, date) {
+            for (let i = 0; i < count; i++) {
+                let checkBoxId = `checkedDay${date}Num${i}`;
+                let checkBox = document.getElementById(checkBoxId);
+                checkBox.style.display = 'block';
             }
         }
 
-        if (divsArr[0].textContent.length < 1) {
-            invalidMsgSpan.innerText = 'You must choose at least one event';
-            return;
+        function hideCheckBoxes(count, date) {
+            for (let i = 0; i < count; i++) {
+                let checkBoxId = `checkedDay${date}Num${i}`;
+                let checkBox = document.getElementById(checkBoxId);
+                checkBox.style.display = 'none';
+            }
         }
 
-        // console.log(divsArr);
+        function showMailForm(date) {
+            let mainContainer = document.getElementById(date);
+            let mailField = document.getElementById(`input${date}`);
+            let sendMailBtn = document.getElementById(`sendMailBtn${date}`);
+            let validateSpan = document.getElementById(`invalidMailSpan${date}`);
+            const importantDivStarPos = 3;
+            const checkBoxNum = mainContainer.children.length - importantDivStarPos;
+            // console.log(checkBoxNum);
+            // console.log(mainContainer.children);
+            // console.log(mainContainer.children.length);
 
-        //still developping
-        // return;    
+            mailFormShown = !mailFormShown;
+            if (mailFormShown) {
+                mailField.style.display = 'block';
+                sendMailBtn.style.display = 'block';
+                validateSpan.style.display = 'block';
+                //enable visility of checkboxes
+                showCheckBoxes(checkBoxNum, date);
 
 
-        const regex = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
-        const result = regex.test(String(mail).toLowerCase());
-        if (!result) {
-            invalidMsgSpan.innerText = 'Invalid mail';
-            return false;
+            } else {
+                mailField.style.display = 'none';
+                sendMailBtn.style.display = 'none';
+                validateSpan.style.display = 'none';
+                hideCheckBoxes(checkBoxNum, date);
+            }
         }
-        invalidMsgSpan.style.display = 'none';
-        progressBar.style.display = 'block';
+
+        function sendMailTo(date) {
+            let mainContainer = document.getElementById(date);
+            let mail = document.getElementById(`input${date}`).value;
+            let invalidMsgSpan = document.getElementById(`invalidMailSpan${date}`);
+            let progressBar = document.getElementById(`progress${date}`);
+            let dayEventsToSend = document.getElementById(date).innerHTML;
 
 
+            let divsArr = [{
+                'date': date,
+                'textContent': []
+            }];
 
-        
-        let formData = new FormData();
-        formData.append('receiver', mail);
-        formData.append('dayEvents', JSON.stringify(divsArr));
-        // formData.append('dayEvents', dayEventsToSend);
+            //iterate divs and search checked ones. Begin from index 3 because from there is the div with checkbox;
+            for (let i = 3; i < mainContainer.children.length; i++) {
+                let currentDiv = mainContainer.children[i];
+                let divContent = currentDiv.children[0].children[0].children[1].children[0];
+                let checkbox = currentDiv.children[0].children[0].children[1].children[0].children[0].children[0].children[0].checked;
+                // console.log(divContent);
+                //these are the <p> content of the main div. - date, begin, finish etc...
+                if (checkbox) {
+                    divsArr[0].textContent.push(divContent.children[1].textContent);
+                    divsArr[0].textContent.push(divContent.children[2].textContent);
+                    divsArr[0].textContent.push(divContent.children[3].textContent);
+                    divsArr[0].textContent.push(divContent.children[4].textContent);
+                }
+            }
+
+            if (divsArr[0].textContent.length < 1) {
+                invalidMsgSpan.innerText = 'You must choose at least one event';
+                return;
+            }
+
+            // console.log(divsArr);
+
+            //still developping
+            // return;
 
 
-        let request = new XMLHttpRequest();
-        request.open('POST', "<?php echo URLROOT; ?>/events/sendToMail");
-        request.send(formData);
-        request.onreadystatechange = function() {
-            if (request.readyState == XMLHttpRequest.DONE) {
-                const serverResp = JSON.parse(request.responseText);
-                if (serverResp.success) {
-                    invalidMsgSpan.style.color = 'green';
-                    invalidMsgSpan.innerText = 'Mail sent successfull';
-                    invalidMsgSpan.style.display = 'block';
-                    progressBar.style.display = 'none';
+            const regex = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+            const result = regex.test(String(mail).toLowerCase());
+            if (!result) {
+                invalidMsgSpan.innerText = 'Invalid mail';
+                return false;
+            }
+            invalidMsgSpan.style.display = 'none';
+            progressBar.style.display = 'block';
 
-                    return;
-                } else {
-                    invalidMsgSpan.display = 'block';
-                    invalidMsgSpan.innerText = 'There is some problem sending mail';
-                    return;
+
+            let formData = new FormData();
+            formData.append('receiver', mail);
+            formData.append('dayEvents', JSON.stringify(divsArr));
+            // formData.append('dayEvents', dayEventsToSend);
+
+
+            let request = new XMLHttpRequest();
+            request.open('POST', "<?php echo URLROOT; ?>/events/sendToMail");
+            request.send(formData);
+            request.onreadystatechange = function () {
+                if (request.readyState == XMLHttpRequest.DONE) {
+                    const serverResp = JSON.parse(request.responseText);
+                    if (serverResp.success) {
+                        invalidMsgSpan.style.color = 'green';
+                        invalidMsgSpan.innerText = 'Mail sent successfull';
+                        invalidMsgSpan.style.display = 'block';
+                        progressBar.style.display = 'none';
+
+                        return;
+                    } else {
+                        invalidMsgSpan.display = 'block';
+                        invalidMsgSpan.innerText = 'There is some problem sending mail';
+                        return;
+                    }
                 }
             }
         }
-    }
 
-    function setHash(newHash) {
-        location.hash = 'Idontexists';
-        location.hash = newHash;
-    }
-
-    let isMoveEventFormShown = false;
-    //move events functionality
-    function showHideMoveEventForm(eventId) {
-        setHash( `btnMoveEv${eventId}`);
-        // window.location.hash = `btnMoveEv${eventId}`;
-        let currentMoveEventFormDiv = document.getElementById(`moveEventForm${eventId}`);
-        isMoveEventFormShown = !isMoveEventFormShown;
-        if(isMoveEventFormShown){
-            currentMoveEventFormDiv.style.display = 'block';
-            return;
+        function setHash(newHash) {
+            location.hash = 'Idontexists';
+            location.hash = newHash;
         }
-        currentMoveEventFormDiv.style.display = 'none';
 
-    }
+        let isMoveEventFormShown = false;
 
-    function moveEvent(eventId) {
-        let dateToMove = document.getElementById(`moveToNewDate${eventId}`).value;
-        let warningSpan = document.getElementById(`moveToNewDateSpanWarn${eventId}`);
-        // window.location.hash = null;
-        if(!eventId) {
-            setHash( `btnMoveEv${eventId}`);
-            warningSpan.innerText = 'Problem with event id';
-            return;
+        //move events functionality
+        function showHideMoveEventForm(eventId) {
+            setHash(`btnMoveEv${eventId}`);
+            // window.location.hash = `btnMoveEv${eventId}`;
+            let currentMoveEventFormDiv = document.getElementById(`moveEventForm${eventId}`);
+            isMoveEventFormShown = !isMoveEventFormShown;
+            if (isMoveEventFormShown) {
+                currentMoveEventFormDiv.style.display = 'block';
+                return;
+            }
+            currentMoveEventFormDiv.style.display = 'none';
+
         }
-        if(!isMoveEventFormShown) return;
-        if(!dateToMove) {
-            setHash( `btnMoveEv${eventId}`);
-            warningSpan.innerText = 'Wrong or empty date';
-            return;
+
+        function moveEvent(eventId) {
+            let dateToMove = document.getElementById(`moveToNewDate${eventId}`).value;
+            let warningSpan = document.getElementById(`moveToNewDateSpanWarn${eventId}`);
+            // window.location.hash = null;
+            if (!eventId) {
+                setHash(`btnMoveEv${eventId}`);
+                warningSpan.innerText = 'Problem with event id';
+                return;
+            }
+            if (!isMoveEventFormShown) return;
+            if (!dateToMove) {
+                setHash(`btnMoveEv${eventId}`);
+                warningSpan.innerText = 'Wrong or empty date';
+                return;
+            }
+            warningSpan.innerText = '';
+            window.location = `/evCalendar/events/moveToNewDate?event=${eventId}&newDate=${dateToMove}`;
         }
-        warningSpan.innerText = '';
-        window.location = `/evCalendar/events/moveToNewDate?event=${eventId}&newDate=${dateToMove}`;
-    }
-</script>
+    </script>
 <?php require_once APPROOT . '/views/inc/footer.php' ?>

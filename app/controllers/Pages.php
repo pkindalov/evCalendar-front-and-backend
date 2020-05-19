@@ -18,6 +18,7 @@ class Pages extends Controller
             //get ids of montly selected events
             $montlyEvents = $this->eventsModel->getMontlyEvents();
             $yearlyEvents = $this->eventsModel->getYearlyEvents();
+            $weeklyEvents = $this->eventsModel->getWeeklyEvents();
             if (count($montlyEvents)) {
                 $eventsIdsDatesForUpdate = getIdsAndDates($montlyEvents);
                 $this->eventsModel->updateMonthOfEvents($eventsIdsDatesForUpdate);
@@ -25,6 +26,10 @@ class Pages extends Controller
             if (count($yearlyEvents)) {
                 $eventsIdsDatesForUpdate = getIdsAndDates($yearlyEvents);
                 $this->eventsModel->updateYearOfEvents($eventsIdsDatesForUpdate);
+            }
+            if (count($weeklyEvents)) {
+                $eventsIdsDatesForUpdate = getIdsAndDates($weeklyEvents);
+                $this->eventsModel->updateWeekOfEvents($eventsIdsDatesForUpdate);
             }
 
             $todayEventsCount = $this->eventsModel->getCountOfMyTodayEvents();
