@@ -1,5 +1,6 @@
 <?php
 require_once APPROOT . '/libraries/PhpMailSender.php';
+
 class Events extends Controller
 {
     private $eventsModel;
@@ -190,51 +191,6 @@ class Events extends Controller
         redirect('/');
     }
 
-    private function extractEventsByDate($data)
-    {
-        $sortedData = [];
-        foreach ($data as $event) {
-            // print_r($event);
-            $eventDetails = [
-                'id' => $event->id,
-                'text' => $event->text,
-                'begin' => $event->begin,
-                'finish' => $event->finish,
-                'date' => $event->date,
-                'checkedEvent' => $event->checkedEvent,
-                'showNotification' => $event->showNotification,
-                'isMonthly' => $event->isMonthly,
-                'isYearly' => $event->isYearly,
-                'isWeekly' => $event->isWeekly,
-                'user_id' => $event->user_id
-            ];
-            // if(!isset($sortedData[$event->date])){
-            //     $sortedData[$event->date][] = $eventDetails; 
-            // } else {
-
-            // }
-            $sortedData[$event->date][] = $eventDetails;
-        }
-
-        return $sortedData;
-    }
-
-    private function convertForGoogleChart($data)
-    {
-        $googleData = [
-            ['Date', 'Events Count']
-        ];
-
-        foreach ($data as $key => $value) {
-            $row = [$key, count($value)];
-            $googleData[] = $row;
-        }
-        if (count($data) == 0) {
-            $googleData[] = [0, 0];
-        }
-        return $googleData;
-    }
-
     public function listMyEvents($query)
     {
         if (!isset($_SESSION['user_id'])) {
@@ -275,6 +231,51 @@ class Events extends Controller
         $this->view('events/listMyEvents', $data);
     }
 
+    private function extractEventsByDate($data)
+    {
+        $sortedData = [];
+        foreach ($data as $event) {
+            // print_r($event);
+            $eventDetails = [
+                'id' => $event->id,
+                'text' => $event->text,
+                'begin' => $event->begin,
+                'finish' => $event->finish,
+                'date' => $event->date,
+                'checkedEvent' => $event->checkedEvent,
+                'showNotification' => $event->showNotification,
+                'isMonthly' => $event->isMonthly,
+                'isYearly' => $event->isYearly,
+                'isWeekly' => $event->isWeekly,
+                'isDaily' => $event->isDaily,
+                'user_id' => $event->user_id
+            ];
+            // if(!isset($sortedData[$event->date])){
+            //     $sortedData[$event->date][] = $eventDetails;
+            // } else {
+
+            // }
+            $sortedData[$event->date][] = $eventDetails;
+        }
+
+        return $sortedData;
+    }
+
+    private function convertForGoogleChart($data)
+    {
+        $googleData = [
+            ['Date', 'Events Count']
+        ];
+
+        foreach ($data as $key => $value) {
+            $row = [$key, count($value)];
+            $googleData[] = $row;
+        }
+        if (count($data) == 0) {
+            $googleData[] = [0, 0];
+        }
+        return $googleData;
+    }
 
     public function searchEvent($query)
     {
@@ -314,7 +315,6 @@ class Events extends Controller
 
         $this->view('events/listSearchResults', $data);
     }
-
 
 
     public function loadEventEdit($eventId)
@@ -596,98 +596,128 @@ class Events extends Controller
             $upcomingEventsInHour = [];
         }
         $data['upcomingEventsInHour'] = $upcomingEventsInHour;
-        
+
         $this->view('events/upcomingInHour', $data);
     }
 
-    public function moveToNewDate($query){
-        if(!isset($_SESSION['user_id'])){
+    public function moveToNewDate($query)
+    {
+        if (!isset($_SESSION['user_id'])) {
             redirect('/users/login');
             return;
         }
         $year = date('Y');
         $month = date('m');
 
-        if(!isset($query)){
-            redirect('/events/listMyEvents?year=' . $year . '&month=' . $month .'&page=1');
+        if (!isset($query)) {
+            redirect('/events/listMyEvents?year=' . $year . '&month=' . $month . '&page=1');
             return;
         }
-        $queryData =  getQueryData($query);
+        $queryData = getQueryData($query);
         $eventId = htmlspecialchars($queryData['event']);
         $editedDate = htmlspecialchars($queryData['newDate']);
 
-        if(!$eventId || !$editedDate){
-            redirect('/events/listMyEvents?year=' . $year . '&month=' . $month .'&page=1');
+        if (!$eventId || !$editedDate) {
+            redirect('/events/listMyEvents?year=' . $year . '&month=' . $month . '&page=1');
             return;
         }
         $this->eventsModel->moveEventByDate($eventId, $editedDate);
-        redirect('/events/listMyEvents?year=' . $year . '&month=' . $month .'&page=1');
+        redirect('/events/listMyEvents?year=' . $year . '&month=' . $month . '&page=1');
     }
 
-    public function makeMonthly($eventId){
-        if(!isset($_SESSION['user_id'])){
+    public function makeMonthly($eventId)
+    {
+        if (!isset($_SESSION['user_id'])) {
             redirect('/users/login');
             return;
         }
         $this->eventsModel->makeEventMonthly(htmlspecialchars($eventId));
         $year = date('Y');
         $month = date('m');
-        redirect('/events/listMyEvents?year=' . $year . '&month=' . $month .'&page=1');
+        redirect('/events/listMyEvents?year=' . $year . '&month=' . $month . '&page=1');
     }
 
-    public function makeNotMonthly($eventId){
-        if(!isset($_SESSION['user_id'])){
+    public function makeNotMonthly($eventId)
+    {
+        if (!isset($_SESSION['user_id'])) {
             redirect('/users/login');
             return;
         }
         $this->eventsModel->makeEventNotMonthly(htmlspecialchars($eventId));
         $year = date('Y');
         $month = date('m');
-        redirect('/events/listMyEvents?year=' . $year . '&month=' . $month .'&page=1');
+        redirect('/events/listMyEvents?year=' . $year . '&month=' . $month . '&page=1');
     }
 
-    public function makeYearly($eventId){
-        if(!isset($_SESSION['user_id'])){
+    public function makeYearly($eventId)
+    {
+        if (!isset($_SESSION['user_id'])) {
             redirect('/users/login');
             return;
         }
         $this->eventsModel->makeEventYearly(htmlspecialchars($eventId));
         $year = date('Y');
         $month = date('m');
-        redirect('/events/listMyEvents?year=' . $year . '&month=' . $month .'&page=1');
+        redirect('/events/listMyEvents?year=' . $year . '&month=' . $month . '&page=1');
     }
 
-    public function makeNotYearly($eventId){
-        if(!isset($_SESSION['user_id'])){
+    public function makeNotYearly($eventId)
+    {
+        if (!isset($_SESSION['user_id'])) {
             redirect('/users/login');
             return;
         }
         $this->eventsModel->makeEventNotYearly(htmlspecialchars($eventId));
         $year = date('Y');
         $month = date('m');
-        redirect('/events/listMyEvents?year=' . $year . '&month=' . $month .'&page=1');
+        redirect('/events/listMyEvents?year=' . $year . '&month=' . $month . '&page=1');
     }
 
-     public function makeWeekly($eventId){
-        if(!isset($_SESSION['user_id'])){
+    public function makeWeekly($eventId)
+    {
+        if (!isset($_SESSION['user_id'])) {
             redirect('/users/login');
             return;
         }
         $this->eventsModel->makeEventWeekly(htmlspecialchars($eventId));
         $year = date('Y');
         $month = date('m');
-        redirect('/events/listMyEvents?year=' . $year . '&month=' . $month .'&page=1');
+        redirect('/events/listMyEvents?year=' . $year . '&month=' . $month . '&page=1');
     }
 
-    public function makeNotWeekly($eventId){
-        if(!isset($_SESSION['user_id'])){
+    public function makeNotWeekly($eventId)
+    {
+        if (!isset($_SESSION['user_id'])) {
             redirect('/users/login');
             return;
         }
         $this->eventsModel->makeEventNotWeekly(htmlspecialchars($eventId));
         $year = date('Y');
         $month = date('m');
-        redirect('/events/listMyEvents?year=' . $year . '&month=' . $month .'&page=1');
+        redirect('/events/listMyEvents?year=' . $year . '&month=' . $month . '&page=1');
     }
 
+    public function makeDaily($eventId)
+    {
+        if (!isset($_SESSION['user_id'])) {
+            redirect('/users/login');
+            return;
+        }
+        $this->eventsModel->makeEventDaily(htmlspecialchars($eventId));
+        $year = date('Y');
+        $month = date('m');
+        redirect('/events/listMyEvents?year=' . $year . '&month=' . $month . '&page=1');
+    }
+
+    public function makeNotDaily($eventId)
+    {
+        if (!isset($_SESSION['user_id'])) {
+            redirect('/users/login');
+            return;
+        }
+        $this->eventsModel->makeEventNotDaily(htmlspecialchars($eventId));
+        $year = date('Y');
+        $month = date('m');
+        redirect('/events/listMyEvents?year=' . $year . '&month=' . $month . '&page=1');
+    }
 }

@@ -462,6 +462,22 @@ class Event
         return execQueryRetTrueOrFalse($this->db);
     }
 
+     public function makeEventDaily($eventId)
+    {
+        $this->db->query("UPDATE events SET events.isDaily = 1 WHERE events.id = :id AND events.user_id = :userId");
+        $this->db->bind(":id", $eventId, null);
+        $this->db->bind(":userId", $_SESSION['user_id'], null);
+        return execQueryRetTrueOrFalse($this->db);
+    }
+
+    public function makeEventNotDaily($eventId)
+    {
+        $this->db->query("UPDATE events SET events.isDaily = NULL WHERE events.id = :id AND events.user_id = :userId");
+        $this->db->bind(":id", $eventId, null);
+        $this->db->bind(":userId", $_SESSION['user_id'], null);
+        return execQueryRetTrueOrFalse($this->db);
+    }
+
     public function getMontlyEvents()
     {
         $this->db->query("SELECT events.id, events.date 
@@ -493,6 +509,19 @@ class Event
         $this->db->query("SELECT events.id, events.date 
                              FROM events 
                              WHERE events.isWeekly = 1 
+                             AND events.user_id = :userId
+                             
+                             ");
+        $this->db->bind(":userId", $_SESSION['user_id'], null);
+        $result = getResults($this->db);
+        return $result;
+    }
+
+     public function getDailyEvents()
+    {
+        $this->db->query("SELECT events.id, events.date 
+                             FROM events 
+                             WHERE events.isDaily = 1 
                              AND events.user_id = :userId
                              
                              ");
@@ -554,5 +583,25 @@ class Event
             }
         };
     }
+
+    public function updateDayOfEvents($idsNum)
+    {
+        foreach ($idsNum as $key => $value) {
+            if ($value['date'] <= date('Y-m-d') == 1) {
+                $this->db->query("UPDATE events SET events.`date` = (
+                                        SELECT DATE_ADD(CAST(events.`date` AS DATE), INTERVAL 1 DAY) AS newDate
+                                        FROM events
+                                        WHERE events.id = :eventId)
+                                        WHERE CAST(CONCAT(events.`date`) AS DATE) = CAST(NOW() AS DATE)
+                                        AND CAST(events.`begin` AS TIME) < CAST(NOW() AS TIME)
+                                        AND events.id = :eventId 
+                                        AND events.user_id = :userId;");
+                $this->db->bind(":eventId", $value['id'], null);
+                $this->db->bind(":userId", $_SESSION['user_id'], null);
+                $this->db->execute();
+            }
+        };
+    }
+
 
 }

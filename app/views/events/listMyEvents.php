@@ -190,6 +190,19 @@
                                     <?php endif; ?>
 
 
+                                    <?php if (isset($event['isDaily']) && $event['isDaily'] == 1) : ?>
+                                        <label>
+                                            <input type="checkbox" checked="checked"/>
+                                            <span>Daily</span>
+                                        </label>
+                                    <?php else : ?>
+                                        <label>
+                                            <input type="checkbox"/>
+                                            <span>Not Daily Currently</span>
+                                        </label>
+                                    <?php endif; ?>
+
+
                                 </div>
                             </div>
                             <div class="card-action">
@@ -277,6 +290,16 @@
                                     <a class="btn"
                                        href="<?php echo URLROOT; ?>/events/makeWeekly/<?php echo $event['id']; ?>">Weekly</a>
                                 <?php endif; ?>
+
+                                 <?php if (isset($event['isDaily']) && $event['isDaily'] == 1)  : ?>
+                                    <a class="btn"
+                                       href="<?php echo URLROOT; ?>/events/makeNotDaily/<?php echo $event['id']; ?>">Not
+                                        Daily</a>
+                                <?php else : ?>
+                                    <a class="btn"
+                                       href="<?php echo URLROOT; ?>/events/makeDaily/<?php echo $event['id']; ?>">Daily</a>
+                                <?php endif; ?>
+
 
 
                                 <!-- <hr /> -->
