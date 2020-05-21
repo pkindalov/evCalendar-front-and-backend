@@ -52,3 +52,9 @@ h1,h2,h3,h4,h5,h6{
 .leftMargin{
     margin-left: 10px;
 }
+.alignVertically{
+    vertical-align: middle;
+}
+.marginCenter{
+    margin: 0 auto;
+}

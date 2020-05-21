@@ -1,12 +1,11 @@
 <?php require_once APPROOT . '/views/inc/header.php' ?>
-    <!-- <pre>-->
-    <!--    --><?php //print_r($data['sortedData']);
-//    ?>
-    <!--</pre> -->
-    <!-- <?php //print_r($data);
-    ?> -->
+<!--     <pre>-->
+<!--        --><?php //print_r($data['sortedData']); ?>
+<!--    </pre>-->
+<!--     --><?php //print_r($data['chartJsData']); ?>
     <!-- <?php //echo date('Y-m-d');
     ?> -->
+
 
     <div class="row center-align">
         <div class="col l12">
@@ -75,8 +74,8 @@
                     }
                     ?>
                     <!-- <option value="" data-icon="images/sample-1.jpg">example 1</option>
-                    <option value="" data-icon="images/office.jpg">example 2</option>
-                    <option value="" data-icon="images/yuna.jpg">example 3</option> -->
+                        <option value="" data-icon="images/office.jpg">example 2</option>
+                        <option value="" data-icon="images/yuna.jpg">example 3</option> -->
                 </select>
                 <label>Months</label>
             </div>
@@ -85,31 +84,49 @@
 
     <div class="row">
         <div class="col l12">
-            <a class="btn teal lighten-1" href="#" id="evAddBtn">
-                <i class="material-icons">add</i></a>
+            <a href="#" id="evAddBtn">
+                <i class="material-icons alignVertically">add</i>
+                <span>Add Event</span>
+            </a>
+
         </div>
     </div>
 
     <!-- Google chart here -->
-    <div class="row">
-        <div class="col l12">
-            <div id="chart_div"></div>
-        </div>
+<!--    <div class="row">-->
+<!--        <div class="col l12">-->
+<!--            <div id="chart_div"></div>-->
+<!--        </div>-->
+<!--    </div>-->
+
+<div class="row">
+    <div class="col l12">
+        <canvas id="eventsChart"></canvas>
     </div>
+</div>
 
 <?php foreach ($data['sortedData'] as $key => $eventsData) : ?>
-    <div id="<?php echo $key; ?>">
+    <div class="center-align" id="<?php echo $key; ?>">
         <h2 id="<?php echo $key; ?>"
             class="<?php if ($key === date('Y-m-d')) echo 'blue lighten-1' ?>"><?php echo $key; ?></h2>
 
 
-        <button onclick="showMailForm('<?php echo $key; ?>')" class="btn">Mail</button>
+        <button onclick="showMailForm('<?php echo $key; ?>')" class="btn">
+            <span class="material-icons alignVertically">
+                email
+            </span>
+            Mail
+        </button>
 
         <div>
             <input class="col-md-6 mailField" type="email" id="input<?php echo $key; ?>"/><br/>
             <span id="invalidMailSpan<?php echo $key; ?>" class="mailField validateMsg"></span>
             <button id="sendMailBtn<?php echo $key; ?>" onclick="sendMailTo('<?php echo $key; ?>')"
-                    class="btn mailField">Send
+                    class="btn marginCenter mailField">
+                <span class="material-icons alignVertically">
+                    send
+                </span>
+                <span>Send</span>
             </button>
 
             <div id="progress<?php echo $key; ?>" class="progress mailField">
@@ -139,30 +156,37 @@
                                 <?php if ($event['checkedEvent']) : ?>
                                     <p class="checkedEvent">
                                         <?php echo $event['text']; ?>
+                                    <hr/>
                                     </p>
                                 <?php else : ?>
                                     <p>
                                         <?php echo $event['text']; ?>
+                                    <hr/>
                                     </p>
                                 <?php endif; ?>
-                                <p>Begin: <?php echo $event['begin']; ?></p>
-                                <p>Finish: <?php echo $event['finish']; ?></p>
-                                <p>Date: <?php echo $event['date']; ?></p>
-                                <!-- <p>Checked: <?php //echo $event['checkedEvent']; 
-                                ?> </p> -->
-                                <p>Notification Turned <?php echo $event['showNotification'] == 1 ? "ON" : "OFF"; ?></p>
+                                <div class="left-align">
+                                    <p>Begin: <?php echo $event['begin']; ?></p>
+                                    <p>Finish: <?php echo $event['finish']; ?></p>
+                                    <p>Date: <?php echo $event['date']; ?></p>
+                                    <!-- <p>Checked: <?php //echo $event['checkedEvent']; 
+                                    ?> </p> -->
+                                    <p>Notification
+                                        Turned <?php echo $event['showNotification'] == 1 ? "ON" : "OFF"; ?></p>
+                                </div>
                                 <hr/>
-                                <div>
+                                <div class="left-align">
                                     <?php if (isset($event['isMonthly']) && $event['isMonthly'] == 1) : ?>
                                         <label>
                                             <input type="checkbox" checked="checked"/>
                                             <span>Montly</span>
                                         </label>
+                                        <br/>
                                     <?php else : ?>
                                         <label>
                                             <input type="checkbox"/>
                                             <span>Not Monthly Currently</span>
                                         </label>
+                                        <br/>
                                     <?php endif; ?>
 
                                     <?php if (isset($event['isYearly']) && $event['isYearly'] == 1) : ?>
@@ -170,11 +194,13 @@
                                             <input type="checkbox" checked="checked"/>
                                             <span>Yearly</span>
                                         </label>
+                                        <br/>
                                     <?php else : ?>
                                         <label>
                                             <input type="checkbox"/>
                                             <span>Not Yearly Currently</span>
                                         </label>
+                                        <br/>
                                     <?php endif; ?>
 
                                     <?php if (isset($event['isWeekly']) && $event['isWeekly'] == 1) : ?>
@@ -182,11 +208,13 @@
                                             <input type="checkbox" checked="checked"/>
                                             <span>Weekly</span>
                                         </label>
+                                        <br/>
                                     <?php else : ?>
                                         <label>
                                             <input type="checkbox"/>
                                             <span>Not Weekly Currently</span>
                                         </label>
+                                        <br/>
                                     <?php endif; ?>
 
 
@@ -195,51 +223,154 @@
                                             <input type="checkbox" checked="checked"/>
                                             <span>Daily</span>
                                         </label>
+                                        <br/>
                                     <?php else : ?>
                                         <label>
                                             <input type="checkbox"/>
                                             <span>Not Daily Currently</span>
                                         </label>
+                                        <br/>
                                     <?php endif; ?>
-
-
                                 </div>
                             </div>
                             <div class="card-action">
-                                <a class="btn blue lighten-2"
-                                   href="<?php echo URLROOT; ?>/events/loadEventEdit/<?php echo $event['id']; ?>">Edit</a>
+                                <a href="<?php echo URLROOT; ?>/events/loadEventEdit/<?php echo $event['id']; ?>">
+                                    <span class="material-icons alignVertically">
+                                        edit
+                                    </span>
+                                    <span>Edit</span>
+                                </a>
                                 <?php if ($event['checkedEvent'] == 1) : ?>
-                                    <a class="btn red lighten-1"
-                                       href="<?php echo URLROOT; ?>/events/checkUncheckEvent/?eventId=<?php echo $event['id']; ?>&author=<?php echo $event['user_id']; ?>&checked=false">Uncheck</a>
+                                    <a href="<?php echo URLROOT; ?>/events/checkUncheckEvent/?eventId=<?php echo $event['id']; ?>&author=<?php echo $event['user_id']; ?>&checked=false">
+                                        <span class="material-icons alignVertically">
+                                            check_circle_outline
+                                        </span>
+                                        <span>Uncheck</span>
+                                    </a>
 
                                 <?php else : ?>
                                     <?php echo $event['checkedEvent']; ?>
-                                    <a class="btn cyan accent-3"
-                                       href="<?php echo URLROOT; ?>/events/checkUncheckEvent/?eventId=<?php echo $event['id']; ?>&author=<?php echo $event['user_id']; ?>&checked=1">Check</a>
+                                    <a href="<?php echo URLROOT; ?>/events/checkUncheckEvent/?eventId=<?php echo $event['id']; ?>&author=<?php echo $event['user_id']; ?>&checked=1">
+                                        <span class="material-icons alignVertically">
+                                            check_circle
+                                        </span>
+                                        <span>Check</span>
+                                    </a>
                                 <?php endif; ?>
                                 <?php if ($event['showNotification'] == 1) : ?>
-                                    <a class="btn red lighten-1"
-                                       href="<?php echo URLROOT; ?>/events/turnOffNotif/<?php echo $event['id']; ?>">Notification
-                                        Turn OFF</a>
+                                    <a href="<?php echo URLROOT; ?>/events/turnOffNotif/<?php echo $event['id']; ?>">
+                                        <span class="material-icons alignVertically">
+                                            alarm_off
+                                        </span>
+                                        Notification Turn OFF</a>
                                 <?php else : ?>
-                                    <a class="btn cyan accent-3"
-                                       href="<?php echo URLROOT; ?>/events/turnOnNotif/<?php echo $event['id']; ?>">Notification
-                                        Turn ON</a>
+                                    <a href="<?php echo URLROOT; ?>/events/turnOnNotif/<?php echo $event['id']; ?>">
+                                        <span class="material-icons alignVertically">
+                                            alarm_on
+                                        </span>
+                                        Notification Turn ON</a>
                                 <?php endif; ?>
-                                <a class="btn cyan accent-1" href="#btnMoveEv<?php echo $event['id']; ?>"
-                                   onclick="showHideMoveEventForm(<?php echo $event['id']; ?>)">Move</a>
+                                <a href="#btnMoveEv<?php echo $event['id']; ?>"
+                                   onclick="showHideMoveEventForm(<?php echo $event['id']; ?>)">
+                                    <span class="material-icons">
+                                        rowing
+                                    </span>
+                                    <span>Move</span>
+                                </a>
                                 <div class="mailField" id="moveEventForm<?php echo $event['id']; ?>">
                                     <label for="moveToNewDate<?php echo $event['id']; ?>">Choose Date To Move
                                         Event</label>
                                     <input type="text" name="moveToNewDate"
                                            id="moveToNewDate<?php echo $event['id']; ?>" class="datepicker"/>
-                                    <a class="btn" onclick="moveEvent(<?php echo $event['id']; ?>)">Confirm Move</a>
+                                    <a class="btn" onclick="moveEvent(<?php echo $event['id']; ?>)">
+                                        <span class="material-icons alignVertically">
+                                            rowing
+                                        </span>
+                                        <span>Confirm Move</span>
+                                    </a>
                                     <span id="moveToNewDateSpanWarn<?php echo $event['id']; ?>"
                                           class="validateMsg"></span>
                                 </div>
+
+
+                                <!--                                --><?php
+                                //                                    echo $event['date'] . ' - ' . date('Y-m-d') . '<br />';
+                                //                                    echo $event['date'] < date('Y-m-d');
+                                //
+                                //
+                                ?>
+
+                                <!-- <?php //if(($event['date'] < date('Y-m-d') == 1)) : 
+                                ?> -->
+
+                                <?php if (isset($event['isMonthly']) && $event['isMonthly'] == 1) : ?>
+                                    <a href="<?php echo URLROOT; ?>/events/makeNotMonthly/<?php echo $event['id']; ?>">
+                                        <span class="material-icons alignVertically">
+                                            calendar_today
+                                        </span>
+                                        <span>Not Monthly</span>
+                                    </a>
+                                <?php else : ?>
+                                    <a href="<?php echo URLROOT; ?>/events/makeMonthly/<?php echo $event['id']; ?>">
+                                        <span class="material-icons alignVertically">
+                                            calendar_today
+                                        </span>
+                                        <span>Monthly</span>
+                                    </a>
+                                <?php endif; ?>
+                                <!-- <?php //endif; 
+                                ?> -->
+
+                                <?php if (isset($event['isYearly']) && $event['isYearly'] == 1) : ?>
+                                    <a href="<?php echo URLROOT; ?>/events/makeNotYearly/<?php echo $event['id']; ?>">
+                                        <span class="material-icons alignVertically">
+                                            date_range
+                                        </span>
+                                        Not Yearly</a>
+                                <?php else : ?>
+                                    <a href="<?php echo URLROOT; ?>/events/makeYearly/<?php echo $event['id']; ?>">
+                                        <span class="material-icons alignVertically">
+                                            date_range
+                                        </span>
+                                        Yearly</a>
+                                <?php endif; ?>
+
+                                <?php if (isset($event['isWeekly']) && $event['isWeekly'] == 1) : ?>
+                                    <a href="<?php echo URLROOT; ?>/events/makeNotWeekly/<?php echo $event['id']; ?>">
+                                        <span class="material-icons alignVertically">
+                                            event
+                                        </span>
+                                        Not Weekly</a>
+                                <?php else : ?>
+                                    <a href="<?php echo URLROOT; ?>/events/makeWeekly/<?php echo $event['id']; ?>">
+                                        <span class="material-icons alignVertically">
+                                            event
+                                        </span>
+                                        Weekly</a>
+                                <?php endif; ?>
+
+                                <?php if (isset($event['isDaily']) && $event['isDaily'] == 1) : ?>
+                                    <a href="<?php echo URLROOT; ?>/events/makeNotDaily/<?php echo $event['id']; ?>">
+                                        <span class="material-icons alignVertically">
+                                            view_day
+                                        </span>
+                                        Not Daily</a>
+                                <?php else : ?>
+                                    <a href="<?php echo URLROOT; ?>/events/makeDaily/<?php echo $event['id']; ?>">
+                                        <span class="material-icons alignVertically">
+                                            view_day
+                                        </span>
+                                        Daily</a>
+                                <?php endif; ?>
+
+
                                 <!-- Modal Trigger -->
                                 <button data-target="<?php echo $event['id']; ?>"
-                                        class="btn modal-trigger red accent-4">Delete
+                                        class="btn modal-trigger red accent-4">
+                                    <span class="material-icons alignVertically">
+                                        delete_forever
+                                    </span>
+                                    <span>Delete</span>
                                 </button>
 
                                 <!-- Modal Structure -->
@@ -255,51 +386,6 @@
                                            href="<?php echo URLROOT; ?>/events/deleteEvent/?eventId=<?php echo $event['id']; ?>&author=<?php echo $event['user_id']; ?>">Delete</a>
                                     </div>
                                 </div>
-
-                                <!--                                --><?php
-                                //                                    echo $event['date'] . ' - ' . date('Y-m-d') . '<br />';
-                                //                                    echo $event['date'] < date('Y-m-d');
-                                //
-                                //                                ?>
-
-                                <!-- <?php //if(($event['date'] < date('Y-m-d') == 1)) : ?> -->
-                                <?php if (isset($event['isMonthly']) && $event['isMonthly'] == 1)  : ?>
-                                    <a class="btn"
-                                       href="<?php echo URLROOT; ?>/events/makeNotMonthly/<?php echo $event['id']; ?>">Not
-                                        Monthly</a>
-                                <?php else : ?>
-                                    <a class="btn"
-                                       href="<?php echo URLROOT; ?>/events/makeMonthly/<?php echo $event['id']; ?>">Monthly</a>
-                                <?php endif; ?>
-                                <!-- <?php //endif; ?> -->
-
-                                <?php if (isset($event['isYearly']) && $event['isYearly'] == 1)  : ?>
-                                    <a class="btn"
-                                       href="<?php echo URLROOT; ?>/events/makeNotYearly/<?php echo $event['id']; ?>">Not
-                                        Yearly</a>
-                                <?php else : ?>
-                                    <a class="btn"
-                                       href="<?php echo URLROOT; ?>/events/makeYearly/<?php echo $event['id']; ?>">Yearly</a>
-                                <?php endif; ?>
-
-                                <?php if (isset($event['isWeekly']) && $event['isWeekly'] == 1)  : ?>
-                                    <a class="btn"
-                                       href="<?php echo URLROOT; ?>/events/makeNotWeekly/<?php echo $event['id']; ?>">Not
-                                        Weekly</a>
-                                <?php else : ?>
-                                    <a class="btn"
-                                       href="<?php echo URLROOT; ?>/events/makeWeekly/<?php echo $event['id']; ?>">Weekly</a>
-                                <?php endif; ?>
-
-                                 <?php if (isset($event['isDaily']) && $event['isDaily'] == 1)  : ?>
-                                    <a class="btn"
-                                       href="<?php echo URLROOT; ?>/events/makeNotDaily/<?php echo $event['id']; ?>">Not
-                                        Daily</a>
-                                <?php else : ?>
-                                    <a class="btn"
-                                       href="<?php echo URLROOT; ?>/events/makeDaily/<?php echo $event['id']; ?>">Daily</a>
-                                <?php endif; ?>
-
 
 
                                 <!-- <hr /> -->
@@ -348,42 +434,91 @@
             <?php endif; ?>
         </div>
     </div>
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<!--    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>-->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
 
             if (document.getElementById('<?php echo $data['today']; ?>')) {
                 window.location.hash = "<?php echo $data['today']; ?>";
             }
-
-            let myGoogleData = <?php echo $data['googleData']; ?>;
-
-
-            google.charts.load('current', {
-                packages: ['corechart', 'bar']
-            });
-            google.charts.setOnLoadCallback(drawStacked);
-
-            function drawStacked() {
-                var data = google.visualization.arrayToDataTable(myGoogleData);
-
-                var options = {
-                    title: 'Count of events per day',
-                    chartArea: {
-                        width: '50%'
-                    },
-                    isStacked: true,
-                    hAxis: {
-                        title: 'Total Count Of Events',
-                        minValue: 0,
-                    },
-                    vAxis: {
-                        title: 'Dates'
+            const dataObj = <?php echo $data['chartJsData']; ?>;
+            const ctx = document.getElementById('eventsChart').getContext('2d');
+            let myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: dataObj.labels,
+                    datasets: [{
+                        label: '# of events last few days',
+                        data:dataObj.values,
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(255, 159, 64, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
                     }
-                };
-                var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
-                chart.draw(data, options);
-            }
+                }
+            });
+
+
+
+
+
+
+
+
+
+
+
+            //let myGoogleData = <?php //echo $data['googleData']; ?>//;
+            //
+            //
+            //google.charts.load('current', {
+            //    packages: ['corechart', 'bar']
+            //});
+            //google.charts.setOnLoadCallback(drawStacked);
+            //
+            //function drawStacked() {
+            //    var data = google.visualization.arrayToDataTable(myGoogleData);
+            //
+            //    var options = {
+            //        title: 'Count of events per day',
+            //        chartArea: {
+            //            width: '50%'
+            //        },
+            //        isStacked: true,
+            //        hAxis: {
+            //            title: 'Total Count Of Events',
+            //            minValue: 0,
+            //        },
+            //        vAxis: {
+            //            title: 'Dates'
+            //        }
+            //    };
+            //    var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
+            //    chart.draw(data, options);
+            //}
         });
 
         let selYearSelect = document.getElementsByName('selectedYear')[0];
