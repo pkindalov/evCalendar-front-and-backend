@@ -61,3 +61,18 @@ function getIdsAndDates($data){
     }
     return $idsDates;
 }
+
+function convDataChartJS($outerData){
+    $data = [
+      'labels' => [],
+      'values' => []
+    ];
+
+    foreach ($outerData as $key => $value){
+//        print_r(count($outerData[$key]));
+        $data['labels'][] = $key;
+        $data['values'][] = count($outerData[$key]);
+    }
+
+    return $data;
+}

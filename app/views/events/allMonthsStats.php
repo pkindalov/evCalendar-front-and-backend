@@ -1,7 +1,7 @@
 <?php require APPROOT . '/views/inc/header.php'; ?>
 
 <div class="row">
-    <div class="col l12">
+    <div class="col l12 s12">
         <table class="highlight">
             <thead>
                 <tr>
@@ -11,18 +11,22 @@
             </thead>
 
             <tbody>
+            <!-- <?php $count = 1; ?>  -->
                 <?php foreach ($data['busyMonths'] as $key => $value) : ?>
                     <?php if ($key == $data['currentMonth']) : ?>
                         <tr class="currentWeek">
                             <td><?php echo $key; ?></td>
+                            <!-- <td><?php //echo $count . ' ' . $key; ?></td> -->
                             <td class="center-align"><?php echo $value[0]; ?></td>
                         </tr>
                     <?php else : ?>
                         <tr>
                             <td><?php echo $key; ?></td>
+                            <!-- <td><?php //echo $count . ' ' . $key; ?></td> -->
                             <td class="center-align"><?php echo $value[0]; ?></td>
                         </tr>
                     <?php endif; ?>
+                    <!-- <?php $count++; ?>   -->
                 <?php endforeach; ?>
             </tbody>
         </table>
@@ -30,7 +34,7 @@
 </div>
 
 <div class="row">
-    <div class="col l12">
+    <div class="col l12 s10">
         <canvas id="myChart" width="300" height="400"></canvas>
         <!-- <div id="chart_div"></div> -->
     </div>
@@ -51,7 +55,7 @@
                 // labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
                 labels: dateLabels,
                 datasets: [{
-                    label: '# of events in month. Started week is shown on hover window when you put mouse on bar',
+                    label: '#number of events in month.',
                     // data: [12, 19, 3, 5, 2, 3],
                     data: dateValues,
                     backgroundColor: [

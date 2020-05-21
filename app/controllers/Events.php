@@ -203,7 +203,8 @@ class Events extends Controller
         $pageSize = 10;
         $events = $this->eventsModel->getMyEventsByYearAndMonth($year, $month, $page, $pageSize);
         $sortedByDate = $this->extractEventsByDate($events);
-        $googleChartData = $this->convertForGoogleChart($sortedByDate);
+        $chartJsData = convDataChartJS($sortedByDate);
+//        $googleChartData = $this->convertForGoogleChart($sortedByDate);
         $data = [
             // 'events' => $events,
             'page' => $page,
@@ -215,7 +216,8 @@ class Events extends Controller
             'nextPage' => $page + 1,
             'prevPage' => $page - 1,
             'sortedData' => $sortedByDate,
-            'googleData' => json_encode($googleChartData)
+            'chartJsData' => json_encode($chartJsData)
+//            'googleData' => json_encode($googleChartData)
         ];
 
 

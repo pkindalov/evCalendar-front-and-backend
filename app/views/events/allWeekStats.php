@@ -7,28 +7,30 @@
 </pre>
 
 <div class="row">
-    <div class="col l12">
+    <div class="col l12 s12">
         <table class="highlight">
             <thead>
                 <tr>
-                    <th>Week</th>
+                    <th>Number Week/Week</th>
                     <th>Events Count</th>
                 </tr>
             </thead>
 
             <tbody>
+               <?php $count = 1; ?> 
                 <?php foreach ($data['busyWeeks'] as $key => $value) : ?>
                     <?php if ($key == $data['currentWeek']) : ?>
                         <tr class="currentWeek">
-                            <td><?php echo $key; ?></td>
+                            <td><?php echo $count . ' ' . $key; ?></td>
                             <td class="center-align"><?php echo $value[0]; ?></td>
                         </tr>
                     <?php else : ?>
                         <tr>
-                            <td><?php echo $key; ?></td>
+                            <td><?php echo $count . ' ' . $key; ?></td>
                             <td class="center-align"><?php echo $value[0]; ?></td>
                         </tr>
                     <?php endif; ?>
+                  <?php $count++; ?>  
                 <?php endforeach; ?>
             </tbody>
         </table>
@@ -37,7 +39,7 @@
 
 <!-- Google chart here -->
 <div class="row">
-    <div class="col l12">
+    <div class="col l12 s10">
         <canvas id="myChart" width="300" height="400"></canvas>
         <!-- <div id="chart_div"></div> -->
     </div>
