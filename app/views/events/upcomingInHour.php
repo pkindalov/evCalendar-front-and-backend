@@ -5,9 +5,9 @@
     </pre> -->
 
 
-<h2 class="header"><?php echo $data['todayDate']; ?></h2>
+<h2 class="header center-align"><?php echo $data['todayDate']; ?></h2>
 <?php foreach ($data['upcomingInHour'] as $key => $event) : ?>
-    <div class="col s12 m7">
+    <div class="col l12 s12 m12">
         <div class="card horizontal">
             <div class="card-image"></div>
             <div class="card-stacked">
@@ -18,7 +18,7 @@
                             <span>Choose to send</span>
                         </label>
                     </div>
-                    <p>Timeleft: <?php echo $event->timeleft; ?></p>
+                    <h5 class="center-align">Timeleft: <?php echo $event->timeleft; ?></h5>
                     <hr />
                     <?php if ($event->checkedEvent) : ?>
                         <p class="checkedEvent">
@@ -29,19 +29,37 @@
                             <?php echo $event->text; ?>
                         </p>
                     <?php endif; ?>
+                    <hr />
                     <p>Begin: <?php echo $event->begin; ?></p>
                     <p>Finish: <?php echo $event->finish; ?></p>
                     <p>Date: <?php echo $event->date; ?></p>
+                    <p>Status:
+                        <?php if ($event->readed == 1) : ?>
+                            <span>VIEWED</span>
+                        <?php else : ?>
+                            <span>NOT VIEWED YET</span>
+                        <?php endif; ?>
+                    </p>
                     <!-- <p>Checked: <?php //echo $event['checkedEvent']; 
                                         ?> </p> -->
                     <p>Notification Turned <?php echo $event->showNotification == 1 ? "ON" : "OFF"; ?></p>
                 </div>
                 <div class="card-action">
                     <?php if ($event->readed == 1) : ?>
-                        <a class="btn  blue darken-4" href="<?php echo URLROOT; ?>/events/markAsUnread/<?php echo $event->id; ?>">Unread</a>
+                        <a class="btn  blue darken-4" href="<?php echo URLROOT; ?>/events/markAsUnread/<?php echo $event->id; ?>">
+                            <span class="material-icons alignVertically">
+                                markunread
+                            </span>
+                            Unread
+                        </a>
 
                     <?php else : ?>
-                        <a class="btn blue lighten-2" href="<?php echo URLROOT; ?>/events/markAsReaded/<?php echo $event->id; ?>">Mark As Read</a>
+                        <a class="btn blue lighten-2" href="<?php echo URLROOT; ?>/events/markAsReaded/<?php echo $event->id; ?>">
+                            <span class="material-icons alignVertically">
+                                drafts
+                            </span>
+                            Read
+                        </a>
                     <? endif; ?>
 
                     <!-- <a class="btn blue lighten-2" href="<?php echo URLROOT; ?>/events/loadEventEdit/<?php echo $event->id; ?>">Not Read</a> -->

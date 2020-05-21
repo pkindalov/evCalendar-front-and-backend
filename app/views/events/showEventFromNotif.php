@@ -4,7 +4,7 @@
         ?> -->
 
 <div class="row">
-    <div class="col s12 m7">
+    <div class="col l12 m12 s12">
         <h2 class="header"><?php echo $data['event'][0]->date; ?></h2>
         <div class="card horizontal">
             <!-- <div class="card-image">
