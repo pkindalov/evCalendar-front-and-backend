@@ -40,7 +40,13 @@
                         </p>
                     </div><br />
 
-                    <input type="submit" value="Save Changes" class="btn btn-success" />
+                    <!-- <input type="submit" value="Save Changes" class="btn btn-success" /> -->
+                    <button type="submit" class="btn btn-success">
+                        <span class="material-icons alignVertically">
+                            save
+                        </span>
+                        <span>Save</span>
+                    </button>
                 </div>
             </form>
         </div>

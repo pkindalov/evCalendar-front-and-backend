@@ -8,11 +8,21 @@
 </div>
 
 <div class="row">
-  <div class="col l12">
-    <a href="#" class="btn" id="showHideMailForm">Send By Email</a>
+  <div class="col l12 s12">
+    <a href="#" id="showHideMailForm">
+      <span class="material-icons alignVertically">
+        send
+      </span>
+      Send By Email
+    </a>
     <div class="mailField" id="mailForm">
       <input type="email" id="mail" /><br />
-      <a href="#" id="sentMailBtn" class="btn">Send</a>
+      <a href="#" id="sentMailBtn" class="btn">
+        <span class="material-icons alignVertically">
+          send
+        </span>
+        Send
+      </a>
       <span id="invalidMailSpan" class="mailField validateMsg"></span>
     </div>
     <div id="progress" class="progress mailField">
@@ -22,7 +32,9 @@
 </div>
 
 <div class="row">
-  <div id="eventContId"></div>
+  <div class="col l12 s12">
+    <div id="eventContId"></div>
+  </div>
 </div>
 
 
@@ -95,7 +107,13 @@
     let nextBtn = document.createElement('a');
     nextBtn.setAttribute('href', '#');
     nextBtn.setAttribute('class', 'btn');
-    nextBtn.innerText = 'Next';
+    // nextBtn.innerText = 'Next';
+    nextBtn.innerHTML += `
+        <span class="material-icons alignVertically">
+             navigate_next
+        </span>
+        <span>Next</span>
+    `;
     nextBtn.onclick = () => {
       that.page++;
       that.offset = (that.page - 1) * that.pageSize;
@@ -103,7 +121,7 @@
       addContent(newData);
     }
     mainContainer.append(nextBtn);
-    
+
     showMailForm = false;
     formContainer.style.display = 'none';
     // if (that.offset + that.pageSize <= that.data.length) {
@@ -114,7 +132,14 @@
       let prevBtn = document.createElement('a');
       prevBtn.setAttribute('href', '#');
       prevBtn.setAttribute('class', 'btn leftMargin');
-      prevBtn.innerText = 'Prev';
+      // prevBtn.setAttribute('class', 'leftMargin');
+      // prevBtn.innerText = 'Prev';
+      prevBtn.innerHTML += `
+        <span class="material-icons alignVertically">
+             navigate_before
+        </span>
+        <span>Prev</span>
+    `;
       prevBtn.onclick = () => {
         that.page--;
         that.offset = (that.page - 1) * that.pageSize;
@@ -149,7 +174,7 @@
 
 
 
-  
+
 
   document.addEventListener('DOMContentLoaded', function() {
     addContent(that.data.slice(that.page, that.offset), that.page, that.pageSize);
