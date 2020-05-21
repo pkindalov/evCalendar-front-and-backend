@@ -1,7 +1,7 @@
 <?php require APPROOT . '/views/inc/header.php'; ?>
 <?php if (isset($_SESSION['user_id'])) : ?>
     <div class="row">
-        <div class="col l12">
+        <div class="col l12 m12 s12">
             <h5>Change Password</h5>
             <div>
                 <span id="validationMessage">
@@ -26,7 +26,7 @@
 <?php endif; ?>
 
 <div class="row">
-    <div class="col l12">
+    <div class="col l12 m12 s12">
     <span id="successResetPass" class="successNotif"></span>
         <h5>Reset Password</h5>
         <label for="email">Enter your email:</label>

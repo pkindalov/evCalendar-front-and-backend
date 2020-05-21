@@ -1,6 +1,6 @@
 <?php require APPROOT . '/views/inc/header.php'; ?>
     <div class="row">
-        <div class="col l12">
+        <div class="col l12 m12 s12">
             <h3>Sorry, there is some problem with facebook login...</h3>
             <hr />
             <p>It is possible to have different emails on both places..</p>
