@@ -31,82 +31,8 @@
 </footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    var elems = document.querySelectorAll('.sidenav');
-    var instances = M.Sidenav.init(elems);
-    var selectElems = document.querySelectorAll('select');
-    var selectInstances = M.FormSelect.init(selectElems);
-    var modalEl = document.querySelectorAll('.modal');
-    var modalElInstances = M.Modal.init(modalEl);
-    var datePickers = document.querySelectorAll('.datepicker');
-    var datepickersInstances = M.Datepicker.init(datePickers, {
-      format: 'yyyy-mm-dd',
-      showClearBtn: true
-    });
-    var timePickersElems = document.querySelectorAll('.timepicker');
-    var timePickersInstances = M.Timepicker.init(timePickersElems, {
-      twelveHour: false,
-      showClearBtn: true
-    });
-    var dropDownElems = document.querySelectorAll('.dropdown-trigger');
-    var instances = M.Dropdown.init(dropDownElems);
-
-    const searchBtn = document.getElementById("searchBtn");
-    const searchInput = document.getElementById("autocomplete-input");
-    const searchInputNav = document.getElementById("autocomplete-input-nav");
-    const searchBtnNav = document.getElementById("searchBtnNav");
-
-    function getKeywordAndSend(searchInput) {
-      window.location = `<?php echo URLROOT; ?>/events/searchEvent?keyword=${searchInput}&page=1`;
-    }
-
-    if (searchBtn) {
-      searchBtn.addEventListener('click', function(event) {
-        const searchInput = document.getElementById('autocomplete-input').value;
-        if (!searchInput || searchInput === "" || searchInput === null || searchInput === " " || searchInput.length < 3) {
-          alert('Invalid keyword or too short.');
-          return false;
-        }
-        getKeywordAndSend(searchInput);
-      });
-    }
-
-    if (searchInput) {
-      searchInput.addEventListener('change', function(event) {
-        const searchInput = event.target.value;
-        if (!searchInput || searchInput === "" || searchInput === null || searchInput === " " || searchInput.length < 3) {
-          alert('Invalid keyword or too short.');
-          return false;
-        }
-        getKeywordAndSend(searchInput);
-      });
-
-    }
-
-    if (searchBtnNav) {
-      searchBtnNav.addEventListener('click', function(event) {
-        const searchInput = document.getElementById("autocomplete-input-nav").value;
-        if (!searchInput || searchInput === "" || searchInput === null || searchInput === " " || searchInput.length < 3) {
-          alert('Invalid keyword or too short.');
-          return false;
-        }
-        getKeywordAndSend(searchInput);
-      });
-    }
-
-    if (searchInputNav) {
-      searchInputNav.addEventListener('change', function(event) {
-        const searchInput = event.target.value;
-        if (!searchInput || searchInput === "" || searchInput === null || searchInput === " " || searchInput.length < 3) {
-          alert('Invalid keyword or too short.');
-          return false;
-        }
-        getKeywordAndSend(searchInput);
-      });
-    }
-  });
-</script>
+<script src="<?php echo URLROOT ?>/js/MaterializeElemsInstances.js"></script>
+<script src="<?php echo URLROOT ?>/js/NavSearch.js"></script>
 </body>
 
 </html>

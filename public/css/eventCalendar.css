@@ -214,7 +214,7 @@ table{
 
     #eventsContainer{
         background-color: #1e88e5;
-        position: fixed;
+        /*position: fixed;*/
         height: 92.4%;
         width: 50%;
         margin-left: 38%;
@@ -250,7 +250,7 @@ table{
 
     #eventsContainer{
         background-color: #1e88e5;
-        position: fixed;
+        /*position: fixed;*/
         height: 92.4%;
         width: 51%;
         margin-left: 38%;
@@ -286,7 +286,7 @@ table{
 
     #eventsContainer{
         background-color: #1e88e5;
-        position: fixed;
+        /*position: fixed;*/
         height: 92.4%;
         width: 50%;
         margin-left: 33.5%;
@@ -317,7 +317,7 @@ table{
     }
     #eventsContainer{
         background-color: #1e88e5;
-        position: fixed;
+        /*position: fixed;*/
         height: 77%;
         width: 31.5%;
         margin-left: 38%;
@@ -348,7 +348,7 @@ table{
     }
     #eventsContainer{
         background-color: #1e88e5;
-        position: fixed;
+        /*position: fixed;*/
         height: auto;
         width: 31.5%;
         margin-left: 38%;
@@ -371,6 +371,13 @@ table{
         height: auto;
     }
 }
+
+
+
+
+
+
+
 
 /* @media(min-width: 1838px) and (max-width: 1845px){
     #eventsSection{

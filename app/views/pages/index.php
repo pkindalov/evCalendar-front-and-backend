@@ -1,26 +1,26 @@
 <?php require_once APPROOT . '/views/inc/header.php' ?>
 <?php if (isset($_SESSION['user_id'])) : ?>
     <div class="row blueBorder">
-        <div class="col s6">
+        <div class="col l6 m6 s6">
             <div id="simpleCalendarContainer"></div>
         </div>
-        <div id="eventsSection" class="col s6"></div>
+        <div id="eventsSection" class="col l12 m12 s12"></div>
         <div id="eventsContainer" class="nonVisible">
             <div class="row">
-                <div class="col s12">
+                <div class="col l12 m12 s12">
                     <div id="mainDateLabel" class="col s6 offset-s3 dateLabel"></div>
-                    <div id="closeWindowBtnCont" class="col s2"></div>
+                    <div id="closeWindowBtnCont" class="col l2 m2 s2"></div>
                 </div>
             </div>
             <div class="row">
-                <div class="col s12">
+                <div class="col l12 m12 s12">
                     <div id="nameOfMonth" class="monthLabel"></div>
                     <div id="yearField" class="yearLabel"></div>
                     <div id="dayName"></div>
                 </div>
             </div>
             <div class="row">
-                <div class="col s12">
+                <div class="col l12 m12 s12">
                     <div id="eventsDashboard" class="center-align">
                         <!-- <p class="flow-text">No events planned for today</p> -->
                         <div id="addEventCont"></div>
@@ -42,31 +42,8 @@
     </script>  -->
 
     <script src="<?php echo URLROOT ?>/js/EventCalendar.js"></script>
-    <script>
-        (async function() {
-            let url = '/evCalendar/events/getUserEventsCurrYear';
-            let userEventsData = await fetch(url);
-            let data = await userEventsData.json(); // read response body and parse as JSON
-            
-            url = '/evCalendar/events/getUserCalendarSettings';
-            let userCalendarSettings = await fetch(url);
-            let calendarSettingsData = await userCalendarSettings.json();
-            // console.log(calendarSettingsData);
-
-            let evCalendar = new eventCalendar({
-                calendarContainer: 'simpleCalendarContainer',
-                usingThemes: calendarSettingsData['usingThemes'],
-                language: calendarSettingsData['language'],
-                calendarEventsData: data,
-                notifications: calendarSettingsData['notifications']
-                // calendarEventsData: dataEvents
-            });
-            // evCalendar.setContainer('simpleCalendarContainer');
-            // evCalendar.setUseOfThemes(false);
-            // evCalendar.setData(dataEvents);
-            evCalendar.createCalendar();
-        })();
-    </script>
+    <script src="<?php echo URLROOT ?>/js/LoadingEventCalendar.js"></script>
+    
 
 <?php else : ?>
 
