@@ -434,271 +434,42 @@
 </div>
 <!--    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>-->
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.js"></script>
+<script src="<?php echo URLROOT ?>/js/drawChartJs.js"></script>
+<script src="<?php echo URLROOT ?>/js/SendMyEventsByMail.js"></script>
+<script src="<?php echo URLROOT ?>/js/MoveEventToDate.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-
         if (document.getElementById('<?php echo $data['today']; ?>')) {
             window.location.hash = "<?php echo $data['today']; ?>";
         }
         const dataObj = <?php echo $data['chartJsData']; ?>;
-        const ctx = document.getElementById('eventsChart').getContext('2d');
-        let myChart = new Chart(ctx, {
+        const options = {
+            ctx: 'eventsChart',
+            labels: dataObj.labels,
+            data: dataObj.values,
             type: 'bar',
-            data: {
-                labels: dataObj.labels,
-                datasets: [{
-                    label: '# of events last few days',
-                    data: dataObj.values,
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true
-                        }
-                    }]
-                }
-            }
+            backgroundColor: [],
+            label: '# of events last few days',
+            borderWidth: 1,
+            beginAtZero: true
+        }
+        drawChartJS(options);
+        let selYearSelect = document.getElementsByName('selectedYear')[0];
+        let selMontSelect = document.getElementsByName('selectedMonth')[0];
+        selYearSelect.addEventListener('change', function(event) {
+            let year = selYearSelect.value;
+            let month = selMontSelect.value;
+            window.location = `/evCalendar/events/listMyEvents?year=${year}&month=${month}&page=1`;
         });
-
-
-
-
-
-
-
-
-
-
-
-        //let myGoogleData = <?php //echo $data['googleData']; 
-                                ?>//;
-        //
-        //
-        //google.charts.load('current', {
-        //    packages: ['corechart', 'bar']
-        //});
-        //google.charts.setOnLoadCallback(drawStacked);
-        //
-        //function drawStacked() {
-        //    var data = google.visualization.arrayToDataTable(myGoogleData);
-        //
-        //    var options = {
-        //        title: 'Count of events per day',
-        //        chartArea: {
-        //            width: '50%'
-        //        },
-        //        isStacked: true,
-        //        hAxis: {
-        //            title: 'Total Count Of Events',
-        //            minValue: 0,
-        //        },
-        //        vAxis: {
-        //            title: 'Dates'
-        //        }
-        //    };
-        //    var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
-        //    chart.draw(data, options);
-        //}
+        selMontSelect.addEventListener('change', function(event) {
+            let year = selYearSelect.value;
+            let month = selMontSelect.value;
+            window.location = `/evCalendar/events/listMyEvents?year=${year}&month=${month}&page=1`;
+        });
+        const evAddBtn = document.getElementById("evAddBtn");
+        evAddBtn.addEventListener('click', function() {
+            window.location = '<?php echo URLROOT; ?>/events/addNewEvent';
+        });
     });
-
-    let selYearSelect = document.getElementsByName('selectedYear')[0];
-    let selMontSelect = document.getElementsByName('selectedMonth')[0];
-    selYearSelect.addEventListener('change', function(event) {
-        let year = selYearSelect.value;
-        let month = selMontSelect.value;
-        window.location = `/evCalendar/events/listMyEvents?year=${year}&month=${month}&page=1`;
-    });
-    selMontSelect.addEventListener('change', function(event) {
-        let year = selYearSelect.value;
-        let month = selMontSelect.value;
-        window.location = `/evCalendar/events/listMyEvents?year=${year}&month=${month}&page=1`;
-    });
-
-    const evAddBtn = document.getElementById("evAddBtn");
-    evAddBtn.addEventListener('click', function() {
-        window.location = '<?php echo URLROOT; ?>/events/addNewEvent';
-    });
-
-    let mailFormShown = false;
-
-    function showCheckBoxes(count, date) {
-        for (let i = 0; i < count; i++) {
-            let checkBoxId = `checkedDay${date}Num${i}`;
-            let checkBox = document.getElementById(checkBoxId);
-            checkBox.style.display = 'block';
-        }
-    }
-
-    function hideCheckBoxes(count, date) {
-        for (let i = 0; i < count; i++) {
-            let checkBoxId = `checkedDay${date}Num${i}`;
-            let checkBox = document.getElementById(checkBoxId);
-            checkBox.style.display = 'none';
-        }
-    }
-
-    function showMailForm(date) {
-        let mainContainer = document.getElementById(date);
-        let mailField = document.getElementById(`input${date}`);
-        let sendMailBtn = document.getElementById(`sendMailBtn${date}`);
-        let validateSpan = document.getElementById(`invalidMailSpan${date}`);
-        const importantDivStarPos = 3;
-        const checkBoxNum = mainContainer.children.length - importantDivStarPos;
-        // console.log(checkBoxNum);
-        // console.log(mainContainer.children);
-        // console.log(mainContainer.children.length);
-
-        mailFormShown = !mailFormShown;
-        if (mailFormShown) {
-            mailField.style.display = 'block';
-            sendMailBtn.style.display = 'block';
-            validateSpan.style.display = 'block';
-            //enable visility of checkboxes
-            showCheckBoxes(checkBoxNum, date);
-
-
-        } else {
-            mailField.style.display = 'none';
-            sendMailBtn.style.display = 'none';
-            validateSpan.style.display = 'none';
-            hideCheckBoxes(checkBoxNum, date);
-        }
-    }
-
-    function sendMailTo(date) {
-        let mainContainer = document.getElementById(date);
-        let mail = document.getElementById(`input${date}`).value;
-        let invalidMsgSpan = document.getElementById(`invalidMailSpan${date}`);
-        let progressBar = document.getElementById(`progress${date}`);
-        let dayEventsToSend = document.getElementById(date).innerHTML;
-
-
-        let divsArr = [{
-            'date': date,
-            'textContent': []
-        }];
-
-        //iterate divs and search checked ones. Begin from index 3 because from there is the div with checkbox;
-        for (let i = 3; i < mainContainer.children.length; i++) {
-            let currentDiv = mainContainer.children[i];
-            let divContent = currentDiv.children[0].children[0].children[1].children[0];
-            let checkbox = currentDiv.children[0].children[0].children[1].children[0].children[0].children[0].children[0].checked;
-            // console.log(divContent);
-            //these are the <p> content of the main div. - date, begin, finish etc...
-            if (checkbox) {
-                divsArr[0].textContent.push(divContent.children[1].textContent);
-                divsArr[0].textContent.push(divContent.children[2].textContent);
-                divsArr[0].textContent.push(divContent.children[3].textContent);
-                divsArr[0].textContent.push(divContent.children[4].textContent);
-            }
-        }
-
-        if (divsArr[0].textContent.length < 1) {
-            invalidMsgSpan.innerText = 'You must choose at least one event';
-            return;
-        }
-
-        // console.log(divsArr);
-
-        //still developping
-        // return;
-
-
-        const regex = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
-        const result = regex.test(String(mail).toLowerCase());
-        if (!result) {
-            invalidMsgSpan.innerText = 'Invalid mail';
-            return false;
-        }
-        invalidMsgSpan.style.display = 'none';
-        progressBar.style.display = 'block';
-
-
-        let formData = new FormData();
-        formData.append('receiver', mail);
-        formData.append('dayEvents', JSON.stringify(divsArr));
-        // formData.append('dayEvents', dayEventsToSend);
-
-
-        let request = new XMLHttpRequest();
-        request.open('POST', "<?php echo URLROOT; ?>/events/sendToMail");
-        request.send(formData);
-        request.onreadystatechange = function() {
-            if (request.readyState == XMLHttpRequest.DONE) {
-                const serverResp = JSON.parse(request.responseText);
-                if (serverResp.success) {
-                    invalidMsgSpan.style.color = 'green';
-                    invalidMsgSpan.innerText = 'Mail sent successfull';
-                    invalidMsgSpan.style.display = 'block';
-                    progressBar.style.display = 'none';
-
-                    return;
-                } else {
-                    invalidMsgSpan.display = 'block';
-                    invalidMsgSpan.innerText = 'There is some problem sending mail';
-                    return;
-                }
-            }
-        }
-    }
-
-    function setHash(newHash) {
-        location.hash = 'Idontexists';
-        location.hash = newHash;
-    }
-
-    let isMoveEventFormShown = false;
-
-    //move events functionality
-    function showHideMoveEventForm(eventId) {
-        setHash(`btnMoveEv${eventId}`);
-        // window.location.hash = `btnMoveEv${eventId}`;
-        let currentMoveEventFormDiv = document.getElementById(`moveEventForm${eventId}`);
-        isMoveEventFormShown = !isMoveEventFormShown;
-        if (isMoveEventFormShown) {
-            currentMoveEventFormDiv.style.display = 'block';
-            return;
-        }
-        currentMoveEventFormDiv.style.display = 'none';
-
-    }
-
-    function moveEvent(eventId) {
-        let dateToMove = document.getElementById(`moveToNewDate${eventId}`).value;
-        let warningSpan = document.getElementById(`moveToNewDateSpanWarn${eventId}`);
-        // window.location.hash = null;
-        if (!eventId) {
-            setHash(`btnMoveEv${eventId}`);
-            warningSpan.innerText = 'Problem with event id';
-            return;
-        }
-        if (!isMoveEventFormShown) return;
-        if (!dateToMove) {
-            setHash(`btnMoveEv${eventId}`);
-            warningSpan.innerText = 'Wrong or empty date';
-            return;
-        }
-        warningSpan.innerText = '';
-        window.location = `/evCalendar/events/moveToNewDate?event=${eventId}&newDate=${dateToMove}`;
-    }
 </script>
 <?php require_once APPROOT . '/views/inc/footer.php' ?>
