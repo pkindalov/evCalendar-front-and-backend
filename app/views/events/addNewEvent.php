@@ -18,7 +18,7 @@
                 <label for="hoursFinish">Event Finish Time</label>
                 <input type="text" name="hoursFinish" id="hoursFinish" class="timepicker" />
             </p>
-        
+
             <p>
                 <!-- <input type="submit" class="waves-effect waves-light btn" value="Save Changes" />
                 <input type="reset" class="waves-effect waves-light btn" value="Clear" /> -->
