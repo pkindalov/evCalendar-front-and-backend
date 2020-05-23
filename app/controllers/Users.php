@@ -227,7 +227,70 @@ class Users extends Controller
         }
     }
 
+    public function googleLogin()
+    {
+        if (!$_SERVER['REQUEST_METHOD'] === 'POST') {
+            redirect('/');
+        }
+
+        if (!isset($_POST)) {
+            redirect('/');
+        }
+        $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+        $userEmail = htmlspecialchars($_POST['email']);
+
+        if ($this->userModel->findUserByEmail($userEmail)) {
+            $loggedUser = $this->userModel->fbLogin($userEmail);
+            if (isset($loggedUser)) {
+                $this->createUserSessionWithoutRedirect($loggedUser);
+                echo json_encode(['success' => true]);
+            }
+        } else {
+            echo json_encode(['success' => false]);
+        }
+    }
+
     public function fbLoginRegUser()
+    {
+        if (!$_SERVER['REQUEST_METHOD'] === 'POST') {
+            redirect('/');
+        }
+
+        if (!isset($_POST)) {
+            redirect('/');
+        }
+
+        $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+        $genPass = $this->genRndPassword();
+        $data = [
+            'name' => htmlspecialchars($_POST['name']),
+            'email' =>  htmlspecialchars($_POST['email']),
+            'password' => password_hash($genPass, PASSWORD_DEFAULT)
+        ];
+
+        $subject = 'Registration in evCalendar';
+        $body = 'Your password for the site is ' . $genPass . '.' . '<br />You can change it when you want';
+
+
+        // if($this->sendMail($subject, $body,$data['email'])){
+        //     flash('register_success', 'You are registered successfully. You can login in your profile now');
+        //     redirect('users/login');
+        // }
+
+        if ($this->userModel->register($data)) {
+            flash('register_success', 'You are registered successfully. You can login in your profile now');
+            $subject = 'Registration in evCalendar';
+            $body = 'Your password for the site is ' . $genPass . '.' . '<br />You can change it when you want';
+            if ($this->sendMail($subject, $body, $data['email'])) {
+                flash('register_success', 'You are registered successfully. You can login in your profile now');
+                echo json_encode(['success' => true]);
+            } else {
+                echo json_encode(['success' => false]);
+            }
+        }
+    }
+
+    public function googleRegUser()
     {
         if (!$_SERVER['REQUEST_METHOD'] === 'POST') {
             redirect('/');

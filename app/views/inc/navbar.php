@@ -209,7 +209,11 @@
               <a>
                 <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
                 </fb:login-button>
-              </a></li>
+              </a>
+            </li>
+            <li>
+              <div class="g-signin2" data-onsuccess="onSignIn" data-width="150"></div>
+            </li>
             <li class="divider" tabindex="-1"></li>
             <li><a href="<?php echo URLROOT; ?>/users/register">
                 <span class="material-icons">
@@ -418,6 +422,9 @@
           </fb:login-button>
         </a>
       </div>
+    </li>
+    <li>
+      <div class="g-signin2 googleBtn" data-onsuccess="onSignIn"></div>
     </li>
   <?php endif ?>
 </ul>
