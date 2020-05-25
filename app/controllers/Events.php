@@ -216,6 +216,7 @@ class Events extends Controller
             'nextPage' => $page + 1,
             'prevPage' => $page - 1,
             'sortedData' => $sortedByDate,
+            'sortedDataJSON' => json_encode($sortedByDate),
             'chartJsData' => json_encode($chartJsData)
 //            'googleData' => json_encode($googleChartData)
         ];
@@ -397,6 +398,56 @@ class Events extends Controller
             echo json_encode(['success' => false]);
             return;
         }
+    }
+
+    public function genWordFileEvents(){
+        if(!isset($_SESSION['user_id'])){
+            redirect('/');
+            return;
+        }
+        $tempData = html_entity_decode($_POST['dayEvents']);
+        $cleanData = json_decode($tempData);
+        $phpWord =  new \PhpOffice\PhpWord\PhpWord();
+        $section = $phpWord->addSection();
+        $date = $cleanData[0]->date;
+        $section->addText(
+            'My Events for ' . $date,
+            array('name' => 'Verdana', 'size' => 30)
+        );
+
+        $section->addText(
+            ' '
+        );
+
+        foreach ($cleanData as $key => $value){
+            $section->addText(
+                $value->text,
+                array('name' => 'Verdana', 'size' => 12)
+            );
+            $section->addText(
+                'Begin: ' . $value->begin,
+                array('name' => 'Verdana', 'size' => 12)
+            );
+            $section->addText(
+                'Finish: ' . $value->finish,
+                array('name' => 'Verdana', 'size' => 12)
+            );
+            $section->addText(
+                '---------------------------------------------------------------------------------------------------------------------------------'
+            );
+        }
+
+        $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
+
+        header('Content-Type: application/vnd.ms-word');
+        header('Content-Disposition: attachment; filename="hello_world.docx"');
+        $objWriter->save("php://output");
+
+//        $temp_file = tempnam(sys_get_temp_dir(), 'PHPWord');
+//        $objWriter->save($temp_file);
+//        header("Content-Disposition: attachment; filename='myFile.docx'");
+//        readfile($temp_file); // or echo file_get_contents($temp_file);
+//        unlink($temp_file);  //
     }
 
     public function sendEventsOnThisDay()

@@ -119,6 +119,13 @@
             Mail
         </button>
 
+        <button onclick="genWordFileAndDownload('<?php echo $key; ?>')" class="btn">
+            <span class="material-icons alignVertically">
+                description
+            </span>
+            Word
+        </button>
+
         <div>
             <input class="col-md-6 mailField" type="email" id="input<?php echo $key; ?>" /><br />
             <span id="invalidMailSpan<?php echo $key; ?>" class="mailField validateMsg"></span>
@@ -471,5 +478,43 @@
             window.location = '<?php echo URLROOT; ?>/events/addNewEvent';
         });
     });
+</script>
+<script>
+    const data = <?php echo $data['sortedDataJSON']; ?>;
+    function genWordFileAndDownload(date) {
+        let formData = new FormData();
+        formData.append('dayEvents', JSON.stringify(data[date]));
+        let request = new XMLHttpRequest();
+        request.open('POST', URLROOT + "/events/genWordFileEvents");
+        request.send(formData);
+        request.responseType = 'blob';
+        request.onreadystatechange = function() {
+            if (request.readyState == XMLHttpRequest.DONE) {
+                let download = URL.createObjectURL(request.response);
+                let a = document.createElement("a");
+                a.href = download;
+                a.download = "file-" + new Date().getTime() + '.doc';
+                document.body.appendChild(a);
+                a.click()
+                // var reader = new FileReader();
+                // let link = document.createElement("a");
+                // link.setAttribute('href', `data:application/octet-stream;charset=utf-16le;base64, ${request.response}`);
+                // link.innerText = 'test.doc';
+                // link.click();
+                // console.log(request);
+                // reader.readAsDataURL(request.response);
+                // reader.onloadend = function() {
+                //     var base64data = reader.result;
+                //     window.onMainImageDrop(base64data);
+                // }
+                // const serverResp = JSON.parse(request.responseText);
+                // console.log(request.responseText);
+                // if (serverResp.success) {
+                // } else {
+                //
+                // }
+            }
+        }
+    }
 </script>
 <?php require_once APPROOT . '/views/inc/footer.php' ?>

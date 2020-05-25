@@ -348,8 +348,8 @@ table{
     }
     #eventsContainer{
         background-color: #1e88e5;
-        /*position: fixed;*/
-        height: auto;
+        position: absolute;
+        height: 640px;
         width: 31.5%;
         margin-left: 38%;
         /* visibility: hidden; */
