@@ -495,24 +495,7 @@
                 a.href = download;
                 a.download = "file-" + new Date().getTime() + '.doc';
                 document.body.appendChild(a);
-                a.click()
-                // var reader = new FileReader();
-                // let link = document.createElement("a");
-                // link.setAttribute('href', `data:application/octet-stream;charset=utf-16le;base64, ${request.response}`);
-                // link.innerText = 'test.doc';
-                // link.click();
-                // console.log(request);
-                // reader.readAsDataURL(request.response);
-                // reader.onloadend = function() {
-                //     var base64data = reader.result;
-                //     window.onMainImageDrop(base64data);
-                // }
-                // const serverResp = JSON.parse(request.responseText);
-                // console.log(request.responseText);
-                // if (serverResp.success) {
-                // } else {
-                //
-                // }
+                a.click();
             }
         }
     }

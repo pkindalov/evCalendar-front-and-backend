@@ -26,7 +26,7 @@ function hideCheckboxesInCont(checkBoxesCount) {
 	}
 }
 
-showHideMailFormBtn.addEventListener('click', function() {
+function showHideMailForm(){
 	showMailForm = !showMailForm;
 	if (showMailForm) {
 		formContainer.style.display = 'block';
@@ -35,8 +35,23 @@ showHideMailFormBtn.addEventListener('click', function() {
 	}
 	formContainer.style.display = 'none';
 	progress.style.display = 'none';
+	document.getElementById('sendToGenWord').style.display = 'none';
 	hideCheckboxesInCont(mainContainer.children.length);
-});
+}
+
+showHideMailFormBtn.addEventListener('click', showHideMailForm);
+
+// showHideMailFormBtn.addEventListener('click', function() {
+// 	showMailForm = !showMailForm;
+// 	if (showMailForm) {
+// 		formContainer.style.display = 'block';
+// 		showCheckboxesInCont(mainContainer.children.length);
+// 		return;
+// 	}
+// 	formContainer.style.display = 'none';
+// 	progress.style.display = 'none';
+// 	hideCheckboxesInCont(mainContainer.children.length);
+// });
 
 sendMailBtn.addEventListener('click', function() {
 	let divsArr = [

@@ -204,7 +204,7 @@ class Events extends Controller
         $events = $this->eventsModel->getMyEventsByYearAndMonth($year, $month, $page, $pageSize);
         $sortedByDate = $this->extractEventsByDate($events);
         $chartJsData = convDataChartJS($sortedByDate);
-//        $googleChartData = $this->convertForGoogleChart($sortedByDate);
+        //        $googleChartData = $this->convertForGoogleChart($sortedByDate);
         $data = [
             // 'events' => $events,
             'page' => $page,
@@ -218,7 +218,7 @@ class Events extends Controller
             'sortedData' => $sortedByDate,
             'sortedDataJSON' => json_encode($sortedByDate),
             'chartJsData' => json_encode($chartJsData)
-//            'googleData' => json_encode($googleChartData)
+            //            'googleData' => json_encode($googleChartData)
         ];
 
 
@@ -400,8 +400,9 @@ class Events extends Controller
         }
     }
 
-    public function genWordFileEvents(){
-        if(!isset($_SESSION['user_id'])){
+    public function genWordFileEvents()
+    {
+        if (!isset($_SESSION['user_id'])) {
             redirect('/');
             return;
         }
@@ -410,16 +411,22 @@ class Events extends Controller
         $phpWord =  new \PhpOffice\PhpWord\PhpWord();
         $section = $phpWord->addSection();
         $date = $cleanData[0]->date;
+        $fontStyle = new \PhpOffice\PhpWord\Style\Font();
+        $fontStyle->setBold(true);
+        $fontStyle->setSize(30);
+        $fontStyle->setBgColor('42A5F5');
         $section->addText(
             'My Events for ' . $date,
             array('name' => 'Verdana', 'size' => 30)
-        );
+        )->setFontStyle($fontStyle);
+
+        
 
         $section->addText(
             ' '
         );
 
-        foreach ($cleanData as $key => $value){
+        foreach ($cleanData as $key => $value) {
             $section->addText(
                 $value->text,
                 array('name' => 'Verdana', 'size' => 12)
@@ -443,11 +450,49 @@ class Events extends Controller
         header('Content-Disposition: attachment; filename="hello_world.docx"');
         $objWriter->save("php://output");
 
-//        $temp_file = tempnam(sys_get_temp_dir(), 'PHPWord');
-//        $objWriter->save($temp_file);
-//        header("Content-Disposition: attachment; filename='myFile.docx'");
-//        readfile($temp_file); // or echo file_get_contents($temp_file);
-//        unlink($temp_file);  //
+        //        $temp_file = tempnam(sys_get_temp_dir(), 'PHPWord');
+        //        $objWriter->save($temp_file);
+        //        header("Content-Disposition: attachment; filename='myFile.docx'");
+        //        readfile($temp_file); // or echo file_get_contents($temp_file);
+        //        unlink($temp_file);  //
+    }
+
+    public function genSelEventsHappToday(){
+        if (!isset($_SESSION['user_id'])) {
+            redirect('/');
+            return;
+        }
+        $tempData = html_entity_decode($_POST['dayEvents']);
+        $cleanData = json_decode($tempData);
+
+        $phpWord =  new \PhpOffice\PhpWord\PhpWord();
+        $section = $phpWord->addSection();
+        $date = date("d-m-Y");
+        $fontStyle = new \PhpOffice\PhpWord\Style\Font();
+        $fontStyle->setBold(true);
+        $fontStyle->setSize(30);
+        $fontStyle->setBgColor('42A5F5');
+        $section->addText(
+            'My Events for ' . $date,
+            array('name' => 'Verdana', 'size' => 30)
+        )->setFontStyle($fontStyle);
+
+        $section->addText(
+            ' '
+        );
+
+        foreach ($cleanData as $key => $value) {
+            $section->addText(
+                $value->event,
+                array('name' => 'Verdana', 'size' => 12)
+            );
+        }
+
+        $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
+
+        header('Content-Type: application/vnd.ms-word');
+        header('Content-Disposition: attachment; filename="hello_world.docx"');
+        $objWriter->save("php://output");
     }
 
     public function sendEventsOnThisDay()
