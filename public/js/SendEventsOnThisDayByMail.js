@@ -26,12 +26,55 @@ function hideCheckboxesInCont(checkBoxesCount) {
 	}
 }
 
+/**
+ * 
+ * @param {*} checked expected only true or false 
+ */
+function checkAllDivs(checked){
+	for (let i = 0; i < mainContainer.children.length - 1; i++) {
+		// console.log(mainContainer.children[i]);
+		if (mainContainer.children[i].children[0].nodeName == 'DIV') {
+			let checkBox =
+				mainContainer.children[i].children[0].children[1].children[0].children[0].children[0].children[0];
+				checkBox.checked =  checked;
+			// if (checkBox.checked) {
+			// 	let elObj = {};
+			// 	const textEl = mainContainer.children[i].children[0].children[1].children[0].children[1];
+			// 	elObj.event = textEl.innerHTML;
+			// 	divsArr[0].textContent.push(elObj);
+			// }
+		}
+		// console.log(checkBox);
+	}
+}
+
 function showHideMailForm(){
 	showMailForm = !showMailForm;
 	if (showMailForm) {
 		formContainer.style.display = 'block';
 		showCheckboxesInCont(mainContainer.children.length);
+		let selectAllDivsBtn = document.createElement('a');
+		selectAllDivsBtn.setAttribute('id', 'selectAllDivs');
+		selectAllDivsBtn.setAttribute('href', '#');
+		selectAllDivsBtn.setAttribute('class', 'leftMargin');
+		selectAllDivsBtn.innerText = 'Select all';
+		selectAllDivsBtn.onclick = () => checkAllDivs(true);
+
+		let deselectAllDivsBtn = document.createElement('a');
+		deselectAllDivsBtn.setAttribute('id', 'deselectAllDivs');
+		deselectAllDivsBtn.setAttribute('href', '#');
+		deselectAllDivsBtn.setAttribute('class', 'leftMargin');
+		deselectAllDivsBtn.innerText = 'Unselect all';
+		deselectAllDivsBtn.onclick = () => checkAllDivs(false);
+		document.getElementById('selectDeselectAllBtnCont').appendChild(selectAllDivsBtn);
+		document.getElementById('selectDeselectAllBtnCont').appendChild(deselectAllDivsBtn);
 		return;
+	}
+	if(document.getElementById('selectAllDivs')){
+		document.getElementById('selectAllDivs').remove();
+	}
+	if(document.getElementById('deselectAllDivs')){
+		document.getElementById('deselectAllDivs').remove();
 	}
 	formContainer.style.display = 'none';
 	progress.style.display = 'none';

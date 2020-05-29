@@ -48,6 +48,12 @@ function addPrevNextBtns() {
 
 	showMailForm = false;
 	formContainer.style.display = 'none';
+	if (document.getElementById('selectAllDivs')) {
+		document.getElementById('selectAllDivs').remove();
+	}
+	if (document.getElementById('deselectAllDivs')) {
+		document.getElementById('deselectAllDivs').remove();
+	}
 	// if (that.offset + that.pageSize <= that.data.length) {
 	// }
 

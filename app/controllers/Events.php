@@ -420,7 +420,7 @@ class Events extends Controller
             array('name' => 'Verdana', 'size' => 30)
         )->setFontStyle($fontStyle);
 
-        
+
 
         $section->addText(
             ' '
@@ -457,7 +457,58 @@ class Events extends Controller
         //        unlink($temp_file);  //
     }
 
-    public function genSelEventsHappToday(){
+    public function genWordFileAllEvents()
+    {
+        if (!isset($_SESSION['user_id'])) {
+            redirect('/');
+            return;
+        }
+        $tempData = html_entity_decode($_POST['dayEvents']);
+        $cleanData = json_decode($tempData);
+        $phpWord =  new \PhpOffice\PhpWord\PhpWord();
+        $section = $phpWord->addSection();
+        $date = date("d-m-Y");
+        $fontStyle = new \PhpOffice\PhpWord\Style\Font();
+        $fontStyle->setBold(true);
+        $fontStyle->setSize(30);
+        $fontStyle->setBgColor('42A5F5');
+        $section->addText(
+            'Events on ' . $date,
+            array('name' => 'Verdana', 'size' => 30)
+        )->setFontStyle($fontStyle);
+
+        $section->addText(
+            ' '
+        );
+
+
+        foreach ($cleanData as $key => $value) {
+            $links = getLinkAddressFromHtmlText($value->html);
+            // $section->addLink('http://www.google.com', 'Best search engine', array('color'=>'0000FF'));
+            $section->addLine();
+            $section->addText(
+                $value->year . ' ' .$value->text,
+                array('name' => 'Verdana', 'size' => 12)
+            );
+
+            appendLinksToSection($links, $section);
+
+            $section->addLine();
+            $section->addText('', [], ['borderBottomSize' => 6]);
+        
+            // \PhpOffice\PhpWord\Shared\Html::addHtml($section, $value->html, false, true);
+        }
+
+        // return;
+        $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
+
+        header('Content-Type: application/vnd.ms-word');
+        header('Content-Disposition: attachment; filename="hello_world.docx"');
+        $objWriter->save("php://output");
+    }
+
+    public function genSelEventsHappToday()
+    {
         if (!isset($_SESSION['user_id'])) {
             redirect('/');
             return;

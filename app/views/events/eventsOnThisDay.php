@@ -33,9 +33,16 @@
         <span class="material-icons alignVertically">
           description
         </span>
-            Generate Word File
+            Select And Make Word File 
+        </a>
+        <a href="#" id="sendAllToGenWord" class="btn mailField">
+        <span class="material-icons alignVertically">
+          description
+        </span>
+            Print All On A Word File 
         </a>
       <span id="invalidMailSpan" class="mailField validateMsg"></span>
+      <div id="selectDeselectAllBtnCont"></div>
     </div>
     <div id="progress" class="progress mailField">
       <div class="indeterminate"></div>
@@ -96,9 +103,11 @@
             // console.log(document.getElementById('sendToGenWord'));
             if(showMailForm){
                 document.getElementById('sendToGenWord').style.display = 'inline-block';
+                document.getElementById('sendAllToGenWord').style.display = 'inline-block';
                 return;
             }
             document.getElementById('sendToGenWord').style.display = 'none';
+            document.getElementById('sendAllToGenWord').style.display = 'none';
         }
         function  iterateSelDivs() {
             for (let i = 0; i < mainContainer.children.length - 1; i++) {
@@ -111,10 +120,8 @@
                         const textEl = mainContainer.children[i].children[0].children[1].children[0].children[1];
                         elObj.event = textEl.innerHTML;
                         that.dataToGenWord.push(elObj);
-                        // divsArr[0].textContent.push(elObj);
                     }
                 }
-                // console.log(checkBox);
             }
 
         }
@@ -144,6 +151,26 @@
                 }
             };
         });
+
+       let sendPrintAllEventsOnWordFile = document.getElementById('sendAllToGenWord');
+       sendPrintAllEventsOnWordFile.addEventListener('click', function(){
+        let formData = new FormData();
+            formData.append('dayEvents', JSON.stringify(that.data));
+            let request = new XMLHttpRequest();
+            request.open('POST', URLROOT + '/events/genWordFileAllEvents');
+            request.send(formData);
+            request.responseType = 'blob';
+            request.onreadystatechange = function() {
+                if (request.readyState == XMLHttpRequest.DONE) {
+                    let download = URL.createObjectURL(request.response);
+                    let a = document.createElement("a");
+                    a.href = download;
+                    a.download = "file-" + new Date().getTime() + '.doc';
+                    document.body.appendChild(a);
+                    a.click();
+                }
+            };
+       });
 
     </script>
 
