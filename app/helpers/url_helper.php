@@ -49,3 +49,43 @@ function sendMail($mail, $subject, $body, $receiver){
         echo "Message could not be sent. Mailer Error: {$mail->getError()}";
     }
 }
+
+function getLinkAddressFromHtmlText($htmlStr){
+    $links = [];
+    /* $re = '/<a\s+href=.*?"\s*(https*:.*?)".*?>/m'; */
+    $re = '/https*:\/*[a-zA-Z0-9_-]*\.*[a-zA-Z0-9_-]*\/*[a-zA-Z0-9_-]*\/*[a-zA-Z0-9_-]*\\\\*/m';
+    $titleRe = '/title=\\\\*"\w+\\\\*"* *\w* *\\\\* *\w* *\w*\\\\*"*/m';
+    preg_match_all($re, $htmlStr, $matches, PREG_SET_ORDER, 0);
+    preg_match_all($titleRe, $htmlStr, $titles, PREG_SET_ORDER, 0);
+
+    foreach($matches as $key => $value){
+        $links[$key]['url'] = $matches[$key][0];
+    }
+
+    // print_r($titles);
+    foreach($titles as $key => $value){
+        $links[$key]['title'] = explode("title=", $titles[$key][0])[1]; 
+    }
+    
+  
+   return $links;
+    // $links = [];
+    // $index = 0;
+    // $end = -1;
+    // $start = -1;
+    // $search = '<a href="';
+    // $searchCount = strlen($search);
+    
+    // //<a href="https://wikipedia.org/wiki/2018_Maryland_flood"
+    // while($index > -1){
+    //     $index = strpos($htmlStr, $search, $index + $searchCount);
+    //     $start = $index + $searchCount;
+    //     $end = (strpos($htmlStr, '"', $start));
+    //     $link = substr($htmlStr, $start, $end - $start);
+    //     if($link !== 'href='){
+    //         $links[] = $link;
+    //     }
+    // }
+    
+    // print_r($matches);
+}

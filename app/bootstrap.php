@@ -9,6 +9,7 @@ require_once 'helpers/data_helper.php';
 require_once 'helpers/dates_helper.php';
 require_once 'helpers/google_charts_helper.php';
 require_once 'helpers/query_helpers.php';
+require_once 'helpers/phpWord_helper.php';
 
 require_once '../vendor/autoload.php';
 //require_once 'vendor/autoload.php';
