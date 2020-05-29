@@ -484,8 +484,9 @@ class Events extends Controller
 
         foreach ($cleanData as $key => $value) {
             $links = getLinkAddressFromHtmlText($value->html);
+
             // $section->addLink('http://www.google.com', 'Best search engine', array('color'=>'0000FF'));
-            $section->addLine();
+//            $section->addLine();
             $section->addText(
                 $value->year . ' ' .$value->text,
                 array('name' => 'Verdana', 'size' => 12)
@@ -493,8 +494,10 @@ class Events extends Controller
 
             appendLinksToSection($links, $section);
 
-            $section->addLine();
+//            $section->addLine();
+            $section->addTextBreak();
             $section->addText('', [], ['borderBottomSize' => 6]);
+            $section->addTextBreak();
         
             // \PhpOffice\PhpWord\Shared\Html::addHtml($section, $value->html, false, true);
         }
