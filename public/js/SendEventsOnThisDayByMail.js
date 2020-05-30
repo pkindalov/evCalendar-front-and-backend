@@ -9,7 +9,7 @@ let showMailForm = false;
 
 function showCheckboxesInCont(checkBoxesCount) {
 	// console.log(mainContainer.children.length);
-	for (let i = 0; i < checkBoxesCount - 1; i++) {
+	for (let i = 0; i < checkBoxesCount; i++) {
 		if (mainContainer.children[i].children[0].nodeName == 'DIV') {
 			let checkBoxDiv = mainContainer.children[i].children[0].children[1].children[0].children[0];
 			checkBoxDiv.style.display = 'block';
@@ -18,7 +18,7 @@ function showCheckboxesInCont(checkBoxesCount) {
 }
 
 function hideCheckboxesInCont(checkBoxesCount) {
-	for (let i = 0; i < checkBoxesCount - 1; i++) {
+	for (let i = 0; i < checkBoxesCount; i++) {
 		if (mainContainer.children[i].children[0].nodeName == 'DIV') {
 			let checkBoxDiv = mainContainer.children[i].children[0].children[1].children[0].children[0];
 			checkBoxDiv.style.display = 'none';
@@ -31,7 +31,7 @@ function hideCheckboxesInCont(checkBoxesCount) {
  * @param {*} checked expected only true or false 
  */
 function checkAllDivs(checked){
-	for (let i = 0; i < mainContainer.children.length - 1; i++) {
+	for (let i = 0; i < mainContainer.children.length; i++) {
 		// console.log(mainContainer.children[i]);
 		if (mainContainer.children[i].children[0].nodeName == 'DIV') {
 			let checkBox =
@@ -103,7 +103,7 @@ sendMailBtn.addEventListener('click', function() {
 		}
 	];
 
-	for (let i = 0; i < mainContainer.children.length - 1; i++) {
+	for (let i = 0; i < mainContainer.children.length; i++) {
 		// console.log(mainContainer.children[i]);
 		if (mainContainer.children[i].children[0].nodeName == 'DIV') {
 			const checkBox =

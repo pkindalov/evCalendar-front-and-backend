@@ -48,7 +48,15 @@
       <div class="indeterminate"></div>
     </div>
   </div>
+
+    <div class="input-field col s12">
+        <input placeholder="Placeholder" id="searchByKeyword" type="text" class="validate">
+<!--        <label for="keyword">Keyword</label>-->
+    </div>
+
+
 </div>
+
 
 <div class="row">
   <div class="col l12 s12">
@@ -110,7 +118,7 @@
             document.getElementById('sendAllToGenWord').style.display = 'none';
         }
         function  iterateSelDivs() {
-            for (let i = 0; i < mainContainer.children.length - 1; i++) {
+            for (let i = 0; i < mainContainer.children.length; i++) {
                 // console.log(mainContainer.children[i]);
                 if (mainContainer.children[i].children[0].nodeName == 'DIV') {
                     const checkBox =
@@ -172,6 +180,55 @@
             };
        });
 
+    </script>
+
+    <script>
+        let searchByKeywordInput = document.getElementById('searchByKeyword');
+        let result;
+        let cardDiv;
+
+        searchByKeywordInput.addEventListener('keyup', function () {
+            result = that.data.filter(rec => rec.html.toLowerCase().includes(this.value.toLowerCase()));
+            mainContainer.innerHTML = '';
+            if(result.length === 0){
+                 cardDiv = `<div class="col l12 m7">
+                        <div class="card horizontal">
+                          <div class="card-image"></div>
+                          <div class="card-stacked">
+                            <div class="card-content">
+                              <p>Nothing Found</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>`;
+                mainContainer.innerHTML += cardDiv;
+                return;
+            };
+
+            result.forEach(rec => {
+                 cardDiv = `<div id="event-${rec.id}" class="col l12 m7">
+                        <div class="card horizontal">
+                          <div class="card-image"></div>
+                          <div class="card-stacked">
+                            <div class="card-content">
+                            <div class="mailField">
+                                <label>
+                                  <input id="checkboxEvent${rec.id}" type="checkbox" />
+                                    <span>Choose to send</span>
+                                </label>
+                              </div>
+                              <p>${rec.html}</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>`;
+
+                mainContainer.innerHTML += cardDiv;
+            })
+           if(this.value.length === 0){
+               addContent(that.data.slice(0, 10));
+           }
+        });
     </script>
 
 <?php require APPROOT . '/views/inc/footer.php'; ?>
