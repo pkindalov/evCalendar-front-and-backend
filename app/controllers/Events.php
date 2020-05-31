@@ -264,22 +264,6 @@ class Events extends Controller
         return $sortedData;
     }
 
-    private function convertForGoogleChart($data)
-    {
-        $googleData = [
-            ['Date', 'Events Count']
-        ];
-
-        foreach ($data as $key => $value) {
-            $row = [$key, count($value)];
-            $googleData[] = $row;
-        }
-        if (count($data) == 0) {
-            $googleData[] = [0, 0];
-        }
-        return $googleData;
-    }
-
     public function searchEvent($query)
     {
         header('Content-Type: text/html; charset=utf-8');
@@ -318,7 +302,6 @@ class Events extends Controller
 
         $this->view('events/listSearchResults', $data);
     }
-
 
     public function loadEventEdit($eventId)
     {
@@ -408,7 +391,7 @@ class Events extends Controller
         }
         $tempData = html_entity_decode($_POST['dayEvents']);
         $cleanData = json_decode($tempData);
-        $phpWord =  new \PhpOffice\PhpWord\PhpWord();
+        $phpWord = new \PhpOffice\PhpWord\PhpWord();
         $section = $phpWord->addSection();
         $date = $cleanData[0]->date;
         $fontStyle = new \PhpOffice\PhpWord\Style\Font();
@@ -419,7 +402,6 @@ class Events extends Controller
             'My Events for ' . $date,
             array('name' => 'Verdana', 'size' => 30)
         )->setFontStyle($fontStyle);
-
 
 
         $section->addText(
@@ -465,7 +447,7 @@ class Events extends Controller
         }
         $tempData = html_entity_decode($_POST['dayEvents']);
         $cleanData = json_decode($tempData);
-        $phpWord =  new \PhpOffice\PhpWord\PhpWord();
+        $phpWord = new \PhpOffice\PhpWord\PhpWord();
         $section = $phpWord->addSection();
         $date = date("d-m-Y");
         $fontStyle = new \PhpOffice\PhpWord\Style\Font();
@@ -484,21 +466,15 @@ class Events extends Controller
 
         foreach ($cleanData as $key => $value) {
             $links = getLinkAddressFromHtmlText($value->html);
-
-            // $section->addLink('http://www.google.com', 'Best search engine', array('color'=>'0000FF'));
-//            $section->addLine();
             $section->addText(
-                $value->year . ' ' .$value->text,
+                $value->year . ' ' . $value->text,
                 array('name' => 'Verdana', 'size' => 12)
             );
-
             appendLinksToSection($links, $section);
-
-//            $section->addLine();
             $section->addTextBreak();
             $section->addText('', [], ['borderBottomSize' => 6]);
             $section->addTextBreak();
-        
+
             // \PhpOffice\PhpWord\Shared\Html::addHtml($section, $value->html, false, true);
         }
 
@@ -519,7 +495,8 @@ class Events extends Controller
         $tempData = html_entity_decode($_POST['dayEvents']);
         $cleanData = json_decode($tempData);
 
-        $phpWord =  new \PhpOffice\PhpWord\PhpWord();
+
+        $phpWord = new \PhpOffice\PhpWord\PhpWord();
         $section = $phpWord->addSection();
         $date = date("d-m-Y");
         $fontStyle = new \PhpOffice\PhpWord\Style\Font();
@@ -531,16 +508,20 @@ class Events extends Controller
             array('name' => 'Verdana', 'size' => 30)
         )->setFontStyle($fontStyle);
 
-        $section->addText(
-            ' '
-        );
+        $section->addTextBreak();
 
         foreach ($cleanData as $key => $value) {
+            $links = getLinkAddressFromHtmlText($value->event);
             $section->addText(
                 $value->event,
                 array('name' => 'Verdana', 'size' => 12)
             );
+            appendLinksToSection($links, $section);
+            $section->addTextBreak();
+            $section->addText('', [], ['borderBottomSize' => 6]);
+            $section->addTextBreak();
         }
+
 
         $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
 
@@ -597,7 +578,7 @@ class Events extends Controller
         //     foreach ($value as $key2 => $value2) {
         //         print_r($value2);
 
-        //     } 
+        //     }
         // }
         // $googleBarChartData = convertForGoogleBarChart($mostBusyWeeks, ['Week', 'Count of events']);
         $data = [
@@ -871,5 +852,21 @@ class Events extends Controller
         $year = date('Y');
         $month = date('m');
         redirect('/events/listMyEvents?year=' . $year . '&month=' . $month . '&page=1');
+    }
+
+    private function convertForGoogleChart($data)
+    {
+        $googleData = [
+            ['Date', 'Events Count']
+        ];
+
+        foreach ($data as $key => $value) {
+            $row = [$key, count($value)];
+            $googleData[] = $row;
+        }
+        if (count($data) == 0) {
+            $googleData[] = [0, 0];
+        }
+        return $googleData;
     }
 }

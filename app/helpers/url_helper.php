@@ -98,12 +98,14 @@ function getURLs($str)
 function getLinkAddressFromHtmlText($htmlStr)
 {
     $links = getURLs($htmlStr);
+    return $links;
 
     /* $re = '/<a\s+href=.*?"\s*(https*:.*?)".*?>/m'; */
     // $re = '/https*:\/*[a-zA-Z0-9_-]*\.*[a-zA-Z0-9_-]*\/*[a-zA-Z0-9_-]*\/*[a-zA-Z0-9_-]*\\\\*/m';
-    $titleRe = '/title=\\\\*"\w+\\\\*"* *\w* *\\\\* *\w* *\w*\\\\*"*/m';
+
+//    $titleRe = '/title=\\\\*"\w+\\\\*"* *\w* *\\\\* *\w* *\w*\\\\*"*/m';
     // preg_match_all($re, $htmlStr, $matches, PREG_SET_ORDER, 0);
-    preg_match_all($titleRe, $htmlStr, $titles, PREG_SET_ORDER, 0);
+//    preg_match_all($titleRe, $htmlStr, $titles, PREG_SET_ORDER, 0);
 
     // print_r($links);
 
@@ -117,7 +119,6 @@ function getLinkAddressFromHtmlText($htmlStr)
 //    }
 
 //    print_r($links);
-    return $links;
     // $links = [];
     // $index = 0;
     // $end = -1;
