@@ -669,6 +669,8 @@ class Events extends Controller
         $pageSize = 5;
         $today = date('Y') . '-' . date('m') . '-' . date('d');
         $todayEvents = $this->eventsModel->getMyTodayEvents($today, $page, $pageSize);
+        $sortedByDate = $this->extractEventsByDate($todayEvents);
+        // $todayEvents['date'] = $today;
         $data = [
             'events' => $todayEvents,
             'page' => $page,
@@ -676,7 +678,8 @@ class Events extends Controller
             'hasPrevPage' => $page > 1,
             'nextPage' => $page + 1,
             'prevPage' => $page - 1,
-            'todayDate' => $today
+            'todayDate' => $today,
+            'sortedDataJSON' => json_encode($sortedByDate)
         ];
 
 

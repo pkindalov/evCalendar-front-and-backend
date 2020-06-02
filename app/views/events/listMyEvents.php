@@ -118,8 +118,10 @@
             </span>
             Mail
         </button>
-
-        <button onclick="genWordFileAndDownload('<?php echo $key; ?>')" class="btn">
+    
+       <!-- <?php //echo gettype(json_decode($data['sortedDataJSON'])); ?> -->
+      
+        <button onclick="genWordFileAndDownload('<?php echo $key; ?>');" class="btn">
             <span class="material-icons alignVertically">
                 description
             </span>
@@ -444,7 +446,10 @@
 <script src="<?php echo URLROOT ?>/js/drawChartJs.js"></script>
 <script src="<?php echo URLROOT ?>/js/SendMyEventsByMail.js"></script>
 <script src="<?php echo URLROOT ?>/js/MoveEventToDate.js"></script>
+<script src="<?php echo URLROOT ?>/js/GenWordFileAndDownload.js"></script>
 <script>
+     const data = <?php echo $data['sortedDataJSON']; ?>;
+     
     document.addEventListener('DOMContentLoaded', function() {
         if (document.getElementById('<?php echo $data['today']; ?>')) {
             window.location.hash = "<?php echo $data['today']; ?>";
@@ -477,10 +482,11 @@
         evAddBtn.addEventListener('click', function() {
             window.location = '<?php echo URLROOT; ?>/events/addNewEvent';
         });
+       
     });
 </script>
-<script>
-    const data = <?php echo $data['sortedDataJSON']; ?>;
+<!-- <script>
+    const data = <?php //echo $data['sortedDataJSON']; ?>;
     function genWordFileAndDownload(date) {
         let formData = new FormData();
         formData.append('dayEvents', JSON.stringify(data[date]));
@@ -499,5 +505,5 @@
             }
         }
     }
-</script>
+</script> -->
 <?php require_once APPROOT . '/views/inc/footer.php' ?>

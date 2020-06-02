@@ -5,123 +5,108 @@
     </pre> -->
 
 <?php if (count($data['events']) == 0) : ?>
-    <h2>You have no task for today.</h2>
-<?php endif; ?>
-
-<h2 class="header center-align"><?php echo $data['todayDate']; ?></h2>
-<?php foreach ($data['events'] as $key => $event) : ?>
-    <div class="col l12 s12 center-align">
-        <div class="card horizontal">
-            <div class="card-image"></div>
-            <div class="card-stacked">
-                <div class="card-content left-align">
-                    <div id="checkedDay<?php echo $event->date; ?>Num<?php echo $key; ?>" class="leftAligned mailField">
-                        <label>
-                            <input type="checkbox" />
-                            <span>Choose to send</span>
-                        </label>
-                    </div>
-                    <?php if ($event->checkedEvent) : ?>
-                        <p class="checkedEvent">
-                            <?php echo $event->text; ?>
-                        </p>
-                    <?php else : ?>
-                        <p>
-                            <?php echo $event->text; ?>
-                        </p>
-                    <?php endif; ?>
-                    <hr />
-                    <p>Begin: <?php echo $event->begin; ?></p>
-                    <p>Finish: <?php echo $event->finish; ?></p>
-                    <p>Date: <?php echo $event->date; ?></p>
-                    <p>Status:
-                     <?php if ($event->readed == 1) : ?>
-                        <span>VIEWED</span>
-                     <?php else : ?>
-                        <span>NOT VIEWED YET</span>
-                     <?php endif; ?>   
-                    </p>    
-                    <!-- <p>Checked: <?php //echo $event['checkedEvent']; 
-                                        ?> </p> -->
-                    <p>Notification Turned <?php echo $event->showNotification == 1 ? "ON" : "OFF"; ?></p>
-                </div>
-                <div class="card-action">
-                    <?php if ($event->readed == 1) : ?>
-                        <a class="btn  blue darken-4" href="<?php echo URLROOT; ?>/events/markAsUnread/<?php echo $event->id; ?>">
-                            <span class="material-icons alignVertically">
-                                markunread
-                            </span>
-                            Make Unread
-                        </a>
-
-                    <?php else : ?>
-                        <a class="btn blue lighten-2" href="<?php echo URLROOT; ?>/events/markAsReaded/<?php echo $event->id; ?>">
-                            <span class="material-icons alignVertically">
-                                drafts
-                            </span>
-                            Read
-                        </a>
-                    <? endif; ?>
-
-                    <!-- <a class="btn blue lighten-2" href="<?php echo URLROOT; ?>/events/loadEventEdit/<?php echo $event->id; ?>">Not Read</a> -->
+    <div class="row">
+        <div class="col l12 m12 s12">
+            <h2 class="center-align">You have no task for today.</h2>
+        </div>
+    </div>
+<?php else : ?>
 
 
-                    <!-- <a class="btn blue lighten-2" href="<?php echo URLROOT; ?>/events/loadEventEdit/<?php echo $event->id; ?>">Edit</a> -->
-
-                    <!-- <?php if ($event->checkedEvent == 1) : ?>
-                            <a class="btn red lighten-1" href="<?php echo URLROOT; ?>/events/checkUncheckEvent/?eventId=<?php echo $event->id; ?>&author=<?php echo $event->user_id; ?>&checked=false">Uncheck</a>
-
+    <h2 class="header center-align"><?php echo $data['todayDate']; ?></h2>
+    <button onclick="genWordFileAndDownload('<?php echo $data['todayDate']; ?>')" class="btn">
+        <span class="material-icons alignVertically">
+            description
+        </span>
+        Word
+    </button>
+    <?php foreach ($data['events'] as $key => $event) : ?>
+        <div class="col l12 s12 center-align">
+            <div class="card horizontal">
+                <div class="card-image"></div>
+                <div class="card-stacked">
+                    <div class="card-content left-align">
+                        <div id="checkedDay<?php echo $event->date; ?>Num<?php echo $key; ?>" class="leftAligned mailField">
+                            <label>
+                                <input type="checkbox" />
+                                <span>Choose to send</span>
+                            </label>
+                        </div>
+                        <?php if ($event->checkedEvent) : ?>
+                            <p class="checkedEvent">
+                                <?php echo $event->text; ?>
+                            </p>
                         <?php else : ?>
-                            <?php echo $event->checkedEvent; ?>
-                            <a class="btn cyan accent-3" href="<?php echo URLROOT; ?>/events/checkUncheckEvent/?eventId=<?php echo $event->id; ?>&author=<?php echo $event->user_id; ?>&checked=1">Check</a>
+                            <p>
+                                <?php echo $event->text; ?>
+                            </p>
                         <?php endif; ?>
-                        <?php if ($event->showNotification == 1) : ?>
-                            <a class="btn red lighten-1" href="<?php echo URLROOT; ?>/events/turnOffNotif/<?php echo $event->id; ?>">Notification Turn OFF</a>
+                        <hr />
+                        <p>Begin: <?php echo $event->begin; ?></p>
+                        <p>Finish: <?php echo $event->finish; ?></p>
+                        <p>Date: <?php echo $event->date; ?></p>
+                        <p>Status:
+                            <?php if ($event->readed == 1) : ?>
+                                <span>VIEWED</span>
+                            <?php else : ?>
+                                <span>NOT VIEWED YET</span>
+                            <?php endif; ?>
+                        </p>
+
+                        <p>Notification Turned <?php echo $event->showNotification == 1 ? "ON" : "OFF"; ?></p>
+                    </div>
+                    <div class="card-action">
+                        <?php if ($event->readed == 1) : ?>
+                            <a class="btn  blue darken-4" href="<?php echo URLROOT; ?>/events/markAsUnread/<?php echo $event->id; ?>">
+                                <span class="material-icons alignVertically">
+                                    markunread
+                                </span>
+                                Make Unread
+                            </a>
+
                         <?php else : ?>
-                            <a class="btn cyan accent-3" href="<?php echo URLROOT; ?>/events/turnOnNotif/<?php echo $event->id; ?>">Notification Turn ON</a>
-                        <?php endif; ?> -->
-
-                    <!-- Modal Trigger -->
-                    <!-- <button data-target="<?php echo $event->id; ?>" class="btn modal-trigger red accent-4">Delete</button> -->
-
-                    <!-- Modal Structure -->
-                    <!-- <div id="<?php echo $event->id; ?>" class="modal">
-                            <div class="modal-content">
-                                <h4>Are you sure to delete <?php echo $event->date; ?></h4>
-                                <p><?php echo $event->text; ?></p>
-                            </div>
-                            <div class="modal-footer">
-                                <a href="#!" class="modal-close waves-effect waves-green btn-flat">CANCEL</a> -->
-                    <!-- /evCalendar/events/deleteEvent/?eventId=${event.id}&author=${event.user_id} -->
-                    <!-- <a class="btn red accent-4" href="<?php echo URLROOT; ?>/events/deleteEvent/?eventId=<?php echo $event->id; ?>&author=<?php echo $event->user_id; ?>">Delete</a>
-                            </div>
-                        </div> -->
+                            <a class="btn blue lighten-2" href="<?php echo URLROOT; ?>/events/markAsReaded/<?php echo $event->id; ?>">
+                                <span class="material-icons alignVertically">
+                                    drafts
+                                </span>
+                                Read
+                            </a>
+                        <?php endif; ?>
+                    </div>
                 </div>
             </div>
         </div>
+    <?php endforeach; ?>
+
+    <div class="row">
+        <div class="col l12 s12">
+            <?php if ($data['hasPrevPage']) : ?>
+                <a href="<?php echo URLROOT; ?>/events/myTodayEvents?page=<?php echo $data['prevPage']; ?>" class="btn btn-primary pull-left">
+                    <span class="material-icons alignVertically">
+                        navigate_before
+                    </span>
+                    Prev
+                </a>
+            <?php endif; ?>
+
+            <?php if ($data['hasNextPage']) : ?>
+                <a href="<?php echo URLROOT; ?>/events/myTodayEvents?page=<?php echo $data['nextPage']; ?>" class="btn btn-primary pull-right">
+                    <span class="material-icons alignVertically">
+                        navigate_next
+                    </span>
+                    Next
+                </a>
+            <?php endif; ?>
+
+        </div>
     </div>
-<?php endforeach; ?>
+<?php endif; ?>
 
-<div class="row">
-    <div class="col l12 s12">
-        <?php if ($data['hasPrevPage']) : ?>
-            <a href="<?php echo URLROOT; ?>/events/myTodayEvents?page=<?php echo $data['prevPage']; ?>" class="btn btn-primary pull-left">
-                <span class="material-icons alignVertically">
-                    navigate_before
-                </span>
-                Prev
-            </a>
-        <?php endif; ?>
+<script src="<?php echo URLROOT ?>/js/GenWordFileAndDownload.js"></script>
+<script>
+    const data = <?php echo $data['sortedDataJSON']; ?>;
+</script>
 
-        <?php if ($data['hasNextPage']) : ?>
-            <a href="<?php echo URLROOT; ?>/events/myTodayEvents?page=<?php echo $data['nextPage']; ?>" class="btn btn-primary pull-right">
-                <span class="material-icons alignVertically">
-                    navigate_next
-                </span>
-                Next
-            </a>
-        <?php endif; ?>
 
-    </div>
-</div>
+
 <?php require_once APPROOT . '/views/inc/footer.php' ?>
