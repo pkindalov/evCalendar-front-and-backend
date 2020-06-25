@@ -857,6 +857,58 @@ class Events extends Controller
         redirect('/events/listMyEvents?year=' . $year . '&month=' . $month . '&page=1');
     }
 
+    public function uploadEvents()
+    {
+        if (!isset($_SESSION['user_id'])) {
+            redirect('/');
+            return;
+        }
+
+        $uploadsDir = $_SERVER['DOCUMENT_ROOT'] . '/evCalendar/public/temp';
+        $data = [];
+        // $uploadsDir = URLROOT . '/public/temp';
+
+        $tmp_name = $_FILES["eventsFile"]["tmp_name"];
+        if (is_uploaded_file($tmp_name)) {
+            $filename = basename($_FILES["eventsFile"]["name"]);
+            move_uploaded_file($tmp_name, "$uploadsDir/$filename");
+            // $phpWord = \PhpOffice\PhpWord\IOFactory::load("$uploadsDir/$filename", 'MsDoc');
+
+            $content = read_file_docx("$uploadsDir/$filename");
+            // echo gettype($content);
+            if ($content !== false) {
+                // echo nl2br($content);
+                $formattedContent = nl2br($content);
+                $headingStr = explode('My Events for ', $formattedContent)[1];
+                $splittedCont = explode(PHP_EOL, $headingStr);
+                $date = $splittedCont[0];
+                $data[$date] = [];
+                unset($splittedCont[0]);
+                unset($splittedCont[1]);
+                $splittedCont = array_values($splittedCont);
+
+
+                for ($i = 0; $i < count($splittedCont); $i++) {
+                    if ($i % 4 === 0 && $i !== 0) {
+                        $eventsData = [
+                            'date' => str_replace(array("\n", "\t", "\r", "<br />"), '', $date),
+                            'eventText' => str_replace(array("\n", "\t", "\r", "<br />"), '', $splittedCont[$i - 4]),
+                            'hoursBegin' => str_replace(array("\n", "\t", "\r", "<br />"), '', explode('Begin: ', $splittedCont[$i - 3])[1]),
+                            'hoursFinish' => str_replace(array("\n", "\t", "\r", "<br />"), '', explode('Finish: ', $splittedCont[$i - 2])[1]),
+                        ];
+
+                        $this->eventsModel->addEvent($eventsData);
+                    }
+                }
+            } else {
+                echo 'Couldn\'t the file. Please check that file.';
+            }
+
+            unlink($uploadsDir . '/' . $filename);
+            redirect('/');
+        }
+    }
+
     private function convertForGoogleChart($data)
     {
         $googleData = [

@@ -9,16 +9,18 @@ function checkIfArrAndIfEmpty($data)
 }
 
 
-function getDateLabelsChartJs($data){
-  $dateLabels = [];
-  foreach ($data as $key => $value) {
-      $dateLabels[] = $key;
-  }
+function getDateLabelsChartJs($data)
+{
+    $dateLabels = [];
+    foreach ($data as $key => $value) {
+        $dateLabels[] = $key;
+    }
 
-  return $dateLabels;
+    return $dateLabels;
 }
 
-function getValueForEachDateChartJs($data){
+function getValueForEachDateChartJs($data)
+{
     $values = [];
     $dates = getDateLabelsChartJs($data);
     foreach ($dates as $key => $value) {
@@ -26,13 +28,14 @@ function getValueForEachDateChartJs($data){
         // echo $data[$value][0] . "<br />";
     }
 
-   return $values;
+    return $values;
 }
 
-function extractEventsDataFromAPIData($data){
+function extractEventsDataFromAPIData($data)
+{
 
     $eventsData = [];
-    foreach ($data->data->Events as $key => $value){
+    foreach ($data->data->Events as $key => $value) {
         $eventsData[$key]['year'] = $value->year;
         $eventsData[$key]['text'] = $value->text;
         $eventsData[$key]['html'] = $value->html;
@@ -42,37 +45,46 @@ function extractEventsDataFromAPIData($data){
     rsort($eventsData);
 
     return $eventsData;
-    
 }
 
-function getIds($data){
+function getIds($data)
+{
     $ids = [];
-    foreach($data as $value){
+    foreach ($data as $value) {
         $ids[] = $value->id;
     }
     return $ids;
 }
 
-function getIdsAndDates($data){
+function getIdsAndDates($data)
+{
     $idsDates = [];
-    foreach($data as $key => $value){
+    foreach ($data as $key => $value) {
         $idsDates[$key]['id'] = $value->id;
         $idsDates[$key]['date'] = $value->date;
     }
     return $idsDates;
 }
 
-function convDataChartJS($outerData){
+function convDataChartJS($outerData)
+{
     $data = [
-      'labels' => [],
-      'values' => []
+        'labels' => [],
+        'values' => []
     ];
 
-    foreach ($outerData as $key => $value){
-//        print_r(count($outerData[$key]));
+    foreach ($outerData as $key => $value) {
+        //        print_r(count($outerData[$key]));
         $data['labels'][] = $key;
         $data['values'][] = count($outerData[$key]);
     }
 
     return $data;
+}
+
+function prettyPrint($data)
+{
+    echo '<pre>';
+    print_r($data);
+    echo '</pre>';
 }
