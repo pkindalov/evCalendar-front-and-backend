@@ -47,19 +47,19 @@
 
 <?php else : ?>
 
-    <div class="col s12 m7 startSplash">
-        <h2 class="header"><?php echo $data['title']; ?></h2>
-        <div class="card horizontal">
-            <div class="card-image">
-                <img src="images/blueFractal1.png">
-            </div>
-            <div class="card-stacked">
-                <div class="card-content">        
-                    <p><?php echo $data['description'] ?></p>
+            <!-- <h2 class="header"><?php echo $data['title']; ?></h2> -->
+            <div class="card horizontal">
+                <div class="card-image">
+                    <img src="images/logo.png">
                 </div>
-                <!-- <div class="card-action">
-                    <a href="#">This is a link</a>
-                </div> -->
+                <div class="card-stacked">
+                    <div class="card-content">        
+                        <p><?php echo $data['description'] ?></p>
+                    </div>
+                    <!-- <div class="card-action">
+                        <a href="#">This is a link</a>
+                    </div> -->
+                </div>
             </div>
         </div>
     </div>

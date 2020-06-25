@@ -91,6 +91,20 @@
             <span>Add Event</span>
         </a>
 
+        <a href="#" id="evAddFileBtn">
+            <i class="material-icons alignVertically">description</i>
+            <span>Add Events From File</span>
+        </a>
+        <div id="addEventForm" class="mailField">
+            <form method="post" action="<?php echo URLROOT; ?>/events/uploadEvents" method="post" enctype="multipart/form-data">
+                <h2>Upload File</h2>
+                <label for="fileSelect">Filename:</label>
+                <input type="file" name="eventsFile" id="fileSelect">
+                <input type="submit" name="submit" value="Upload">
+                <p><strong>Note:</strong> Only .doc formats allowed to a max size of 5 MB.</p>
+            </form>
+        </div>
+
     </div>
 </div>
 
@@ -118,9 +132,10 @@
             </span>
             Mail
         </button>
-    
-       <!-- <?php //echo gettype(json_decode($data['sortedDataJSON'])); ?> -->
-      
+
+        <!-- <?php //echo gettype(json_decode($data['sortedDataJSON'])); 
+                ?> -->
+
         <button onclick="genWordFileAndDownload('<?php echo $key; ?>');" class="btn">
             <span class="material-icons alignVertically">
                 description
@@ -448,8 +463,8 @@
 <script src="<?php echo URLROOT ?>/js/MoveEventToDate.js"></script>
 <script src="<?php echo URLROOT ?>/js/GenWordFileAndDownload.js"></script>
 <script>
-     const data = <?php echo $data['sortedDataJSON']; ?>;
-     
+    const data = <?php echo $data['sortedDataJSON']; ?>;
+
     document.addEventListener('DOMContentLoaded', function() {
         if (document.getElementById('<?php echo $data['today']; ?>')) {
             window.location.hash = "<?php echo $data['today']; ?>";
@@ -482,11 +497,28 @@
         evAddBtn.addEventListener('click', function() {
             window.location = '<?php echo URLROOT; ?>/events/addNewEvent';
         });
-       
+
     });
 </script>
+
+<script>
+    let fileUploadFormShown = false;
+    let fileUploadBtn = document.getElementById('evAddFileBtn');
+    let fileForm = document.getElementById('addEventForm');
+
+    fileUploadBtn.addEventListener('click', function(){
+        fileUploadFormShown = !fileUploadFormShown;
+        if(fileUploadFormShown){
+            fileForm.style.display = 'block';
+            return;
+        }
+        fileForm.style.display = 'none';
+    });
+</script>    
+
 <!-- <script>
-    const data = <?php //echo $data['sortedDataJSON']; ?>;
+    const data = <?php //echo $data['sortedDataJSON']; 
+                    ?>;
     function genWordFileAndDownload(date) {
         let formData = new FormData();
         formData.append('dayEvents', JSON.stringify(data[date]));
