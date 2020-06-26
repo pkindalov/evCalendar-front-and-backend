@@ -7,7 +7,7 @@
         <span id="validationMessage">
           <?php if (isset($data['errpr'])) : ?>
             echo $data['error'];
-          <? endif; ?>
+          <?php endif; ?>
         </span>
       </div>
 

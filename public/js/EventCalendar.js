@@ -260,7 +260,7 @@ let eventCalendar = (function(calendarContainerId) {
 			// throw new Error('Variable of setUseOfTheme method must be of type boolean');
 			try{
 				useTheme = Boolean(useTheme);
-			}catch{
+			}catch(err){
 				console.log('Variable of setUseOfTheme method must be of type boolean');
 				return;
 			}
@@ -273,13 +273,13 @@ let eventCalendar = (function(calendarContainerId) {
 			// throw new Error('Variable of setUseOfTheme method must be of type boolean');
 			try{
 				useNotifications = Boolean(useNotifications);
-			}catch{
+			}catch(err){
 				console.log('Variable of setUserNotifPermission method must be of type boolean');
 				return;
 			}
 		}
 		that.userNotifPermission = useNotifications;
-	}
+	};
 
 	eventCalendar.prototype.setLanguage = function(language) {
 		if (!language) {

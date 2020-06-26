@@ -60,7 +60,7 @@
                             </span>
                             Read
                         </a>
-                    <? endif; ?>
+                    <?php endif; ?>
 
                     <!-- <a class="btn blue lighten-2" href="<?php echo URLROOT; ?>/events/loadEventEdit/<?php echo $event->id; ?>">Not Read</a> -->
 
