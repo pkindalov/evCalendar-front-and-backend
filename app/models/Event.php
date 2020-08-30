@@ -462,7 +462,7 @@ class Event
         return execQueryRetTrueOrFalse($this->db);
     }
 
-     public function makeEventDaily($eventId)
+    public function makeEventDaily($eventId)
     {
         $this->db->query("UPDATE events SET events.isDaily = 1 WHERE events.id = :id AND events.user_id = :userId");
         $this->db->bind(":id", $eventId, null);
@@ -517,7 +517,7 @@ class Event
         return $result;
     }
 
-     public function getDailyEvents()
+    public function getDailyEvents()
     {
         $this->db->query("SELECT events.id, events.date 
                              FROM events 
@@ -536,12 +536,21 @@ class Event
             // echo $value['date'] . '<br />' . date('Y-m-d');
             // echo $value['date'] < date('Y-m-d');
             if ($value['date'] <= date('Y-m-d') == 1) {
-                $this->db->query("UPDATE events 
-                                  SET events.`date` = (
-                                  SELECT DATE_ADD(CAST(events.`date` AS DATE), INTERVAL 1 MONTH) AS newDate
-                                  FROM events
-                                  WHERE events.id = :eventId)
-                                  WHERE events.id = :eventId AND events.user_id = :userId;");
+                // $this->db->query("UPDATE events 
+                //                   SET events.`date` = (
+                //                   SELECT DATE_ADD(CAST(events.`date` AS DATE), INTERVAL 1 MONTH) AS newDate
+                //                   FROM events
+                //                   WHERE events.id = :eventId)
+                //                   WHERE events.id = :eventId AND events.user_id = :userId;");
+
+                $this->db->query("
+                    UPDATE `events` 
+                    SET `events`.`date` = ( SELECT DATE_ADD( CAST( `events`.`date` AS DATE ), INTERVAL (SELECT TIMESTAMPDIFF(MONTH, `events`.date, CURRENT_DATE()) AS timeDiff)  MONTH ) AS newDate FROM `events` WHERE `events`.id = :eventId ) 
+                    WHERE
+                        `events`.id = :eventId 
+                        AND `events`.user_id = :userId;
+                ");
+
                 $this->db->bind(":eventId", $value['id'], null);
                 $this->db->bind(":userId", $_SESSION['user_id'], null);
                 $this->db->execute();
@@ -554,12 +563,52 @@ class Event
         foreach ($idsNum as $key => $value) {
             // echo $value['date'] < date('Y-m-d') . '<br />';
             if ($value['date'] <= date('Y-m-d') == 1) {
-                $this->db->query("UPDATE events 
-                                  SET events.`date` = (
-                                  SELECT DATE_ADD(CAST(events.`date` AS DATE), INTERVAL 1 YEAR) AS newDate
-                                  FROM events
-                                  WHERE events.id = :eventId)
-                                  WHERE events.id = :eventId AND events.user_id = :userId;");
+                // $this->db->query("UPDATE events 
+                //                   SET events.`date` = (
+                //                   SELECT DATE_ADD(CAST(events.`date` AS DATE), INTERVAL 1 YEAR) AS newDate
+                //                   FROM events
+                //                   WHERE events.id = :eventId)
+                //                   WHERE events.id = :eventId AND events.user_id = :userId;");
+
+                // $this->db->query("
+                //     UPDATE `events` 
+                //     SET `events`.`date` = ( SELECT DATE_ADD( CAST( `events`.`date` AS DATE ), INTERVAL (SELECT TIMESTAMPDIFF(YEAR, `events`.date, CURRENT_DATE()) AS yearDiff)  YEAR ) AS newDate FROM `events` WHERE `events`.id = :eventId ) 
+                //     WHERE
+                //         `events`.id = :eventId 
+                //         AND `events`.user_id = :userId;
+                // ");
+
+                $this->db->query("
+                UPDATE `events` 
+                SET `events`.`date` =
+                CASE
+                        
+                        WHEN ( SELECT TIMESTAMPDIFF( DAY, `events`.date, CURRENT_DATE ()) AS yearDiff ) > 0 THEN
+                        (
+                        SELECT
+                            DATE_ADD(
+                                CAST( `events`.`date` AS DATE ),
+                                INTERVAL ( SELECT TIMESTAMPDIFF( YEAR, `events`.date, CURRENT_DATE ()) AS yearDiff ) + 1 YEAR 
+                            ) AS newDate 
+                        FROM
+                            `events` 
+                        WHERE
+                            `events`.id = :eventId 
+                            ) ELSE (
+                        SELECT
+                            DATE_ADD( CAST( `events`.`date` AS DATE ), INTERVAL ( SELECT TIMESTAMPDIFF( YEAR, `events`.date, CURRENT_DATE ()) AS yearDiff ) YEAR ) AS newDate 
+                        FROM
+                            `events` 
+                        WHERE
+                            `events`.id = :eventId 
+                        ) 
+                    END 
+                    WHERE
+                    `events`.id = 30 
+                    AND `events`.user_id = :userId;
+            ");
+
+
                 $this->db->bind(":eventId", $value['id'], null);
                 $this->db->bind(":userId", $_SESSION['user_id'], null);
                 $this->db->execute();
@@ -571,12 +620,34 @@ class Event
     {
         foreach ($idsNum as $key => $value) {
             if ($value['date'] <= date('Y-m-d') == 1) {
-                $this->db->query("UPDATE events 
-                                  SET events.`date` = (
-                                  SELECT DATE_ADD(CAST(events.`date` AS DATE), INTERVAL 1 WEEK) AS newDate
-                                  FROM events
-                                  WHERE events.id = :eventId)
-                                  WHERE events.id = :eventId AND events.user_id = :userId;");
+                // $this->db->query("UPDATE events 
+                //                   SET events.`date` = (
+                //                   SELECT DATE_ADD(CAST(events.`date` AS DATE), INTERVAL 1 WEEK) AS newDate
+                //                   FROM events
+                //                   WHERE events.id = :eventId)
+                //                   WHERE events.id = :eventId AND events.user_id = :userId;");
+
+                $this->db->query("
+                        UPDATE `events` 
+                        SET `events`.`date` = (
+                            SELECT
+                                DATE_ADD(
+                                    CAST( `events`.`date` AS DATE ),
+                                    INTERVAL (
+                                    SELECT
+                                    FLOOR( DATEDIFF( DATE( CURRENT_DATE ()), DATE( `events`.date ))/ 7 )) WEEK 
+                                ) AS newDate 
+                            FROM
+                                `events` 
+                            WHERE
+                                `events`.id = :eventId 
+                            ) 
+                        WHERE
+                            `events`.id = :eventId 
+                            AND `events`.user_id = :userId;
+                ");
+
+
                 $this->db->bind(":eventId", $value['id'], null);
                 $this->db->bind(":userId", $_SESSION['user_id'], null);
                 $this->db->execute();
@@ -588,20 +659,29 @@ class Event
     {
         foreach ($idsNum as $key => $value) {
             if ($value['date'] <= date('Y-m-d') == 1) {
-                $this->db->query("UPDATE events SET events.`date` = (
-                                        SELECT DATE_ADD(CAST(events.`date` AS DATE), INTERVAL 1 DAY) AS newDate
-                                        FROM events
-                                        WHERE events.id = :eventId)
-                                        WHERE CAST(CONCAT(events.`date`) AS DATE) = CAST(NOW() AS DATE)
-                                        AND CAST(events.`begin` AS TIME) < CAST(NOW() AS TIME)
-                                        AND events.id = :eventId 
-                                        AND events.user_id = :userId;");
+                // $this->db->query("UPDATE events SET events.`date` = (
+                //                         SELECT DATE_ADD(CAST(events.`date` AS DATE), INTERVAL 1 DAY) AS newDate
+                //                         FROM events
+                //                         WHERE events.id = :eventId)
+                //                         WHERE CAST(CONCAT(events.`date`) AS DATE) = CAST(NOW() AS DATE)
+                //                         AND CAST(events.`begin` AS TIME) < CAST(NOW() AS TIME)
+                //                         AND events.id = :eventId 
+                //                         AND events.user_id = :userId;");
+
+                $this->db->query("
+                    UPDATE `events` 
+                    SET `events`.`date` = CAST(CURDATE() AS VARCHAR(50))
+                    WHERE
+                    `events`.id = :eventId
+                     AND `events`.user_id = :userId;
+                ");
+
+
+
                 $this->db->bind(":eventId", $value['id'], null);
                 $this->db->bind(":userId", $_SESSION['user_id'], null);
                 $this->db->execute();
             }
         };
     }
-
-
 }

@@ -439,52 +439,52 @@ class Events extends Controller
         //        unlink($temp_file);  //
     }
 
-    public function genWordFileAllEvents()
-    {
-        if (!isset($_SESSION['user_id'])) {
-            redirect('/');
-            return;
-        }
-        $tempData = html_entity_decode($_POST['dayEvents']);
-        $cleanData = json_decode($tempData);
-        $phpWord = new \PhpOffice\PhpWord\PhpWord();
-        $section = $phpWord->addSection();
-        $date = date("d-m-Y");
-        $fontStyle = new \PhpOffice\PhpWord\Style\Font();
-        $fontStyle->setBold(true);
-        $fontStyle->setSize(30);
-        $fontStyle->setBgColor('42A5F5');
-        $section->addText(
-            'Events on ' . $date,
-            array('name' => 'Verdana', 'size' => 30)
-        )->setFontStyle($fontStyle);
+    // public function genWordFileAllEvents()
+    // {
+    //     if (!isset($_SESSION['user_id'])) {
+    //         redirect('/');
+    //         return;
+    //     }
+    //     $tempData = html_entity_decode($_POST['dayEvents']);
+    //     $cleanData = json_decode($tempData);
+    //     $phpWord = new \PhpOffice\PhpWord\PhpWord();
+    //     $section = $phpWord->addSection();
+    //     $date = date("d-m-Y");
+    //     $fontStyle = new \PhpOffice\PhpWord\Style\Font();
+    //     $fontStyle->setBold(true);
+    //     $fontStyle->setSize(30);
+    //     $fontStyle->setBgColor('42A5F5');
+    //     $section->addText(
+    //         'Events on ' . $date,
+    //         array('name' => 'Verdana', 'size' => 30)
+    //     )->setFontStyle($fontStyle);
 
-        $section->addText(
-            ' '
-        );
+    //     $section->addText(
+    //         ' '
+    //     );
 
 
-        foreach ($cleanData as $key => $value) {
-            $links = getLinkAddressFromHtmlText($value->html);
-            $section->addText(
-                $value->year . ' ' . $value->text,
-                array('name' => 'Verdana', 'size' => 12)
-            );
-            appendLinksToSection($links, $section);
-            $section->addTextBreak();
-            $section->addText('', [], ['borderBottomSize' => 6]);
-            $section->addTextBreak();
+    //     foreach ($cleanData as $key => $value) {
+    //         $links = getLinkAddressFromHtmlText($value->html);
+    //         $section->addText(
+    //             $value->year . ' ' . $value->text,
+    //             array('name' => 'Verdana', 'size' => 12)
+    //         );
+    //         appendLinksToSection($links, $section);
+    //         $section->addTextBreak();
+    //         $section->addText('', [], ['borderBottomSize' => 6]);
+    //         $section->addTextBreak();
 
-            // \PhpOffice\PhpWord\Shared\Html::addHtml($section, $value->html, false, true);
-        }
+    //         // \PhpOffice\PhpWord\Shared\Html::addHtml($section, $value->html, false, true);
+    //     }
 
-        // return;
-        $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
+    //     // return;
+    //     $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
 
-        header('Content-Type: application/vnd.ms-word');
-        header('Content-Disposition: attachment; filename="hello_world.docx"');
-        $objWriter->save("php://output");
-    }
+    //     header('Content-Type: application/vnd.ms-word');
+    //     header('Content-Disposition: attachment; filename="hello_world.docx"');
+    //     $objWriter->save("php://output");
+    // }
 
     public function genSelEventsHappToday()
     {
@@ -857,6 +857,11 @@ class Events extends Controller
         redirect('/events/listMyEvents?year=' . $year . '&month=' . $month . '&page=1');
     }
 
+
+    //-------------------------------------------------------------------------------------------------------------
+    //TO FINISH THIS LATER
+    //-------------------------------------------------------------------------------------------------------------
+
     public function uploadEvents()
     {
         if (!isset($_SESSION['user_id'])) {
@@ -869,6 +874,7 @@ class Events extends Controller
         // $uploadsDir = URLROOT . '/public/temp';
 
         $tmp_name = $_FILES["eventsFile"]["tmp_name"];
+        //ДА ПРОВЕРЯ РАЗМЕРА НА ФАЙЛА И РАЗШИРЕНИЕТО ДА БЪДЕ .DOCX
         if (is_uploaded_file($tmp_name)) {
             $filename = basename($_FILES["eventsFile"]["name"]);
             move_uploaded_file($tmp_name, "$uploadsDir/$filename");
