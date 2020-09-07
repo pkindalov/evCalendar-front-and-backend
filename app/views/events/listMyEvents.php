@@ -41,10 +41,13 @@
         </div>
     </div>
 </div>
-<div class="row">
-    <div class="col l12 m12 s12">
+<div class="row center-align">
+    <div class="col lg2 m2 s2">
+        <a id="prevMonth" class="btn" href="#">Prev Month</a>
+    </div>
+    <div class="col l8 m8 s8">
         <div class="input-field">
-            <select name="selectedMonth" class="icons">
+            <select id="selMonth" name="selectedMonth" class="icons">
                 <?php
                 $counter = 1;
                 $month = isset($data['month']) ? intval($data['month']) : intval(date('m'));
@@ -82,7 +85,14 @@
             <label>Months</label>
         </div>
     </div>
+
+    <div class="col lg2 m2 s2">
+        <a id="nextMonth" class="btn" href="#">Next Month</a>
+    </div>
+
 </div>
+<div>
+
 
 <div class="row">
     <div class="col l12 m12 s12">
@@ -472,15 +482,15 @@
 <script src="<?php echo URLROOT ?>/js/SendMyEventsByMail.js"></script>
 <script src="<?php echo URLROOT ?>/js/MoveEventToDate.js"></script>
 <script src="<?php echo URLROOT ?>/js/GenWordFileAndDownload.js"></script>
+<script src="<?php echo URLROOT ?>/js/prevNextMonths.js"></script>
 <script>
-    const data = < ? php echo $data['sortedDataJSON']; ? > ;
+    const data = <?php echo $data['sortedDataJSON']; ?>;
 
     document.addEventListener('DOMContentLoaded', function () {
-        if (document.getElementById('<?php echo $data['
-                today ']; ?>')) {
+        if (document.getElementById('<?php echo $data['today']; ?>')) {
             window.location.hash = "<?php echo $data['today']; ?>";
         }
-        const dataObj = < ? php echo $data['chartJsData']; ? > ;
+        const dataObj = <?php echo $data['chartJsData']; ?>;
         const options = {
             ctx: 'eventsChart',
             labels: dataObj.labels,
@@ -512,22 +522,76 @@
     });
 </script>
 
-// <script>
-//     let fileUploadFormShown = false;
-//     let fileUploadBtn = document.getElementById('evAddFileBtn');
-//     let fileForm = document.getElementById('addEventForm');
+<!-- <script>
+    let prevMonthBtn = document.getElementById('prevMonth');
+    let nextMonthBtn = document.getElementById('nextMonth');
 
-//     fileUploadBtn.addEventListener('click', function () {
-//         fileUploadFormShown = !fileUploadFormShown;
-//         if (fileUploadFormShown) {
-//             fileForm.style.display = 'block';
-//             return;
-//         }
-//         fileForm.style.display = 'none';
-//     });
-// </script>
+    let selectElems = document.querySelectorAll('#selMonth');
+    selMontSelect = selectElems[0];
+    let monthNum = parseInt(selMontSelect.value);
 
-// <!-- <script>
+    function getMonthStr(mode, monthNum){
+        let num = monthNum;
+        switch(mode){
+            case 'prev':
+                num--;
+                num = num < 0 ? 0 : num;
+            break;
+            case 'next':
+                num++;
+                num = num > 12 ? 12 : num;
+            break;
+            default:
+                console.log('No such mode. Only prev and next');
+                return;
+            break;    
+        }
+
+        num = num < 10 ?  "0" + num : num;
+        return num;
+    }
+
+    function updateSelectedIndexAndRelocate(numOfMonth, monthStr){
+        selMontSelect.selectedIndex = numOfMonth;
+        window.location.href = "/evCalendar/events/listMyEvents?year=2020&month=" + monthStr + "&page=1";
+    }
+
+    prevMonthBtn.addEventListener('click', function () {
+        let selectInstances = M.FormSelect.init(selectElems);
+        let updatedMonthNum = monthNum - 1;
+        let updatedMonthStr = getMonthStr('prev', monthNum);
+        updateSelectedIndexAndRelocate(updatedMonthNum, updatedMonthStr);
+    });
+
+    nextMonthBtn.addEventListener('click', function () {
+        let selectInstances = M.FormSelect.init(selectElems);
+        let updatedMonthNum = monthNum + 1;
+        let updatedMonthStr = getMonthStr('next', monthNum);
+        updateSelectedIndexAndRelocate(updatedMonthNum, updatedMonthStr);
+    });
+    
+</script> -->
+
+
+
+ <!-- <script>
+        let fileUploadFormShown = false;
+        let fileUploadBtn = document.getElementById('evAddFileBtn');
+        let fileForm = document.getElementById('addEventForm');
+
+        fileUploadBtn.addEventListener('click', function () {
+            fileUploadFormShown = !fileUploadFormShown;
+            if (fileUploadFormShown) {
+                fileForm.style.display = 'block';
+                return;
+            }
+            fileForm.style.display = 'none';
+        });
+    
+</script> -->
+
+
+<!-- <script>
 //     const data = <?php //echo $data['sortedDataJSON']; 
 //                     ?>;
 //     function genWordFileAndDownload(date) {
