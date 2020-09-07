@@ -24,7 +24,7 @@
   </div>
   <div class="footer-copyright">
     <div class="container startSplash">
-      © 2014 Copyright Text
+      Contacts: panayotkindalov@gmail.com
       <!-- <a class="grey-text text-lighten-4 right" href="#!">More Links</a> -->
     </div>
   </div>

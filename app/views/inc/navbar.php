@@ -223,7 +223,7 @@
                     </span>
                     Register
                   </a></li>
-                <li><a href="<?php echo URLROOT; ?>/users/recommend">
+                <li><a href="<?php echo URLROOT; ?>/pages/recommend">
                     <span class="material-icons">
                       create
                     </span>

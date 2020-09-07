@@ -126,4 +126,8 @@ class Pages extends Controller
 //        header('Content-Disposition: attachment; filename="hello_world.docx"');
 //        $objWriter->save("php://output");
     }
+
+    public function recommend(){
+        $this->view('pages/recommend');
+    }
 }
