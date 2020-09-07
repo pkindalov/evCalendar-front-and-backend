@@ -10,7 +10,7 @@ function getMonthStr(mode, monthNum) {
 	switch (mode) {
 		case 'prev':
 			num--;
-			num = num < 0 ? 0 : num;
+			num = num <= 0 ? 1 : num;
 			break;
 		case 'next':
 			num++;
